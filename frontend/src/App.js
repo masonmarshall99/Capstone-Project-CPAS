@@ -1,17 +1,19 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Dash from './Pages/Dash';
-import Account from './Pages/Account';
+import 'bulma/css/bulma.min.css';
+import React, { useEffect, useState } from 'react';
 
 function App() {
+  // For testing, remove in production
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    fetch('http://localhost:8000/api/test').then((res) => res.text()).then((data) => setMessage(data));
+  }, []);
+  // End of test
+
   return (
-     <Router>
-      <Routes>
-        <Route path="/" element={<Navigate to="/dash" replace />} />
-        <Route path="/dash" element={<Dash />} />
-        <Route path="/account" element={<Account />} />
-      </Routes>
-    </Router>
+    <div>
+      <p class="title">{message}</p>
+    </div>
   );
 }
 
