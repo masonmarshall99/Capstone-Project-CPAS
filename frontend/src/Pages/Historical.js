@@ -4,7 +4,7 @@ import "bulma/css/bulma.min.css";
 import Top from "./../Styling/Top";
 import Sidebar from "./../Styling/Sidebar";
 
-function Dash() {
+function Historical() {
   return (
     <>
       <Top />
@@ -15,11 +15,11 @@ function Dash() {
           gap: "12px",
         }}
       >
-        <Sidebar curWindow="Dashboard" />
-        <div style={{ flex: 1, padding: "1rem" }}>Dash content area</div>
+        <Sidebar curWindow="Historical Analysis" />
+        <div style={{ flex: 1, padding: "1rem" }}>Historical content area</div>
       </div>
     </>
   );
 }
 
-export default Dash;
+export default Historical;
