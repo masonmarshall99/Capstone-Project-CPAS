@@ -17,7 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from CPAS_Main.views import graphql_testing_view
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include("CPAS_Main.urls")),
+    path('graphql/', graphql_testing_view),
 ]
