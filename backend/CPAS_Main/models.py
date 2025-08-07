@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
@@ -61,3 +62,10 @@ class DiseasePresence(models.Model):
 
     class Meta:
         unique_together = ('disease', 'crop', 'sub_region')
+
+
+# Custom user class for authentication and creation
+
+class CPAS_User(AbstractUser):
+    email_address = models.EmailField(unique=True)
+    # user_role to be added once access control system is implemented

@@ -102,6 +102,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# User model
+
+AUTH_USER_MODEL = 'CPAS_Main.CPAS_User'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
