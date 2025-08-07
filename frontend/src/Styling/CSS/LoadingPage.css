@@ -1,0 +1,60 @@
+.loading-wrapper {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #00b5c2;
+}
+
+.loading-container {
+  background-color: white;
+  border-radius: 0 0 100px 0;
+  padding: 2rem;
+  width: 350px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.logo-section {
+  margin-bottom: 2rem;
+}
+
+.curtin-logo {
+  width: 160px;
+}
+
+.welcome-text {
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.button-primary {
+  width: 100%;
+  padding: 10px;
+  background-color: #8ea6f9;
+  border: none;
+  border-radius: 4px;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.button-primary:hover {
+  background-color: #7d96e5;
+}
+
+.account-text {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #4a4a4a;
+}
+
+.account-text a {
+  color: #4a4a4a;
+  text-decoration: underline;
+}
