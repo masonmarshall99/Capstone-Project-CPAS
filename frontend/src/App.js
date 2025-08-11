@@ -5,28 +5,31 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import "./Styling/CSS/Main.css";
 
-import LoadingPage from "./Pages/LoadingPage";
-import LoginPage from "./Pages/LoginPage";
-import CreateAccountPage from "./Pages/CreateAccountPage";
-
-import Dash from "./Pages/Dash";
+// Account pages //
+import Loading from "./Pages/Loading";
 import Account from "./Pages/Account";
+import CreateAccount from "./Pages/CreateAccount";
+
+// Dash pages //
+import Dash from "./Pages/Dash";
 import Disease from "./Pages/Disease";
 import Historical from "./Pages/Historical";
+import Contact from "./Pages/Contact";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LoadingPage/>} />
-          <Route path="/Login" element={<LoginPage />} />
-          <Route path="/create-account" element={<CreateAccountPage />} />
-        
+        <Route path="/" element={<Loading />} />
+        <Route path="/account" element={<Account />} />
+        <Route path="/create-account" element={<CreateAccount />} />
+
         <Route path="/dash" element={<Dash />} />
         <Route path="/historical" element={<Historical />} />
         <Route path="/disease" element={<Disease />} />
-        <Route path="/account" element={<Account />} />
+        <Route path="/Contact" element={<Contact />} />
       </Routes>
     </Router>
   );

@@ -1,0 +1,88 @@
+.button:hover {
+  filter: brightness(var(--button-Fade));
+}
+
+/*---------------------------------------------------------------*/
+/* Bottom Panel */
+.panel-bottom {
+  display: flex;
+  height: 100%;
+  gap: 12px;
+}
+
+/*---------------------------------------------------------------*/
+/* Top Panel */
+.panel-top {
+  height: 42px;
+  width: 100%;
+  display: flex;
+  background-color: var(--primary-color);
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 8px;
+}
+
+/* Account button */
+.panel-top-account {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--panel-colour);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+/*---------------------------------------------------------------*/
+/* Side Panel */
+.panel-side {
+  width: 220px;
+  flex-direction: column;
+  display: flex;
+  height: calc(100vh - 42px);
+  background-color: var(--panel-colour);
+  padding: 1rem;
+}
+
+/* Button */
+.panel-side-button {
+  justify-content: flex-start;
+  padding-left: 12px;
+  margin-bottom: 4px;
+  background-color: var(--panel-colour);
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  padding-left: 1.25rem;
+}
+
+.panel-side-button.active {
+  filter: brightness(100%);
+  background-color: var(--primary-color-fadded);
+  color: var(--primary-color);
+}
+
+.panel-side-button.bottom {
+  margin-top: auto;
+}
+
+/* Icon svg of button */
+.panel-side-button .icon svg {
+  width: 1.5em;
+  height: 1.5em;
+  fill: var(--text-color);
+}
+
+.panel-side-button.active .icon svg {
+  fill: var(--primary-color);
+}
+
+/* Text of button */
+.panel-side-button span.text {
+  padding-left: 6px;
+  margin-top: 0.23rem;
+  color: inherit;
+}

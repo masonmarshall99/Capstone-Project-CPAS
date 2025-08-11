@@ -1,36 +1,35 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
-import '../Styling/CSS/AuthPages.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "../Styling/CSS/AuthPages.css";
 
 const CreateAccountPage = () => {
-  const [email, setEmail] = useState('');
-  const [mobile, setMobile] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleSignUp = (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError("Passwords do not match.");
       return;
     }
 
     alert(`Account created for ${email}`);
-    setError('');
+    setError("");
 
-    
-    navigate('/login');
+    navigate("/account");
   };
 
   return (
     <div className="auth-wrapper">
       <div className="auth-container">
         <h1 className="auth-title">Create Your Account</h1>
-        
+
         <form onSubmit={handleSignUp}>
           <label>Email</label>
           <input
@@ -74,13 +73,14 @@ const CreateAccountPage = () => {
 
           {error && <p className="error-text">{error}</p>}
 
-          <button type="submit" className="button-primary">Sign Up</button>
+          <button type="submit" className="button-primary">
+            Sign Up
+          </button>
         </form>
 
-        
         <p className="auth-switch-text">
-          Already have an account?{' '}
-          <span className="auth-link" onClick={() => navigate('/login')}>
+          Already have an account?{" "}
+          <span className="auth-link" onClick={() => navigate("/account")}>
             Login
           </span>
         </p>
