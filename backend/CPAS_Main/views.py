@@ -33,6 +33,9 @@ def create_user(request):
         # Check if user with this username already exists. return error if so
         if User.objects.filter(username = new_username):
             return JsonResponse({'error': 'Username unavailable'}, status = 400)
+        
+        if User.objects.filter(email = new_email):
+            return JsonResponse({'error': 'Email address unavailable'}, status = 400)
 
         # If user doesn't exist, create new user and return success message
         new_user = User.objects.create_user(
