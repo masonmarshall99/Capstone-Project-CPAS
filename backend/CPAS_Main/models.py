@@ -67,5 +67,7 @@ class DiseasePresence(models.Model):
 # Custom user class for authentication and creation
 
 class CPAS_User(AbstractUser):
-    email_address = models.EmailField(unique=True)
+
+    email = models.EmailField(unique=True)
+
     # user_role to be added once access control system is implemented

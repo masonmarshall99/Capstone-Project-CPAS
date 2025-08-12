@@ -1,12 +1,16 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from django.contrib.auth.models import User
+
+from django.contrib.auth import get_user_model
 
 # Ariadne testing view imports
 from ariadne.wsgi import GraphQL
 from CPAS_Main.schema import schema
 from django.views.decorators.csrf import csrf_exempt
 graphql_app = GraphQL(schema, debug=True)
+
+# Define user class
+User = get_user_model()
 
 # Create your views here.
 
@@ -15,6 +19,8 @@ def test(request):
     return HttpResponse("Welcome to CPAS")
 
 # Feature B01a User Creation Functionality
+# CSRF Exempt decorator used for testing. To be removed when frontend connected
+@csrf_exempt
 def create_user(request):
     if request.method == 'POST':
         # Collect information from the post request
@@ -38,6 +44,9 @@ def create_user(request):
         )
 
         return JsonResponse({'message': 'User created successfully'})
+    
+    elif request.method == 'GET':
+        return HttpResponse("Please make a post request")
 
 @csrf_exempt
 def graphql_testing_view(request):
