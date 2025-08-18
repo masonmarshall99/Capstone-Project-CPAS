@@ -37,7 +37,9 @@ function Sidebar({ curWindow }) {
           <span className="icon">
             <Icon />
           </span>
-          <span className="text">{Text}</span>
+          <span className="text" style={{ fontWeight: 600 }}>
+            {Text}
+          </span>
         </Link>
       ))}
     </div>
