@@ -1,0 +1,5 @@
+# Model to Schema types
+
+type Zone {
+    zone_name: String!
+}

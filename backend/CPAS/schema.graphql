@@ -1,0 +1,9 @@
+# Query and Mutation types
+
+type Query {
+    
+}
+
+type Mutation {
+    
+}

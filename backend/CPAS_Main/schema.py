@@ -1,10 +1,13 @@
 from ariadne import QueryType, make_executable_schema, gql
 
-type_defs = gql("""
-            type Query { 
-                hello: String! 
-            }
-        """)
+type_defs = gql(
+    """
+
+    type Query { 
+        hello: String! 
+        }
+
+    """)
 
 query = QueryType()
 
