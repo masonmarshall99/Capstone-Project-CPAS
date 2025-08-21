@@ -4,7 +4,8 @@ import "../Styling/CSS/AuthPages.css";
 
 const CreateAccountPage = () => {
   const [email, setEmail] = useState("");
-  const [name, setMobile] = useState("");
+  const [name, setName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
@@ -25,7 +26,7 @@ const CreateAccountPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, name, password }),
+        body: JSON.stringify({ email, name, lastName, password }),
       });
 
       if (!response.ok) {
@@ -60,7 +61,7 @@ const CreateAccountPage = () => {
 
   useEffect(() => {
     handleChange();
-  }, [email, name, password, confirmPassword]);
+  }, [email, password, confirmPassword]);
 
   return (
     <div className="auth-wrapper">
@@ -84,7 +85,16 @@ const CreateAccountPage = () => {
             className="input-field"
             placeholder="Enter your name"
             value={name}
-            onChange={(e) => setMobile(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <label>Last Name</label>
+          <input
+            type="text"
+            className="input-field"
+            placeholder="Enter your surname"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
             required
           />
 
