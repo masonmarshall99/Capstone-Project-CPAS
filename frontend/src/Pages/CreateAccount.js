@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Styling/CSS/AuthPages.css";
 
 const CreateAccountPage = () => {
   const [email, setEmail] = useState("");
-  const [mobile, setMobile] = useState("");
+  const [name, setMobile] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
@@ -19,11 +19,48 @@ const CreateAccountPage = () => {
       return;
     }
 
-    alert(`Account created for ${email}`);
-    setError("");
+    try {
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, name, password }),
+      });
 
-    navigate("/account");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log("Signup success:", data);
+
+      alert(`Account created for ${email}`);
+      setError("");
+      navigate("/dash");
+    } catch (error) {
+      console.error("Fetch error:", error);
+      setError("Failed to sign up. Please try again.");
+    }
   };
+
+  function handleChange() {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (email && !emailRegex.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (password && confirmPassword && password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    setError("");
+  }
+
+  useEffect(() => {
+    handleChange();
+  }, [email, name, password, confirmPassword]);
 
   return (
     <div className="auth-wrapper">
@@ -41,12 +78,12 @@ const CreateAccountPage = () => {
             required
           />
 
-          <label>Mobile Number</label>
+          <label>Full Name</label>
           <input
-            type="tel"
+            type="text"
             className="input-field"
-            placeholder="Enter your mobile number"
-            value={mobile}
+            placeholder="Enter your name"
+            value={name}
             onChange={(e) => setMobile(e.target.value)}
             required
           />
