@@ -1,9 +1,27 @@
 # Query and Mutation types
 
 type Query {
-    
+    zones: [Zone!]!
+    locations: [Location!]!
+    seasons: [Season!]!
+    crops: [Crops!]!
+    cropareas: [CropArea!]!
+    producedins: [ProducedIn!]!
+    diseases: [Disease!]!
+    diseasepresences: [DiseasePresence!]!
+
+    users: [CPAS_User!]!
 }
 
 type Mutation {
-    
+    createZone: Zone!
+    createLocation: Location!
+    createSeason: Season!
+    createCrop: Crops!
+    createCropArea: CropArea!
+    createProducedIn: ProducedIn!
+    createDisease: Disease!
+    createDiseasePresence: DiseasePresence!
+
+    createUser: CPAS_User!
 }
