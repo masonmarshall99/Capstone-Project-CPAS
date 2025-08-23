@@ -1,0 +1,139 @@
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "../Styling/CSS/AuthPages.css";
+
+const CreateAccountPage = () => {
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, name, lastName, password }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log("Signup success:", data);
+
+      alert(`Account created for ${email}`);
+      setError("");
+      navigate("/dash");
+    } catch (error) {
+      console.error("Fetch error:", error);
+      setError("Failed to sign up. Please try again.");
+    }
+  };
+
+  function handleChange() {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (email && !emailRegex.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (password && confirmPassword && password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    setError("");
+  }
+
+  useEffect(() => {
+    handleChange();
+  }, [email, password, confirmPassword]);
+
+  return (
+    <div className="auth-wrapper">
+      <div className="auth-container">
+        <h1 className="auth-title">Create Your Account</h1>
+
+        <form onSubmit={handleSignUp}>
+          <label>Email</label>
+          <input
+            type="email"
+            className="input-field"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+
+          <label>Full Name</label>
+          <input
+            type="text"
+            className="input-field"
+            placeholder="Enter your name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <label>Last Name</label>
+          <input
+            type="text"
+            className="input-field"
+            placeholder="Enter your surname"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            required
+          />
+
+          <label>Password</label>
+          <input
+            type="password"
+            className="input-field"
+            placeholder="Enter password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          <label>Confirm Password</label>
+          <input
+            type="password"
+            className="input-field"
+            placeholder="Confirm password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+
+          {error && <p className="error-text">{error}</p>}
+
+          <button type="submit" className="button-primary">
+            Sign Up
+          </button>
+        </form>
+
+        <p className="auth-switch-text">
+          Already have an account?{" "}
+          <span className="auth-link" onClick={() => navigate("/account")}>
+            Login
+          </span>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default CreateAccountPage;

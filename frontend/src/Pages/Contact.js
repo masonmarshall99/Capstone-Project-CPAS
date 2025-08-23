@@ -7,16 +7,17 @@ import Sidebar from "./../Styling/Sidebar";
 import "bulma/css/bulma.min.css";
 import "./../Styling/CSS/Pages.css";
 
-function Historical() {
+function Contact() {
   return (
     <>
       <Top />
       <div className="panel-bottom">
-        <Sidebar curWindow="Historical Analysis" />
-        <div style={{ flex: 1, padding: "1rem" }}>Historical content area</div>
+        <Sidebar curWindow="Contact Us" />
+
+        <div style={{ flex: 1, padding: "1rem" }}>Contact content area</div>
       </div>
     </>
   );
 }
 
-export default Historical;
+export default Contact;
