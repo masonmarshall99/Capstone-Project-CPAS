@@ -1,27 +1,27 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import "../Styling/CSS/LoadingPage.css";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../Styling/CSS/LoadingPage.css';
 
 const LoadingPage = () => {
   const navigate = useNavigate();
 
   const handleSignUpClick = () => {
-    navigate("/create-account");
+    navigate('/create-account');
   };
 
   const handleSignInClick = (e) => {
-    e.preventDefault();
-    navigate("/account");
+    e.preventDefault(); 
+    navigate('/login');
   };
 
   return (
     <div className="loading-wrapper">
       <div className="loading-container">
-        <div className="logo-section"></div>
+        <div className="logo-section">
+        </div>
 
         <p className="welcome-text">
-          Welcome to Crop Protection Analytics – smarter insights for healthier
-          crops
+          Welcome to Crop Protection Analytics – smarter insights for healthier crops
         </p>
 
         <button className="button-primary" onClick={handleSignUpClick}>
@@ -29,8 +29,8 @@ const LoadingPage = () => {
         </button>
 
         <p className="account-text">
-          Already have an Account?{" "}
-          <a href="/account" onClick={handleSignInClick}>
+          Already have an Account?{' '}
+          <a href="/login" onClick={handleSignInClick}>
             SIGN IN
           </a>
         </p>
