@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model, authenticate
 
 # Ariadne testing view imports
 from ariadne.wsgi import GraphQL
-from CPAS_Main.schema import schema
+from CPAS.graphql_config import schema
 from django.views.decorators.csrf import csrf_exempt
 graphql_app = GraphQL(schema, debug=True)
 
