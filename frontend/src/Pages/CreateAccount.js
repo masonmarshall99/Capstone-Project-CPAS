@@ -9,6 +9,7 @@ const CreateAccountPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -29,34 +30,40 @@ const CreateAccountPage = () => {
         body: JSON.stringify({ email, name, lastName, password }),
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
       const data = await response.json();
-      console.log("Signup success:", data);
 
-      alert(`Account created for ${email}`);
-      setError("");
-      navigate("/dash");
+      if (!response.ok) {
+        if(data.message){
+          setMessage(data.message)
+        } else{
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+      } else{
+        console.log("Signup success:", data);
+
+        alert(`Account created for ${email}`);
+        setMessage("");
+        navigate("/dash");
+      }
     } catch (error) {
       console.error("Fetch error:", error);
-      setError("Failed to sign up. Please try again.");
+      setMessage("Sign up failed. Please try again.");
     }
   };
 
   function handleChange() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (email && !emailRegex.test(email)) {
-      setError("Please enter a valid email address.");
+      setMessage("Please enter a valid email address.");
       return;
     }
 
     if (password && confirmPassword && password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setMessage("Passwords do not match.");
       return;
     }
 
-    setError("");
+    setMessage("");
   }
 
   useEffect(() => {
@@ -118,7 +125,7 @@ const CreateAccountPage = () => {
             required
           />
 
-          {error && <p className="error-text">{error}</p>}
+          {message && <p className="error-text">{message}</p>}
 
           <button type="submit" className="button-primary">
             Sign Up
