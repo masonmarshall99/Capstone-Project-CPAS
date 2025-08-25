@@ -11,20 +11,17 @@ def fill_database(sender, **kwargs):
         # Fill Zone Table
         try:
             if pd.notna(row['GRDC Agro Ecological Zones']):
-                Zone.objects.get_or_create(zone_name=row['GRDC Agro Ecological Zones'])
-
+                zone = Zone.objects.get_or_create(zone_name=row['GRDC Agro Ecological Zones'])
         except Exception as error:
             print(f'Zone error at row {index}: {error}')
 
         #Fill Location Table
         try:
-            zone = Zone.objects.get(zone_name=row['GRDC Agro Ecological Zones'])
-
             if pd.notna(row['Sub regions']):
                 Location.objects.get_or_create(
                     sub_region=row['Sub regions'],
                     region=row.get('GRDC Regions', ''),
-                    zone=zone
+                    defaults={'zone': zone}
                 )
         except Exception as error:
             print(f'Location error at row {index}: {error}')
