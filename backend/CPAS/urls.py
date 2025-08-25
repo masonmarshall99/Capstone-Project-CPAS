@@ -16,7 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from ariadne.contrib.django.views import GraphQLView
+from ariadne_django.views import GraphQLView
+from ariadne.explorer import ExplorerGraphiQL
 
 from CPAS_Main.views import graphql_testing_view
 from .graphql_config import schema
@@ -25,5 +26,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include("CPAS_Main.urls")),
     path('graphql/', graphql_testing_view),
-    path('graphqltest', GraphQLView.as_view(schema=schema)),
+    path('graphqltest/', GraphQLView.as_view(schema=schema), name='graphqltest'),
 ]

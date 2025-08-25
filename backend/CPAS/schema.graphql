@@ -5,10 +5,10 @@ type Query {
     locations: [Location!]!
     seasons: [Season!]!
     crops: [Crops!]!
-    cropareas: [CropArea!]!
-    producedins: [ProducedIn!]!
+    cropAreas: [CropArea!]!
+    producedIns: [ProducedIn!]!
     diseases: [Disease!]!
-    diseasepresences: [DiseasePresence!]!
+    diseasePresences: [DiseasePresence!]!
 
     users: [CPAS_User!]!
 }

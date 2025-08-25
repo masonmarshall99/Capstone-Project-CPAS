@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'CPAS_Main',
 
-    'ariadne.contrib.django',
     'ariadne',
     'ariadne_django',
 ]
