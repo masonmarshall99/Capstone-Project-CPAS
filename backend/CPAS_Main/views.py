@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
+import json
 
 from django.contrib.auth import get_user_model, authenticate
+from .serializers import serializeUser
 
 # Ariadne testing view imports
 from ariadne.wsgi import GraphQL
@@ -23,23 +25,19 @@ def test(request):
 @csrf_exempt
 def create_user(request):
     if request.method == 'POST':
+        # Load json data from frontend POST request
+        data = json.loads(request.body)
         # Collect information from the post request
-        #new_username = request.POST.get('name')
-        new_password = request.POST.get('password')
-        new_first_name = request.POST.get('first_name')
-        new_last_name = request.POST.get('last_name')
-        new_email = request.POST.get('email')
-
-        # Check if user with this username already exists. return error if so
-        if User.objects.filter(email = new_email):
-            return JsonResponse({'error': 'Email already in use'}, status = 400)
+        new_password = data.get('password')
+        new_first_name = data.get('name')
+        new_last_name = data.get('lastName')
+        new_email = data.get('email')
         
         if User.objects.filter(email = new_email):
-            return JsonResponse({'error': 'Email address unavailable'}, status = 400)
+            return JsonResponse({'message': 'Email address unavailable'}, status = 400)
 
         # If user doesn't exist, create new user and return success message
         new_user = User.objects.create_user(
-            #username = new_username,
             password = new_password,
             first_name = new_first_name,
             last_name = new_last_name,
@@ -48,7 +46,7 @@ def create_user(request):
 
         user = authenticate(email = new_email, password = new_password)
 
-        return JsonResponse({'message': 'User created successfully'})
+        return JsonResponse({'message': 'User created successfully', 'user': serializeUser(user).data})
 
 
 @csrf_exempt
