@@ -42,7 +42,7 @@ INSTALLED_APPS = [
 
     'ariadne.contrib.django',
     'ariadne',
-    'ariadne_django'
+    'ariadne_django',
 ]
 
 MIDDLEWARE = [
