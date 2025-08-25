@@ -6,3 +6,4 @@ django-cors-headers>=4.3
 ariadne>=0.23
 django-environ
 pandas>=2.0
+ariadne_django
