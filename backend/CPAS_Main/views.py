@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 import json
 
-from django.contrib.auth import get_user_model, authenticate
+from django.contrib.auth import get_user_model, authenticate, login
 from .serializers import serializeUser
 
 # Ariadne testing view imports
@@ -44,9 +44,10 @@ def create_user(request):
             email = new_email
         )
 
-        user = authenticate(email = new_email, password = new_password)
+        # Log the new user in
+        login(request, new_user)
 
-        return JsonResponse({'message': 'User created successfully', 'user': serializeUser(user).data})
+        return JsonResponse({'message': 'User created successfully', 'user': serializeUser(new_user).data})
 
 
 @csrf_exempt
