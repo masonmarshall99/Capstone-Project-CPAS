@@ -1,6 +1,7 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import "../Styling/CSS/LoadingPage.css";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../Styling/CSS/LoadingPage.css';
+import curtinLogo from '../Styling/Icons/Curtin_Logo.jpg';
 
 const LoadingPage = () => {
   const navigate = useNavigate();
@@ -17,11 +18,14 @@ const LoadingPage = () => {
   return (
     <div className="loading-wrapper">
       <div className="loading-container">
-        <div className="logo-section"></div>
+
+        <div className="logo-section">
+        <h1 className="logo-title">CPAS</h1>
+        <img src={curtinLogo} alt="Curtin Logo" className="curtin-logo" />
+        </div>
 
         <p className="welcome-text">
-          Welcome to Crop Protection Analytics – smarter insights for healthier
-          crops
+          Welcome to Crop Protection Analytics - smarter insights for healthier crops
         </p>
 
         <button className="button-primary" onClick={handleSignUpClick}>
