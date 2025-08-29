@@ -17,6 +17,10 @@ function Disease() {
   const [crop, setCrop] = useState(null)
   const [season, setSeason] = useState(null)
 
+  // Inputs for Crop Production
+  const [area, setArea] = useState(null)
+  const [yieldRate, setYieldRate] = useState(null)
+
   return (
     <>
       <title>Disease Risk</title>
@@ -31,7 +35,11 @@ function Disease() {
             setCrop={setCrop}
             setSeason={setSeason}
             />
-            <CropProduction />
+            <CropProduction 
+            area={area}
+            setArea={setArea}
+            yieldRate={yieldRate}
+            setYieldRate={setYieldRate}/>
           </div>
           <div style={{display: "flex"}}>
             <DiseaseImpactEstimates />
@@ -54,7 +62,7 @@ function RegionCropSeason({setRegion, setSubregion, setCrop, setSeason}) {
   
   const handleRegionChange = (event) => {
     setRegion(event.target.value)
-    // TODO: Query for subregions in region
+    // TODO: Query for subregions in selected region
   }
 
   const handleSubregionChange = (event) => {
@@ -124,12 +132,37 @@ function RegionCropSeason({setRegion, setSubregion, setCrop, setSeason}) {
   );
 }
 
-function CropProduction() {
+function CropProduction({area, setArea, yieldRate, setYieldRate}) {
+
+  const onAreaChange = (event) => {
+    setArea(event.target.value)
+  }
+
+  const onYieldChange = (event) => {
+    setYieldRate(event.target.value)
+  }
+
   return(
     <div style={{flex: 1, padding: "1rem"}}>
       <h1>Crop Production</h1>
       <div style={{flex: 1, padding: "1rem", border: "1px solid cyan", borderRadius: '10px'}}>
-        Text
+        <div style={{display: "flex", gap: "1rem"}}>
+            <div>
+              <label>
+                <p>Planted Area</p>
+                <input type="number" style={{width: "50%"}} onChange={onAreaChange}/> hectares
+              </label>
+            </div>
+            <div>
+              <label>
+                <p>Expected Yield Potential</p>
+                <input type="number" style={{width: "50%"}} onChange={onYieldChange}/> t/ha
+              </label>
+            </div>
+        </div>
+        <div style={{padding: "1rem 0rem"}}>
+          <h2>Expected yield: {Math.round(area * yieldRate * 1000)/1000} tonnes</h2>
+        </div>
       </div>
     </div>
   );
