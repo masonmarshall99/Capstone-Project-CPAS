@@ -33,12 +33,12 @@ const CreateAccountPage = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        if(data.message){
-          setMessage(data.message)
-        } else{
+        if (data.message) {
+          setMessage(data.message);
+        } else {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-      } else{
+      } else {
         console.log("Signup success:", data);
 
         alert(`Account created for ${email}`);

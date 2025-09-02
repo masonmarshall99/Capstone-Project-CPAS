@@ -1,24 +1,48 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../Styling/CSS/AuthPages.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "../Styling/CSS/AuthPages.css";
 
 const LoginPage = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate();  
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleCreateAccountClick = () => {
-  navigate('/create-account');
-};
+    navigate("/create-account");
+  };
 
+  const handleLoginClick = async (e) => {
+    e.preventDefault();
 
-  const handleLoginClick = () => {
-    if (!username || !password) {
-      alert('Please enter both username and password.');
+    if (!email || !password) {
+      alert("Please enter both email and password.");
       return;
     }
 
-    navigate('/dash');
+    try {
+      const response = await fetch("http://localhost:8000/api/signin/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (!data.message) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+      } else {
+        console.log("Signin success:", data);
+
+        alert(`Signing for ${email}`);
+        navigate("/dash");
+      }
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
   };
 
   return (
@@ -27,13 +51,13 @@ const LoginPage = () => {
         <h1 className="auth-title">Sign In</h1>
 
         <form>
-          <label>Username</label>
+          <label>Email</label>
           <input
-            type="text"
+            type="email"
             className="input-field"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
 
           <label>Password</label>
@@ -49,11 +73,19 @@ const LoginPage = () => {
             <a href="#">Forgot your password?</a>
           </div>
 
-          <button type="button" className="button-primary" onClick={handleLoginClick}>
+          <button
+            type="button"
+            className="button-primary"
+            onClick={handleLoginClick}
+          >
             Login
           </button>
 
-          <button type="button" className="button-secondary mt-2" onClick={handleCreateAccountClick}>
+          <button
+            type="button"
+            className="button-secondary mt-2"
+            onClick={handleCreateAccountClick}
+          >
             Create Account
           </button>
         </form>

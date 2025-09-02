@@ -10,6 +10,10 @@ export const SharedData = ({ children }) => {
   const saveDash = useCallback((oldDash, newDash) => {
     if (oldDash !== 0) {
       console.log("dash changed to", newDash);
+      localStorage.setItem(
+        "dash",
+        JSON.stringify({ data: newDash, time: Date.now() })
+      );
     }
   }, []);
 
@@ -17,6 +21,15 @@ export const SharedData = ({ children }) => {
     saveDash(dash, newDash);
     setDash(newDash);
   };
+
+  /* Every tab listens to events */
+  window.addEventListener("storage", (event) => {
+    if (event.key === "dash") {
+      const data = JSON.parse(event.newValue);
+      console.log("Data updated in another tab:", data);
+      setDash(data.data);
+    }
+  });
 
   /* Add more variables here */
 
