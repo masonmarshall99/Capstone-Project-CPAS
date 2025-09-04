@@ -5,7 +5,7 @@ import Top from "./../Styling/Top";
 import Sidebar from "./../Styling/Sidebar";
 
 import "bulma/css/bulma.min.css";
-import "./../Styling/CSS/Pages.css";
+import "./../Styling/CSS/Contact.css";
 
 function Contact() {
   return (
