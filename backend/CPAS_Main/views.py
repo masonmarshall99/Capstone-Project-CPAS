@@ -48,7 +48,7 @@ def create_user(request):
         # Log the new user in
         login(request, user)
 
-        return JsonResponse({'message': 'User created successfully' })
+        return JsonResponse({'message': 'User created successfully', 'user': serializeUser(user).data})
 
 
 @csrf_exempt
