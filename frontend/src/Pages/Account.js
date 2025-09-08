@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Styling/CSS/AuthPages.css";
+import { useData } from "./../Data";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { account, setAccount } = useData();
   const navigate = useNavigate();
 
   const handleCreateAccountClick = () => {
@@ -12,36 +14,40 @@ const LoginPage = () => {
   };
 
   const handleLoginClick = async (e) => {
-    e.preventDefault();
+    if (account == null) {
+      e.preventDefault();
 
-    if (!email || !password) {
-      alert("Please enter both email and password.");
-      return;
-    }
-
-    try {
-      const response = await fetch("http://localhost:8000/api/signin/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        if (!data.message) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-      } else {
-        console.log("Signin success:", data);
-
-        alert(`Signing for ${email}`);
-        navigate("/dash");
+      if (!email || !password) {
+        alert("Please enter both email and password.");
+        return;
       }
-    } catch (error) {
-      console.error("Fetch error:", error);
+
+      try {
+        const response = await fetch("http://localhost:8000/api/signin/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          if (!data.message) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+        } else {
+          console.log("Signin success:", data);
+
+          setAccount(data);
+
+          alert(`Signing for ${email}`);
+          navigate("/dash");
+        }
+      } catch (error) {
+        console.error("Fetch error:", error);
+      }
     }
   };
 
