@@ -10,16 +10,16 @@ function Top() {
 
   function toAccount() {
     if (account !== null) {
-      navigate("/me");
-    } else {
       navigate("/account");
+    } else {
+      navigate("/login");
     }
   }
 
   return (
     <div className="panel-top is-radiusless">
       <Link
-        to={"/me"}
+        to={"/account"}
         key={"Account"}
         className="panel-top-account"
         onClick={toAccount}

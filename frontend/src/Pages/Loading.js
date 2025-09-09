@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useData } from "./../Data";
 import "../Styling/CSS/LoadingPage.css";
+import { useData } from "./../Data";
 import curtinLogo from "../Styling/Icons/Curtin_Logo.jpg";
 
 const LoadingPage = () => {
@@ -14,7 +14,7 @@ const LoadingPage = () => {
 
   const handleSignInClick = (e) => {
     e.preventDefault();
-    navigate("/account");
+    navigate("/login");
   };
 
   /* Redirect if signed in */
@@ -43,7 +43,7 @@ const LoadingPage = () => {
 
         <p className="account-text">
           Already have an Account?{" "}
-          <a href="/account" onClick={handleSignInClick}>
+          <a href="/login" onClick={handleSignInClick}>
             SIGN IN
           </a>
         </p>
