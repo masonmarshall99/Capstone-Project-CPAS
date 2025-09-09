@@ -76,6 +76,13 @@ const CreateAccountPage = () => {
     handleChange();
   }, [email, password, confirmPassword]);
 
+  /* Redirect if signed in */
+  useEffect(() => {
+    if (account !== null) {
+      navigate("/dash");
+    }
+  }, [account, navigate]);
+
   return (
     <div className="auth-wrapper">
       <div className="auth-container">

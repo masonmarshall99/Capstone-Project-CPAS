@@ -12,6 +12,7 @@ import { SharedData } from "./Data";
 import Loading from "./Pages/Loading";
 import Account from "./Pages/Account";
 import CreateAccount from "./Pages/CreateAccount";
+import Me from "./Pages/Me";
 
 // Dash pages //
 import Dash from "./Pages/Dash";
@@ -27,6 +28,7 @@ function App() {
           <Route path="/" element={<Loading />} />
           <Route path="/account" element={<Account />} />
           <Route path="/create-account" element={<CreateAccount />} />
+          <Route path="/me" element={<Me />} />
 
           <Route path="/dash" element={<Dash />} />
           <Route path="/historical" element={<Historical />} />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Styling/CSS/AuthPages.css";
 import { useData } from "./../Data";
@@ -50,6 +50,13 @@ const LoginPage = () => {
       }
     }
   };
+
+  /* Redirect if signed in */
+  useEffect(() => {
+    if (account !== null) {
+      navigate("/dash");
+    }
+  }, [account, navigate]);
 
   return (
     <div className="auth-wrapper">

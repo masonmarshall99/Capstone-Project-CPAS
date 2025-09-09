@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Styling/CSS/LoadingPage.css";
+import { useData } from "./../Data";
 
 const LoadingPage = () => {
   const navigate = useNavigate();
+  const { account, setAccount } = useData();
 
   const handleSignUpClick = () => {
     navigate("/create-account");
@@ -13,6 +15,13 @@ const LoadingPage = () => {
     e.preventDefault();
     navigate("/account");
   };
+
+  /* Redirect if signed in */
+  useEffect(() => {
+    if (account !== null) {
+      navigate("/dash");
+    }
+  }, [account, navigate]);
 
   return (
     <div className="loading-wrapper">

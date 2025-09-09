@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useState,
-  useContext,
-  useEffect,
-  useCallback,
-} from "react";
+import React, { createContext, useState, useContext, useCallback } from "react";
 
 const SharedDataContext = createContext();
 
@@ -50,6 +44,7 @@ export const SharedData = ({ children }) => {
           "Content-Type": "application/json",
         },
         credentials: "include",
+        body: JSON.stringify({}),
       });
 
       const data = await response.json();
