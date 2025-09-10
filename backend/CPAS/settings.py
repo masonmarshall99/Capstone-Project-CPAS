@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'CPAS_Main',
+
+    'ariadne',
+    'ariadne_django',
 ]
 
 MIDDLEWARE = [
