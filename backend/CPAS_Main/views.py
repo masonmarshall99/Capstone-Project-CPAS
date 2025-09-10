@@ -33,7 +33,7 @@ def create_user(request):
         new_last_name = data.get('lastName')
         new_email = data.get('email')
         
-        if User.objects.filter(email = new_email):
+        if User.objects.filter(email = new_email).exists():
             return JsonResponse({'message': 'Email address unavailable'}, status = 400)
 
         # If user doesn't exist, create new user and return success message
@@ -43,11 +43,12 @@ def create_user(request):
             last_name = new_last_name,
             email = new_email
         )
+        user = authenticate(request, email=new_email, password=new_password)
 
         # Log the new user in
-        login(request, new_user)
+        login(request, user)
 
-        return JsonResponse({'message': 'User created successfully', 'user': serializeUser(new_user).data})
+        return JsonResponse({'message': 'User created successfully', 'user': serializeUser(user).data})
 
 
 @csrf_exempt
