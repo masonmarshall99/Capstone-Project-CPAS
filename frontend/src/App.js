@@ -10,7 +10,7 @@ import { SharedData } from "./Data";
 
 // Account pages //
 import Loading from "./Pages/Loading";
-import Account from "./Pages/Account";
+import Account from "./Pages/Login";
 import CreateAccount from "./Pages/CreateAccount";
 import Me from "./Pages/Me";
 
