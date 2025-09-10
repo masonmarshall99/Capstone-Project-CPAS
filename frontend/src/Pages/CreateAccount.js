@@ -76,7 +76,6 @@ const CreateAccountPage = () => {
         <h1 className="auth-title">Create Your Account</h1>
 
         <form onSubmit={handleSignUp}>
-          <label>Email</label>
           <input
             type="email"
             className="input-field"
@@ -86,7 +85,6 @@ const CreateAccountPage = () => {
             required
           />
 
-          <label>Full Name</label>
           <input
             type="text"
             className="input-field"
@@ -95,7 +93,6 @@ const CreateAccountPage = () => {
             onChange={(e) => setName(e.target.value)}
             required
           />
-          <label>Last Name</label>
           <input
             type="text"
             className="input-field"
@@ -105,7 +102,6 @@ const CreateAccountPage = () => {
             required
           />
 
-          <label>Password</label>
           <input
             type="password"
             className="input-field"
@@ -115,7 +111,6 @@ const CreateAccountPage = () => {
             required
           />
 
-          <label>Confirm Password</label>
           <input
             type="password"
             className="input-field"
