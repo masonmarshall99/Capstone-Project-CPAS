@@ -142,7 +142,7 @@ const CreateAccountPage = () => {
 
         <p className="auth-switch-text">
           Already have an account?{" "}
-          <span className="auth-link" onClick={() => navigate("/account")}>
+          <span className="auth-link" onClick={() => navigate("/login")}>
             Login
           </span>
         </p>

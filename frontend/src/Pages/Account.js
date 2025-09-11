@@ -33,7 +33,7 @@ function Account() {
 
   useEffect(() => {
     if (account === null) {
-      navigate("/signin");
+      navigate("/login");
     }
   }, [account, navigate]);
 
