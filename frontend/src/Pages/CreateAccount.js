@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Styling/CSS/AuthPages.css";
+import { useData } from "./../Data";
 
 const CreateAccountPage = () => {
   const [email, setEmail] = useState("");
@@ -10,44 +11,49 @@ const CreateAccountPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const { account, setAccount } = useData();
 
   const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
-    e.preventDefault();
+    if (account == null) {
+      e.preventDefault();
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
-
-    try {
-      const response = await fetch("http://localhost:8000/api/register/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, name, lastName, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        if(data.message){
-          setMessage(data.message)
-        } else{
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-      } else{
-        console.log("Signup success:", data);
-
-        alert(`Account created for ${email}`);
-        setMessage("");
-        navigate("/dash");
+      if (password !== confirmPassword) {
+        setError("Passwords do not match.");
+        return;
       }
-    } catch (error) {
-      console.error("Fetch error:", error);
-      setMessage("Sign up failed. Please try again.");
+
+      try {
+        const response = await fetch("http://localhost:8000/api/register/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, name, lastName, password }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          if (data.message) {
+            setMessage(data.message);
+          } else {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+        } else {
+          console.log("Signup success:", data);
+
+          setAccount(data);
+
+          alert(`Account created for ${email}`);
+          setMessage("");
+          navigate("/dash");
+        }
+      } catch (error) {
+        console.error("Fetch error:", error);
+        setMessage("Sign up failed. Please try again.");
+      }
     }
   };
 
@@ -69,6 +75,13 @@ const CreateAccountPage = () => {
   useEffect(() => {
     handleChange();
   }, [email, password, confirmPassword]);
+
+  /* Redirect if signed in */
+  useEffect(() => {
+    if (account !== null) {
+      navigate("/dash");
+    }
+  }, [account, navigate]);
 
   return (
     <div className="auth-wrapper">
@@ -129,7 +142,7 @@ const CreateAccountPage = () => {
 
         <p className="auth-switch-text">
           Already have an account?{" "}
-          <span className="auth-link" onClick={() => navigate("/account")}>
+          <span className="auth-link" onClick={() => navigate("/login")}>
             Login
           </span>
         </p>
