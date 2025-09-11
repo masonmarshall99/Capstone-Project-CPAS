@@ -49,6 +49,13 @@ def create_user(request):
 
         return JsonResponse({'message': 'User created successfully', 'user': serializeUser(new_user).data})
 
+@csrf_exempt
+# add to toggl - 3:20pm - 3:45  (10/09/25)
+def whoami(request):
+        if request.user:
+            return JsonResponse({'user', serializeUser(request.user).data})
+        else:
+            return JsonResponse({'message': 'No user logged in'} status=400)
 
 @csrf_exempt
 def graphql_testing_view(request):
