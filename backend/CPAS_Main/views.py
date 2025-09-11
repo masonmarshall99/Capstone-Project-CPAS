@@ -50,7 +50,6 @@ def create_user(request):
         return JsonResponse({'message': 'User created successfully', 'user': serializeUser(new_user).data})
 
 @csrf_exempt
-# add to toggl - 3:20pm - 3:45  (10/09/25)
 def whoami(request):
         if request.user:
             return JsonResponse({'user', serializeUser(request.user).data})
