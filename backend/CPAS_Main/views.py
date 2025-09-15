@@ -63,7 +63,7 @@ def whoami(request):
         if request.user:
             return JsonResponse({'user', serializeUser(request.user).data})
         else:
-            return JsonResponse({'message': 'No user logged in'} status=400)
+            return JsonResponse({'message': 'No user logged in'}, status=400)
 
 @csrf_exempt
 def graphql_testing_view(request):
