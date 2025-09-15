@@ -2,18 +2,22 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.base_user import BaseUserManager
 
+
+
 # Create your models here.
 
 class Zone(models.Model):
     zone_name = models.CharField(max_length=255, primary_key=True)
 
+class Region(models.Model):
+    region_name = models.CharField(max_length=255, primary_key=True)
 
 class Location(models.Model):
     sub_region = models.CharField(max_length=255, primary_key=True)
-    region = models.CharField(max_length=255)
+    region = models.ForeignKey(Region, on_delete=models.PROTECT)
     zone = models.ForeignKey(Zone, on_delete=models.PROTECT)
 
-
+    
 class Season(models.Model):
     year = models.CharField(max_length=7, primary_key=True)  
 

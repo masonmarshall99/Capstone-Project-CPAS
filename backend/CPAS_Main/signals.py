@@ -1,5 +1,5 @@
 import pandas as pd
-from .models import Zone, Location, Season, Crops, CropArea, ProducedIn, Disease, DiseasePresence
+from .models import Zone, Region, Location, Season, Crops, CropArea, ProducedIn, Disease, DiseasePresence
 
 # Method to fill database automatically after migration
 def fill_database(sender, **kwargs):
@@ -15,14 +15,22 @@ def fill_database(sender, **kwargs):
         except Exception as error:
             print(f'Zone error at row {index}: {error}')
 
+        # Fill Region Table
+        try:
+            if pd.notna(row['GRDC Regions']):
+                Region.objects.get_or_create(region_name=row['GRDC Regions'])
+        except Exception as error:
+            print(f'Region error at row {index}: {error}')
+
         #Fill Location Table
         try:
             zone = Zone.objects.get(zone_name=row['GRDC Agro Ecological Zones'])
+            region = Region.objects.get(region_name=row['GRDC Regions'])
             
             if pd.notna(row['Sub regions']):
                 Location.objects.get_or_create(
                     sub_region=row['Sub regions'],
-                    region=row.get('GRDC Regions', ''),
+                    region=region,
                     zone=zone
                 )
         except Exception as error:
