@@ -8,21 +8,16 @@ from .serializers import serializeUser
 # Ariadne testing view imports
 from ariadne.wsgi import GraphQL
 from CPAS.graphql_config import schema
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 graphql_app = GraphQL(schema, debug=True)
 
 # Define user class
 User = get_user_model()
 
-# Create your views here.
-
-# Testing frontend/backend connection
-def test(request):
-    return HttpResponse("Welcome to CPAS")
+# Required REST API Endpoints for CPAS
 
 # Feature B01a User Creation Functionality
-# CSRF Exempt decorator used for testing. To be removed when frontend connected
-@csrf_exempt
+@ensure_csrf_cookie
 def create_user(request):
     if request.method == 'POST':
         # Load json data from frontend POST request
@@ -48,20 +43,22 @@ def create_user(request):
         # Log the new user in
         login(request, user)
 
-        return JsonResponse({'message': 'User created successfully', 'user': serializeUser(user).data})
-    
-@csrf_exempt
+        return JsonResponse({'message': 'User created successfully', 'user': serializeUser(user).data}, status=201)
+
+# Feature B01f User logout
+# Testing required    
 def logout_user(request):
     if request.user.is_authenticated:
         logout(request)
-        return JsonResponse({'message': 'User logged out successfully'})
+        return JsonResponse({'message': 'User logged out successfully'}, status=200)
     else:
         return JsonResponse({'message': 'No user is currently logged in'}, status=400)
 
-@csrf_exempt
+# Feature B01g whoami
+# Testing required
 def whoami(request):
-        if request.user:
-            return JsonResponse({'user', serializeUser(request.user).data})
+        if request.user.is_authenticated:
+            return JsonResponse({'user': serializeUser(request.user).data}, status=200)
         else:
             return JsonResponse({'message': 'No user logged in'}, status=400)
 
