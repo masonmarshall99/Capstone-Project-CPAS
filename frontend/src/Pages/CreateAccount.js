@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Styling/CSS/AuthPages.css";
+import Cookies from "js-cookie";
 
 const CreateAccountPage = () => {
   const [email, setEmail] = useState("");
@@ -24,8 +25,11 @@ const CreateAccountPage = () => {
     try {
       const response = await fetch("http://localhost:8000/api/register/", {
         method: "POST",
+        mode: "cors",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          "X-CSRFToken": Cookies.get("csrftoken"),
         },
         body: JSON.stringify({ email, name, lastName, password }),
       });
