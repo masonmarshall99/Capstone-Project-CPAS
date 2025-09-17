@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 import json
 
-from django.contrib.auth import get_user_model, authenticate, login
+from django.contrib.auth import get_user_model, authenticate, login, logout
 from .serializers import serializeUser
 
 # Ariadne testing view imports
@@ -49,7 +49,21 @@ def create_user(request):
         login(request, user)
 
         return JsonResponse({'message': 'User created successfully', 'user': serializeUser(user).data})
+    
+@csrf_exempt
+def logout_user(request):
+    if request.user.is_authenticated:
+        logout(request)
+        return JsonResponse({'message': 'User logged out successfully'})
+    else:
+        return JsonResponse({'message': 'No user is currently logged in'}, status=400)
 
+@csrf_exempt
+def whoami(request):
+        if request.user:
+            return JsonResponse({'user', serializeUser(request.user).data})
+        else:
+            return JsonResponse({'message': 'No user logged in'}, status=400)
 
 @csrf_exempt
 def graphql_testing_view(request):
