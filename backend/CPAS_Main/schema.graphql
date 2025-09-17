@@ -6,9 +6,13 @@ type Zone {
     zone_name: String!
 }
 
+type Region {
+    region_name: String!
+}
+
 type Location {
     sub_region: String!
-    region: String!
+    region: Region!
     zone: Zone!
 }
 

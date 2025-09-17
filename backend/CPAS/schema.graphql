@@ -2,6 +2,7 @@
 
 type Query {
     zones: [Zone!]!
+    regions: [Region!]!
     locations: [Location!]!
     seasons: [Season!]!
     crops: [Crops!]!

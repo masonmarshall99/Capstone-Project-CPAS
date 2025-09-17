@@ -70,7 +70,9 @@ function DisplayLocations() {
         query {
             locations {
                 sub_region
-                region
+            }
+            regions {
+                region_name
             }
         }`;
 
@@ -95,7 +97,7 @@ function DisplayLocations() {
                 <option value="" disabled>
                     -- Regions --
                 </option>
-                {data.locations.map(location => <option key={location.region}>{location.region}</option>)};
+                {data.regions.map(region => <option key={region.region_name}>{region.region_name}</option>)};
             </select>
             </div>
         </div>

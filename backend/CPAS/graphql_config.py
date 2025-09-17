@@ -8,6 +8,7 @@ type_defs = [
 
 query = QueryType()
 query.set_field("zones", CPAS_Main.resolvers.list_zones)
+query.set_field("regions", CPAS_Main.resolvers.list_regions)
 query.set_field("locations", CPAS_Main.resolvers.list_locations)
 query.set_field("seasons", CPAS_Main.resolvers.list_seasons)
 query.set_field("crops", CPAS_Main.resolvers.list_crops)

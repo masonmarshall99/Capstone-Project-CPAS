@@ -8,6 +8,9 @@ def list_zones(*_):
 def get_zone(_,zone_name: str):
     return Zone.objects.get(zone_name=zone_name)
 
+def list_regions(*_):
+    return Region.objects.all()
+
 def list_locations(*_):
     return Location.objects.all()
 
