@@ -136,7 +136,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Cors Setup
 
-CORS_ALLOWED_ORIGINS = env.list('DJANGO_CORS_ORIGINS', default=["http://localhost:3000"])
+# CORS_ALLOWED_ORIGINS = env.list('DJANGO_CORS_ORIGINS', default=["http://localhost:3000"])
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+]
 CORS_ALLOW_CREDENTIALS = env.bool('CORS_ALLOW_CREDENTIALS', default=False)
 CORS_ALLOW_HEADERS = [
     'accept',
