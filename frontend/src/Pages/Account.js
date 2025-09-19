@@ -1,21 +1,49 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useData } from "./../Data";
 
 function Account() {
   const navigate = useNavigate();
+  const { account, setAccount } = useData();
 
-  function handleClick() {
-    navigate('/dash');
-  }
-  
+  const signOut = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/api/signout/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({}),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (!data.message) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+      } else {
+        setAccount(null);
+      }
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (account === null) {
+      navigate("/login");
+    }
+  }, [account, navigate]);
+
   return (
     <>
-      <h1>Account</h1>
-      <button onClick={handleClick}>
-        Back
+      <div className="panel-bottom"></div>
+      <button className="is-fullwidth" onClick={signOut}>
+        Signout
       </button>
     </>
   );
 }
-
 export default Account;
