@@ -1,12 +1,18 @@
 # Model to Schema types
 
+# TODO: ability to add whole csv row
+
 type Zone {
     zone_name: String!
 }
 
+type Region {
+    region_name: String!
+}
+
 type Location {
     sub_region: String!
-    region: String!
+    region: Region!
     zone: Zone!
 }
 

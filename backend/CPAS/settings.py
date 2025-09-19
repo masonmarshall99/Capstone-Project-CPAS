@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import environ
+import logging
 
 env = environ.Env()
 environ.Env.read_env()
@@ -135,7 +136,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Cors Setup
 
-CORS_ALLOWED_ORIGINS = env.list('DJANGO_CORS_ORIGINS', default=["http://localhost:3000"])
+# CORS_ALLOWED_ORIGINS = env.list('DJANGO_CORS_ORIGINS', default=["http://localhost:3000"])
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+]
 CORS_ALLOW_CREDENTIALS = env.bool('CORS_ALLOW_CREDENTIALS', default=False)
 CORS_ALLOW_HEADERS = [
     'accept',
@@ -156,3 +163,33 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
+
+# Create a logs/ directory if it doesn't exist
+LOG_DIR = BASE_DIR / 'logs'
+LOG_DIR.mkdir(exist_ok=True)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,  # Keep Django's built-in loggers
+    'formatters': {
+        'simple': {
+            'format': '{asctime} [{levelname}] {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': LOG_DIR / 'cpas.log',  # Log file location
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        'cpas': {  # Our custom logger
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}

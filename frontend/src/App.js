@@ -15,6 +15,7 @@ import Disease from "./Pages/Disease";
 import Historical from "./Pages/Historical";
 import Contact from "./Pages/Contact";
 
+
 function App() {
   return (
     <SharedData>
