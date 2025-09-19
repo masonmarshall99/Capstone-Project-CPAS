@@ -43,6 +43,8 @@ INSTALLED_APPS = [
 
     'ariadne',
     'ariadne_django',
+
+    'members',
 ]
 
 MIDDLEWARE = [
