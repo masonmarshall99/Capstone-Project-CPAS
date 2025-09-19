@@ -1,65 +1,49 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../Styling/CSS/AuthPages.css';
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useData } from "./../Data";
 
-const LoginPage = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate();  
+function Account() {
+  const navigate = useNavigate();
+  const { account, setAccount } = useData();
 
-  const handleCreateAccountClick = () => {
-  navigate('/create-account');
-};
+  const signOut = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/api/signout/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({}),
+      });
 
+      const data = await response.json();
 
-  const handleLoginClick = () => {
-    if (!username || !password) {
-      alert('Please enter both username and password.');
-      return;
+      if (!response.ok) {
+        if (!data.message) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+      } else {
+        setAccount(null);
+      }
+    } catch (error) {
+      console.error("Fetch error:", error);
     }
-
-    navigate('/dash');
   };
 
+  useEffect(() => {
+    if (account === null) {
+      navigate("/login");
+    }
+  }, [account, navigate]);
+
   return (
-    <div className="auth-wrapper">
-      <div className="auth-container">
-        <h1 className="auth-title">Sign In</h1>
-
-        <form>
-          <label>Username</label>
-          <input
-            type="text"
-            className="input-field"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-
-          <label>Password</label>
-          <input
-            type="password"
-            className="input-field"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-
-          <div className="text-link">
-            <a href="#">Forgot your password?</a>
-          </div>
-
-          <button type="button" className="button-primary" onClick={handleLoginClick}>
-            Login
-          </button>
-
-          <button type="button" className="button-secondary mt-2" onClick={handleCreateAccountClick}>
-            Create Account
-          </button>
-        </form>
-      </div>
-    </div>
+    <>
+      <div className="panel-bottom"></div>
+      <button className="is-fullwidth" onClick={signOut}>
+        Signout
+      </button>
+    </>
   );
-};
-
-export default LoginPage;
+}
+export default Account;
