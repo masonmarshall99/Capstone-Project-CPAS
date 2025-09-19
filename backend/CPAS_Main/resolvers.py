@@ -2,17 +2,14 @@ from .models import *
 
 # Query
 
-# def list_zones(*_):
-#     return [
-#         {"zone_name": zone.zone_name}
-#         for zone in Zone.objects.all()
-#     ]
-
 def list_zones(*_):
     return Zone.objects.all()
 
 def get_zone(_,zone_name: str):
     return Zone.objects.get(zone_name=zone_name)
+
+def list_regions(*_):
+    return Region.objects.all()
 
 def list_locations(*_):
     return Location.objects.all()
@@ -40,6 +37,30 @@ def list_users(*_):
 
 # Mutation
 
-def create_zone(*_, zone_name):
-    zone = Zone.objects.create(zone_name=zone_name)
-    return {"zone_name": zone.zone_name}
+def create_zone(*_, zone_name: str):
+    zone, created = Zone.objects.get_or_create(
+        zone_name=zone_name
+        )
+    
+    return {
+        "zone_name": zone.zone_name
+        }
+
+def create_location(*_, sub_region: str, region: str, zone_name: str):
+    zone, created = Zone.objects.get_or_create(
+        zone_name=zone_name
+        )
+
+    location, created = Location.objects.get_or_create(
+        sub_region=sub_region,
+        region=region,
+        zone=zone
+        )
+    
+    return {
+        "sub_region": location.sub_region,
+        "region": location.region,
+        "zone": {
+            "zone_name": zone_name
+            }
+        }
