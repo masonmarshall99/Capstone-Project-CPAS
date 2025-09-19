@@ -15,7 +15,6 @@ function Sidebar({ curWindow }) {
     { icon: dashIcon, text: "Dashboard", route: "/dash" },
     { icon: historicalIcon, text: "Historical Analysis", route: "/historical" },
     { icon: diseaseIcon, text: "Disease Risk", route: "/disease" },
-    { icon: dashIcon, text: "APITest", route: "/apitest" },
     { icon: contactIcon, text: "Contact Us", pos: "Bottom", route: "/contact" },
   ];
 

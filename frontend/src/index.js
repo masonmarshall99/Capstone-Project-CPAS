@@ -10,7 +10,7 @@ import { ApolloProvider } from "@apollo/client/react";
 const client = new ApolloClient({
   link: new HttpLink({ 
     // Change port to the port you are using in your docker file (probably 8000)
-    uri: "http://localhost:8888/graphql/",
+    uri: "http://localhost:8000/graphql/",
   }),
   cache: new InMemoryCache(),
 });
