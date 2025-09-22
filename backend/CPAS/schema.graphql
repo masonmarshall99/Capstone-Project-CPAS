@@ -2,6 +2,7 @@
 
 type Query {
     zones: [Zone!]!
+    regions: [Region!]!
     locations: [Location!]!
     seasons: [Season!]!
     crops: [Crops!]!
@@ -14,8 +15,14 @@ type Query {
 }
 
 type Mutation {
-    createZone: Zone!
-    createLocation: Location!
+    createZone(zone_name: String!): Zone!
+
+    createLocation(
+        sub_region: String! 
+        region: String! 
+        zone_name: String!
+        ): Location!
+        
     createSeason: Season!
     createCrop: Crops!
     createCropArea: CropArea!
