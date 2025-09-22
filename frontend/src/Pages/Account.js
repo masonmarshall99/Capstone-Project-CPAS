@@ -40,6 +40,10 @@ function Account() {
   return (
     <>
       <div className="panel-bottom"></div>
+      <span className="text">First Name: {account.first_name} </span>
+      <span className="text">Last Name: {account.last_name} </span>
+      <span className="text">Email: {account.email} </span>
+
       <button className="is-fullwidth" onClick={signOut}>
         Signout
       </button>
