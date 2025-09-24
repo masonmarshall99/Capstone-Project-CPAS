@@ -135,12 +135,12 @@ const CreateAccountPage = () => {
 
           {message && <p className="error-text">{message}</p>}
 
-          <button type="submit" className="button-primary">
+          <button type="submit" className="button-secondary mt-2">
             Sign Up
           </button>
         </form>
 
-        <p className="auth-switch-text">
+        <p className="auth-switch-text mt-4">
           Already have an account?{" "}
           <span className="auth-link" onClick={() => navigate("/login")}>
             Login
