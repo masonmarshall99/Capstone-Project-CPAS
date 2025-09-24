@@ -56,6 +56,7 @@ def logout_user(request):
 
 # Feature B01g whoami
 # Testing required
+@ensure_csrf_cookie
 def whoami(request):
         if request.user.is_authenticated:
             return JsonResponse({'user': serializeUser(request.user).data}, status=200)
