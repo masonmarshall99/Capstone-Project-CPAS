@@ -46,6 +46,15 @@ def create_zone(*_, zone_name: str):
         "zone_name": zone.zone_name
         }
 
+def create_region(*_, region_name: str):
+    region, created = Region.objects.get_or_create(
+        region_name=region_name
+        )
+    
+    return {
+        "region_name": region.region_name
+        }
+
 def create_location(*_, sub_region: str, region: str, zone_name: str):
     zone, created = Zone.objects.get_or_create(
         zone_name=zone_name
@@ -63,4 +72,22 @@ def create_location(*_, sub_region: str, region: str, zone_name: str):
         "zone": {
             "zone_name": zone_name
             }
+        }
+
+def create_season(*_, year: str):
+    season, created = Season.objects.get_or_create(
+        year=year
+        )
+    
+    return {
+        "year": season.year
+        }
+
+def create_crop(*_, crop_name: str):
+    crop, created = Crops.objects.get_or_create(
+        crop_name=crop_name
+        )
+    
+    return {
+        "crop_name": crop.crop_name
         }

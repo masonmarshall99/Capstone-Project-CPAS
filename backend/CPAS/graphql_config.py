@@ -20,6 +20,8 @@ query.set_field("users", CPAS_Main.resolvers.list_users)
 
 mutation = MutationType()
 mutation.set_field("createZone", CPAS_Main.resolvers.create_zone)
+mutation.set_field("createRegion", CPAS_Main.resolvers.create_region)
 mutation.set_field("createLocation", CPAS_Main.resolvers.create_location)
+mutation.set_field("createSeason", CPAS_Main.resolvers.create_season)
 
 schema = make_executable_schema(type_defs, query, mutation)

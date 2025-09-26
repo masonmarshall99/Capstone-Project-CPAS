@@ -26,7 +26,7 @@ type Crops {
 
 type CropArea {
     crop: Crops!
-    sub_region: Location!
+    location: Location!
     year: Season!
     area_hectares: Float!
     value_tonnes: Float!
