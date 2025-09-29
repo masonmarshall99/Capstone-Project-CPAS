@@ -58,8 +58,8 @@ def fill_database(sender, **kwargs):
 
             CropArea.objects.get_or_create(
                 crop=crop,
-                sub_region=location,
-                year=season,
+                location=location,
+                season=season,
                 defaults={
                     'area_hectares': row.get('Area Hectares', 0),
                     'value_tonnes': row.get('Value Tonnes', 0)
@@ -75,7 +75,7 @@ def fill_database(sender, **kwargs):
 
             ProducedIn.objects.get_or_create(
                 crop=crop,
-                year=season,
+                season=season,
                 defaults={
                     'average_commodity_price': row.get('Average Commodity Price', 0)
                 }
@@ -103,7 +103,7 @@ def fill_database(sender, **kwargs):
                 DiseasePresence.objects.get_or_create(
                     disease=disease,
                     crop=crop,
-                    sub_region=location,
+                    location=location,
                     defaults={
                         'disease_presence_status': row.get('Disease Presence Status', ''),
                         'disease_incidence_year_percentage': row.get('Disease Incidence year_Percentage', 0),
