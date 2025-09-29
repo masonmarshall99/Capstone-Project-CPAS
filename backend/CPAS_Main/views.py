@@ -46,7 +46,8 @@ def create_user(request):
         return JsonResponse({'message': 'User created successfully', 'user': serializeUser(user).data}, status=201)
 
 # Feature B01f User logout
-# Testing required    
+# Testing required
+@ensure_csrf_cookie    
 def logout_user(request):
     if request.user.is_authenticated:
         logout(request)
@@ -56,6 +57,7 @@ def logout_user(request):
 
 # Feature B01g whoami
 # Testing required
+@ensure_csrf_cookie
 def whoami(request):
         if request.user.is_authenticated:
             return JsonResponse({'user': serializeUser(request.user).data}, status=200)
