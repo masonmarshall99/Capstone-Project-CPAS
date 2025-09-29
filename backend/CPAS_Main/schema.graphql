@@ -20,20 +20,20 @@ type Season {
     year: String!
 }
 
-type Crops {
+type Crop {
     crop_name: String!
 }
 
 type CropArea {
-    crop: Crops!
-    location: Location!
+    crop: Crop!
+    sub_region: Location!
     year: Season!
     area_hectares: Float!
     value_tonnes: Float!
 }
 
 type ProducedIn {
-    crop: Crops!
+    crop: Crop!
     year: Season!
     average_commodity_price: Float!
 }
@@ -45,7 +45,7 @@ type Disease {
 
 type DiseasePresence {
     disease: Disease!
-    crop: Crops!
+    crop: Crop!
     sub_region: Location!
     disease_presence_status: String!
     disease_incidence_year_percentage: Float!

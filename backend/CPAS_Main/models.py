@@ -22,12 +22,12 @@ class Season(models.Model):
     year = models.CharField(max_length=7, primary_key=True)  
 
 
-class Crops(models.Model):
+class Crop(models.Model):
     crop_name = models.CharField(max_length=255, primary_key=True)
 
 
 class CropArea(models.Model):
-    crop = models.ForeignKey(Crops, on_delete=models.PROTECT)
+    crop = models.ForeignKey(Crop, on_delete=models.PROTECT)
     sub_region = models.ForeignKey(Location, on_delete=models.PROTECT)
     year = models.ForeignKey(Season, on_delete=models.PROTECT)
     area_hectares = models.FloatField()
@@ -38,7 +38,7 @@ class CropArea(models.Model):
 
 
 class ProducedIn(models.Model):
-    crop = models.ForeignKey(Crops, on_delete=models.PROTECT)
+    crop = models.ForeignKey(Crop, on_delete=models.PROTECT)
     year = models.ForeignKey(Season, on_delete=models.PROTECT)
     average_commodity_price = models.FloatField()
 
@@ -53,7 +53,7 @@ class Disease(models.Model):
 
 class DiseasePresence(models.Model):
     disease = models.ForeignKey(Disease, on_delete=models.PROTECT)
-    crop = models.ForeignKey(Crops, on_delete=models.PROTECT)
+    crop = models.ForeignKey(Crop, on_delete=models.PROTECT)
     sub_region = models.ForeignKey(Location, on_delete=models.PROTECT)
     disease_presence_status = models.CharField(max_length=2)
     disease_incidence_year_percentage = models.FloatField()
