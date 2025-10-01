@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useCallback } from "react";
+import React, { createContext, useState, useContext, useCallback, useEffect } from "react";
 import Cookies from "js-cookie";
 
 const SharedDataContext = createContext();
@@ -79,7 +79,10 @@ export const SharedData = ({ children }) => {
       console.error("Fetch error:", error);
     }
   };
-  initialLoad();
+  
+  useEffect(() => {
+    initialLoad();
+  }, []);
 
   /* Every tab listens to events */
   window.addEventListener("storage", (event) => {
