@@ -2,9 +2,23 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useData } from "./../Data";
 
+import Top from "./../Styling/Top";
+import Sidebar from "./../Styling/Sidebar";
+
+import "bulma/css/bulma.min.css";
+import "../Styling/CSS/Pages.css";
+
 function Account() {
   const navigate = useNavigate();
   const { account, setAccount } = useData();
+  /*
+  const account = {
+    first_name: "Ivan",
+    last_name: "Bezuidenhout",
+    email: "Ivan.Bezuidenhout2@gmail.com",
+  };
+  const setAccount = console.error;
+  */
 
   const signOut = async () => {
     try {
@@ -39,14 +53,26 @@ function Account() {
 
   return (
     <>
-      <div className="panel-bottom"></div>
-      <span className="text">First Name: {account.first_name} </span>
-      <span className="text">Last Name: {account.last_name} </span>
-      <span className="text">Email: {account.email} </span>
+      <Top />
+      <div className="panel-bottom">
+        <Sidebar curWindow="" />
+        <div className="panel-bottom account-page">
+          <span className="text account-detail">
+            <strong>First Name:</strong> {account.first_name}
+          </span>
+          <span className="text account-detail">
+            <strong>Last Name:</strong> {account.last_name}
+          </span>
+          <span className="text account-detail">
+            <strong>Email:</strong> {account.email}
+          </span>
+          <button className="button">Update Password</button>
 
-      <button className="is-fullwidth" onClick={signOut}>
-        Signout
-      </button>
+          <button className="button signout" onClick={signOut}>
+            Signout
+          </button>
+        </div>
+      </div>
     </>
   );
 }
