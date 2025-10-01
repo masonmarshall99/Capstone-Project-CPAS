@@ -26,6 +26,5 @@ urlpatterns = [
     path('api/', include("CPAS_Main.urls")),
     path('graphql/', graphql_testing_view),
     path('graphqltest/', GraphQLView.as_view(schema=schema), name='graphqltest'),
-    path('members/', include('django.contrib.auth.urls')),
-    path('members/', include('members.urls')),
+
 ]

@@ -46,7 +46,7 @@ def create_user(request):
         return JsonResponse({'message': 'User created successfully', 'user': serializeUser(user).data}, status=201)
 
 # Feature B01b User Login Functionality
-@ensure_csrf_cookie
+@csrf_exempt
 def login_user(request):
         if request.method != 'POST':
             return JsonResponse({'message': 'Method not allowed'}, status=405)
