@@ -5,7 +5,7 @@ type Query {
     regions: [Region!]!
     locations: [Location!]!
     seasons: [Season!]!
-    crops: [Crops!]!
+    crops: [Crop!]!
     cropAreas: [CropArea!]!
     producedIns: [ProducedIn!]!
     diseases: [Disease!]!
@@ -17,18 +17,35 @@ type Query {
 type Mutation {
     createZone(zone_name: String!): Zone!
 
-    createLocation(
+    createRegion(region_name: String!): Region!
+
+    createLocation (
         sub_region: String! 
-        region: String! 
+        region_name: String! 
         zone_name: String!
         ): Location!
         
-    createSeason: Season!
-    createCrop: Crops!
-    createCropArea: CropArea!
-    createProducedIn: ProducedIn!
-    createDisease: Disease!
-    createDiseasePresence: DiseasePresence!
+    createSeason (
+        year: String!
+        ): Season!
 
-    createUser: CPAS_User!
+    createCrop (
+        crop_name: String!
+        ): Crop!
+
+    createCropArea (
+        crop_name: String!
+        sub_region: String! 
+        region_name: String! 
+        zone_name: String
+        year: String!
+        area_hectares: Float!
+        value_tonnes: Float!
+        ): CropArea!
+        
+    # createProducedIn: ProducedIn!
+    # createDisease: Disease!
+    # createDiseasePresence: DiseasePresence!
+
+    # createUser: CPAS_User!
 }
