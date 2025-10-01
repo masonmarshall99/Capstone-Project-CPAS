@@ -17,6 +17,7 @@ const CreateAccountPage = () => {
 
   const navigate = useNavigate();
 
+
   const handleSignUp = async (e) => {
     if (account == null) {
       e.preventDefault();
