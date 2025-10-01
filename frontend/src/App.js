@@ -14,6 +14,7 @@ import Dash from "./Pages/Dash";
 import Disease from "./Pages/Disease";
 import Historical from "./Pages/Historical";
 import FAQ from "./Pages/Faq";
+import Help from "./Pages/Help";
 import Contact from "./Pages/Contact";
 
 
@@ -31,6 +32,7 @@ function App() {
           <Route path="/historical" element={<Historical />} />
           <Route path="/disease" element={<Disease />} />
           <Route path="/faq" element={<FAQ />} />
+          <Route path="/help" element={<Help />} />``
           <Route path="/Contact" element={<Contact />} />
         </Routes>
       </Router>
