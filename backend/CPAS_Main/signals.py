@@ -1,5 +1,5 @@
 import pandas as pd
-from .models import Zone, Region, Location, Season, Crops, CropArea, ProducedIn, Disease, DiseasePresence
+from .models import Zone, Region, Location, Season, Crop, CropArea, ProducedIn, Disease, DiseasePresence
 
 # Method to fill database automatically after migration
 def fill_database(sender, **kwargs):
@@ -46,20 +46,20 @@ def fill_database(sender, **kwargs):
         #Fill Crops Table
         try:
             if pd.notna(row['Crops']):
-                Crops.objects.get_or_create(crop_name=row['Crops'])
+                Crop.objects.get_or_create(crop_name=row['Crops'])
         except Exception as error:
             print(f'Crops error at row {index}: {error}')
 
         #Fill CropArea Table
         try:
-            crop = Crops.objects.get(crop_name=row['Crops'])
+            crop = Crop.objects.get(crop_name=row['Crops'])
             location = Location.objects.get(sub_region=row['Sub regions'])
             season = Season.objects.get(year=row['Season'])
 
             CropArea.objects.get_or_create(
                 crop=crop,
-                sub_region=location,
-                year=season,
+                location=location,
+                season=season,
                 defaults={
                     'area_hectares': row.get('Area Hectares', 0),
                     'value_tonnes': row.get('Value Tonnes', 0)
@@ -70,12 +70,12 @@ def fill_database(sender, **kwargs):
 
         #Fill ProducedIn Table
         try:
-            crop = Crops.objects.get(crop_name=row['Crops'])
+            crop = Crop.objects.get(crop_name=row['Crops'])
             season = Season.objects.get(year=row['Season'])
 
             ProducedIn.objects.get_or_create(
                 crop=crop,
-                year=season,
+                season=season,
                 defaults={
                     'average_commodity_price': row.get('Average Commodity Price', 0)
                 }
@@ -97,13 +97,13 @@ def fill_database(sender, **kwargs):
         try:
             if pd.notna(row.get('Disease')):
                 disease = Disease.objects.get(disease_name=row['Disease'])
-                crop = Crops.objects.get(crop_name=row['Crops'])
+                crop = Crop.objects.get(crop_name=row['Crops'])
                 location = Location.objects.get(sub_region=row['Sub regions'])
 
                 DiseasePresence.objects.get_or_create(
                     disease=disease,
                     crop=crop,
-                    sub_region=location,
+                    location=location,
                     defaults={
                         'disease_presence_status': row.get('Disease Presence Status', ''),
                         'disease_incidence_year_percentage': row.get('Disease Incidence year_Percentage', 0),

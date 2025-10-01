@@ -8,7 +8,7 @@ from .serializers import serializeUser
 # Ariadne testing view imports
 from ariadne.wsgi import GraphQL
 from CPAS.graphql_config import schema
-from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie, csrf_protect
 graphql_app = GraphQL(schema, debug=True)
 
 # Define user class
@@ -16,8 +16,14 @@ User = get_user_model()
 
 # Required REST API Endpoints for CPAS
 
-# Feature B01a User Creation Functionality
+# Feature B01c Cookie Handling
 @ensure_csrf_cookie
+def get_csrf_token(request):
+    return JsonResponse({'message': 'CSRF cookie set'}, status=200)
+# Add any other cookie related views here
+
+# Feature B01a User Creation Functionality
+@csrf_protect
 def create_user(request):
     if request.method == 'POST':
         # Load json data from frontend POST request
@@ -47,7 +53,7 @@ def create_user(request):
 
 # Feature B01f User logout
 # Testing required
-@ensure_csrf_cookie    
+@csrf_protect    
 def logout_user(request):
     if request.user.is_authenticated:
         logout(request)
@@ -57,6 +63,7 @@ def logout_user(request):
 
 # Feature B01g whoami
 # Testing required
+@csrf_protect
 def whoami(request):
         if request.user.is_authenticated:
             return JsonResponse({'user': serializeUser(request.user).data}, status=200)
