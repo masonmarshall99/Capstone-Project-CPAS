@@ -52,7 +52,6 @@ def create_user(request):
         return JsonResponse({'message': 'User created successfully', 'user': serializeUser(user).data}, status=201)
 
 # Feature B01f User logout
-# Testing required
 @csrf_protect    
 def logout_user(request):
     if request.user.is_authenticated:
@@ -60,6 +59,42 @@ def logout_user(request):
         return JsonResponse({'message': 'User logged out successfully'}, status=200)
     else:
         return JsonResponse({'message': 'No user is currently logged in'}, status=400)
+
+# Feature B08 User detail editing
+# To be tested
+@csrf_protect
+def edit_user(request):
+    if request.method == 'PUT':
+        if request.user.is_authenticated:
+            data = json.loads(request.body)
+            user = request.user
+            
+            # Check current password
+            current_password = data.get('currentPassword')
+            if not user.check_password(current_password):
+                return JsonResponse({'message': 'Current password is incorrect'}, status=400)
+            else:
+                # Update user details if provided
+                new_first_name = data.get('name')
+                new_last_name = data.get('lastName')
+                new_email = data.get('email')
+                new_password = data.get('newPassword')
+
+                if new_first_name:
+                    user.first_name = new_first_name
+                if new_last_name:
+                    user.last_name = new_last_name
+                if new_email:
+                    if User.objects.filter(email=new_email).exclude(id=user.id).exists():
+                        return JsonResponse({'message': 'Email address unavailable'}, status=400)
+                    user.email = new_email
+                if new_password:
+                    user.set_password(new_password)
+
+                user.save()
+
+                return JsonResponse({'message': 'User details updated successfully', 'user': serializeUser(user).data}, status=200)
+
 
 # Feature B01g whoami
 # Testing required
