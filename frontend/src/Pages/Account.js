@@ -18,7 +18,7 @@ function Account() {
     email: "Ivan.Bezuidenhout2@gmail.com",
   };
   const setAccount = console.error;
-  */
+  //*/
 
   const signOut = async () => {
     try {
@@ -57,6 +57,9 @@ function Account() {
       <div className="panel-bottom">
         <Sidebar curWindow="" />
         <div className="panel-bottom account-page">
+          <span className="text title is-5">
+            <strong>Account details:</strong>
+          </span>
           <span className="text account-detail">
             <strong>First Name:</strong> {account.first_name}
           </span>
