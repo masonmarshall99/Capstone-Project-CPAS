@@ -57,8 +57,3 @@ type DiseasePresence {
     disease_severity_control_pesticide_contribution_percentage: Float!
     fungicide_resistance_risk: String!
 }
-
-type CPAS_User {
-    username: String
-    email: String!
-}

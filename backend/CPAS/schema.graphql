@@ -10,30 +10,32 @@ type Query {
     producedIns: [ProducedIn!]!
     diseases: [Disease!]!
     diseasePresences: [DiseasePresence!]!
-
-    users: [CPAS_User!]!
 }
 
 type Mutation {
-    createZone(zone_name: String!): Zone!
+    createZone(
+        zone_name: String!
+    ): Zone!
 
-    createRegion(region_name: String!): Region!
+    createRegion(
+        region_name: String!
+    ): Region!
 
-    createLocation (
+    createLocation(
         sub_region: String! 
         region_name: String! 
         zone_name: String!
-        ): Location!
+    ): Location!
         
-    createSeason (
+    createSeason(
         year: String!
-        ): Season!
+    ): Season!
 
-    createCrop (
+    createCrop(
         crop_name: String!
-        ): Crop!
+    ): Crop!
 
-    createCropArea (
+    createCropArea(
         crop_name: String!
         sub_region: String! 
         region_name: String! 
@@ -41,11 +43,34 @@ type Mutation {
         year: String!
         area_hectares: Float!
         value_tonnes: Float!
-        ): CropArea!
+    ): CropArea!
         
-    # createProducedIn: ProducedIn!
-    # createDisease: Disease!
-    # createDiseasePresence: DiseasePresence!
+    createProducedIn(
+        crop_name: String!
+        year: String!
+        average_commodity_price: Float!
+    ): ProducedIn!
 
-    # createUser: CPAS_User!
+    createDisease(
+        disease_name: String!
+        disease_group: String!
+    ): Disease!
+
+    createDiseasePresence(
+        disease_name: String!
+        disease_group: String!
+        crop_name: String!
+        sub_region: String! 
+        region_name: String! 
+        zone_name: String!
+        disease_presence_status: String!
+        disease_incidence_year_percentage: Float!
+        disease_incidence_area_percentage: Float!
+        disease_severity_without_control_percentage: Float!
+        disease_severity_with_control_percentage: Float!
+        disease_severity_control_genetic_contribution_percentage: Float!
+        disease_severity_control_cultural_contribution_percentage: Float!
+        disease_severity_control_pesticide_contribution_percentage: Float!
+        fungicide_resistance_risk: String!
+    ): DiseasePresence!
 }
