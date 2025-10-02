@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useData } from "./../Data";
 
@@ -10,8 +10,8 @@ import "../Styling/CSS/Pages.css";
 
 function Account() {
   const navigate = useNavigate();
-  const { account, setAccount } = useData();
-  /*
+  //const { account, setAccount } = useData();
+  //*
   const account = {
     first_name: "Ivan",
     last_name: "Bezuidenhout",
@@ -51,6 +51,36 @@ function Account() {
     }
   }, [account, navigate]);
 
+  /* Edit details */
+  const [isEdit, setIsEdit] = useState(false);
+  const [lastName, setLastName] = useState(null);
+  const [firstName, setFirstName] = useState(null);
+
+  function edit(detail) {
+    setIsEdit(true);
+    if (detail == "firstName") {
+      setFirstName(account.first_name);
+    } else if (detail == "lastName") {
+      setLastName(account.last_name);
+    }
+  }
+
+  function save(detail, action) {
+    setIsEdit(false);
+
+    if (action == "save") {
+      console.log(firstName, lastName);
+    }
+
+    if (detail == "firstName") {
+      setFirstName(null);
+    } else if (detail == "lastName") {
+      setLastName(null);
+    }
+
+    console.log(firstName, lastName);
+  }
+
   return (
     <>
       <Top />
@@ -60,12 +90,123 @@ function Account() {
           <span className="text title is-5">
             <strong>Account details:</strong>
           </span>
-          <span className="text account-detail">
-            <strong>First Name:</strong> {account.first_name}
-          </span>
-          <span className="text account-detail">
-            <strong>Last Name:</strong> {account.last_name}
-          </span>
+
+          <nav className="level mb-1">
+            <div className="level-left">
+              <div className="level-item">
+                <span className="text account-detail">
+                  <strong>First Name:&nbsp;</strong>
+                </span>
+                {isEdit ? (
+                  <span
+                    contentEditable={true}
+                    suppressContentEditableWarning={true}
+                    onBlur={(e) => setFirstName(e.currentTarget.textContent)}
+                  >
+                    {firstName ?? account.first_name}
+                  </span>
+                ) : (
+                  <span>{account.first_name}</span>
+                )}
+              </div>
+            </div>
+            <div
+              className="level-right"
+              style={{ display: isEdit ? "none" : "block" }}
+            >
+              <div className="level-item">
+                <button
+                  onClick={() => edit("firstName")}
+                  className="button is-small edit-button"
+                >
+                  Edit
+                </button>
+              </div>
+            </div>
+            <div
+              className="level-right"
+              style={{
+                display: firstName ? "flex" : "none",
+                gap: "0.5rem",
+              }}
+            >
+              <div className="level-item">
+                <button
+                  onClick={() => save("firstName", "save")}
+                  className="button is-small edit-button"
+                >
+                  Save
+                </button>
+              </div>
+              <div className="level-item">
+                <button
+                  onClick={() => save("firstName", "cancel")}
+                  className="button is-small edit-button"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </nav>
+
+          <nav className="level mb-1">
+            <div className="level-left">
+              <div className="level-item">
+                <span className="text account-detail">
+                  <strong>Last Name:&nbsp;</strong>
+                </span>
+                {isEdit ? (
+                  <span
+                    contentEditable={true}
+                    suppressContentEditableWarning={true}
+                    onBlur={(e) => setLastName(e.currentTarget.textContent)}
+                  >
+                    {lastName ?? account.last_name}
+                  </span>
+                ) : (
+                  <span>{account.last_name}</span>
+                )}
+              </div>
+            </div>
+            <div
+              className="level-right"
+              style={{ display: isEdit ? "none" : "block" }}
+            >
+              <div className="level-item">
+                <button
+                  onClick={() => edit("lastName")}
+                  className="button is-small edit-button"
+                >
+                  Edit
+                </button>
+              </div>
+            </div>
+            <div
+              className="level-right"
+              style={{
+                display: lastName ? "flex" : "none",
+                gap: "0.5rem",
+              }}
+            >
+              <div className="level-item">
+                <button
+                  onClick={() => save("lastName", "save")}
+                  className="button is-small edit-button"
+                >
+                  Save
+                </button>
+              </div>
+              <div className="level-item">
+                <button
+                  onClick={() => save("lastName", "cancel")}
+                  className="button is-small edit-button"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </nav>
+
           <span className="text account-detail">
             <strong>Email:</strong> {account.email}
           </span>
