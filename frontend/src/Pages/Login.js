@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Styling/CSS/AuthPages.css";
 import { useData } from "./../Data";
+import Cookies from "js-cookie";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -23,10 +24,13 @@ const LoginPage = () => {
       }
 
       try {
-        const response = await fetch("http://localhost:8000/api/signin/", {
+        const response = await fetch("http://localhost:8000/api/login/", {
           method: "POST",
+          mode: "cors",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
+            "X-CSRFToken": Cookies.get("csrftoken"),
           },
           body: JSON.stringify({ email, password }),
         });
@@ -36,6 +40,8 @@ const LoginPage = () => {
         if (!response.ok) {
           if (!data.message) {
             throw new Error(`HTTP error! status: ${response.status}`);
+          } else if(data.message){
+            alert(`Login failed: ${data.message}`);
           }
         } else {
           console.log("Signin success:", data);
