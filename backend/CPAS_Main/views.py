@@ -51,6 +51,30 @@ def create_user(request):
 
         return JsonResponse({'message': 'User created successfully', 'user': serializeUser(user).data}, status=201)
 
+# Feature B01b User Login Functionality
+@csrf_protect
+def login_user(request):
+        if request.method != 'POST':
+            return JsonResponse({'message': 'Method not allowed'}, status=405)
+
+        try:
+            data = json.loads(request.body)
+        except Exception:
+            return JsonResponse({'message': 'Invalid JSON body'}, status=400)
+
+        email = data.get('email')
+        password = data.get('password')
+
+        if not email or not password:
+            return JsonResponse({'message': 'Email and password are required'}, status=400)
+
+        user = authenticate(request, email=email, password=password)
+        if user is None:
+            return JsonResponse({'message': 'Invalid email or password'}, status=401)
+
+        login(request, user)
+        return JsonResponse({'message': 'Login successful', 'user': serializeUser(user).data}, status=200)
+
 # Feature B01f User logout
 # Testing required
 @csrf_protect    
