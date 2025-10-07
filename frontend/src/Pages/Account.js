@@ -53,8 +53,39 @@ function Account() {
 
   /* Edit details */
   const [isEdit, setIsEdit] = useState(false);
-  const [lastName, setLastName] = useState(null);
   const [firstName, setFirstName] = useState(null);
+  const [lastName, setLastName] = useState(null);
+
+  const handleSave = async () => {
+    if (account !== null) {
+      const obj = {
+        ...(firstName ? { firstname: firstName } : {}),
+        ...(lastName ? { lastname: lastName } : {}),
+      };
+
+      try {
+        const response = await fetch("http://localhost:8000/api/edit-user/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(obj),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          if (!data.message) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+        } else {
+          setAccount(data);
+        }
+      } catch (error) {
+        console.error("Fetch error:", error);
+      }
+    }
+  };
 
   function edit(detail) {
     setIsEdit(true);
@@ -69,7 +100,7 @@ function Account() {
     setIsEdit(false);
 
     if (action == "save") {
-      console.log(firstName, lastName);
+      handleSave();
     }
 
     if (detail == "firstName") {
