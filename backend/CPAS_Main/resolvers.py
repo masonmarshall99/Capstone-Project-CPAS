@@ -208,3 +208,88 @@ def create_disease(
         "disease_name": disease.disease_name,
         "disease_group": disease.disease_group
     }
+
+def create_disease_presence(
+    *_,
+    disease_name: str,
+    disease_group: str,
+    crop_name: str,
+    sub_region: str,
+    region_name: str,
+    zone_name: str,
+    disease_presence_status: str,
+    disease_incidence_year_percentage: float,
+    disease_incidence_area_percentage: float,
+    disease_severity_without_control_percentage: float,
+    disease_severity_with_control_percentage: float,
+    disease_severity_control_genetic_contribution_percentage: float,
+    disease_severity_control_cultural_contribution_percentage: float,
+    disease_severity_control_pesticide_contribution_percentage: float,
+    fungicide_resistance_risk: str
+):
+    
+    disease, created = Disease.objects.get_or_create(
+        disease_name=disease_name,
+        disease_group=disease_group
+    )
+    
+    crop, created = Crop.objects.get_or_create(
+        crop_name=crop_name
+    )
+    
+    zone, created = Zone.objects.get_or_create(
+        zone_name=zone_name
+    )
+
+    region, created = Region.objects.get_or_create(
+        region_name=region_name
+    )
+
+    location, created = Location.objects.get_or_create(
+        sub_region=sub_region,
+        region=region,
+        zone=zone
+    )
+
+    disease_presence, created = DiseasePresence.objects.get_or_create(
+        disease=disease,
+        crop=crop,
+        location=location,
+        disease_presence_status=disease_presence_status,
+        disease_incidence_year_percentage=disease_incidence_year_percentage,
+        disease_incidence_area_percentage=disease_incidence_area_percentage,
+        disease_severity_without_control_percentage=disease_severity_without_control_percentage,
+        disease_severity_with_control_percentage=disease_severity_with_control_percentage,
+        disease_severity_control_genetic_contribution_percentage=disease_severity_control_genetic_contribution_percentage,
+        disease_severity_control_cultural_contribution_percentage=disease_severity_control_cultural_contribution_percentage,
+        disease_severity_control_pesticide_contribution_percentage=disease_severity_control_pesticide_contribution_percentage,
+        fungicide_resistance_risk=fungicide_resistance_risk
+    )
+
+    return{
+        "disease":{
+            "disease_name": disease.disease_name,
+            "disease_group": disease.disease_group
+        },
+        "crop":{
+            "crop_name": crop.crop_name,
+        },
+        "location": {
+            "sub_region": location.sub_region,
+            "region": {
+                "region_name": region.region_name,
+            },
+            "zone": {
+                "zone_name": zone.zone_name,
+            },
+        },
+        "disease_presence_status":disease_presence.disease_presence_status,
+        "disease_incidence_year_percentage":disease_presence.disease_incidence_year_percentage,
+        "disease_incidence_area_percentage":disease_presence.disease_incidence_area_percentage,
+        "disease_severity_without_control_percentage":disease_presence.disease_severity_without_control_percentage,
+        "disease_severity_with_control_percentage":disease_presence.disease_severity_with_control_percentage,
+        "disease_severity_control_genetic_contribution_percentage":disease_presence.disease_severity_control_genetic_contribution_percentage,
+        "disease_severity_control_cultural_contribution_percentage":disease_presence.disease_severity_control_cultural_contribution_percentage,
+        "disease_severity_control_pesticide_contribution_percentage":disease_presence.disease_severity_control_pesticide_contribution_percentage,
+        "fungicide_resistance_risk":disease_presence.fungicide_resistance_risk
+    }
