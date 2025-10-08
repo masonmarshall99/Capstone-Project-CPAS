@@ -1,7 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.base_user import BaseUserManager
+import logging
 
+logger = logging.getLogger('cpas')
 
 
 # Create your models here.
@@ -9,22 +11,34 @@ from django.contrib.auth.base_user import BaseUserManager
 class Zone(models.Model):
     zone_name = models.CharField(max_length=255, primary_key=True)
 
+    def __str__(self):
+        return self.zone_name
+
 class Region(models.Model):
     region_name = models.CharField(max_length=255, primary_key=True)
+
+    def __str__(self):
+        return self.region_name
 
 class Location(models.Model):
     sub_region = models.CharField(max_length=255, primary_key=True)
     region = models.ForeignKey(Region, on_delete=models.PROTECT)
     zone = models.ForeignKey(Zone, on_delete=models.PROTECT)
 
-    
-class Season(models.Model):
-    year = models.CharField(max_length=7, primary_key=True)  
+    def __str__(self):
+        return f"{self.sub_region} (Region: {self.region}, Zone: {self.zone})"
 
+class Season(models.Model):
+    year = models.CharField(max_length=7, primary_key=True)
+
+    def __str__(self):
+        return self.year
 
 class Crops(models.Model):
     crop_name = models.CharField(max_length=255, primary_key=True)
 
+    def __str__(self):
+        return self.crop_name
 
 class CropArea(models.Model):
     crop = models.ForeignKey(Crops, on_delete=models.PROTECT)
@@ -36,6 +50,8 @@ class CropArea(models.Model):
     class Meta:
         unique_together = ('crop', 'sub_region', 'year')
 
+    def __str__(self):
+        return f"{self.crop} in {self.sub_region} ({self.year})"
 
 class ProducedIn(models.Model):
     crop = models.ForeignKey(Crops, on_delete=models.PROTECT)
@@ -45,11 +61,15 @@ class ProducedIn(models.Model):
     class Meta:
         unique_together = ('crop', 'year')
 
+    def __str__(self):
+        return f"{self.crop} in {self.year}: ${self.average_commodity_price}"
 
 class Disease(models.Model):
     disease_name = models.CharField(max_length=255, primary_key=True)
     disease_group = models.CharField(max_length=255, null=True, blank=True)
 
+    def __str__(self):
+        return self.disease_name
 
 class DiseasePresence(models.Model):
     disease = models.ForeignKey(Disease, on_delete=models.PROTECT)
@@ -60,13 +80,16 @@ class DiseasePresence(models.Model):
     disease_incidence_area_percentage = models.FloatField()
     disease_severity_without_control_percentage = models.FloatField(null=True)
     disease_severity_with_control_percentage = models.FloatField(null=True)
-    disease_severity_control_genetic_contribution_percentage = models.FloatField(null = True)
-    disease_severity_control_cultural_contribution_percentage = models.FloatField(null = True)
-    disease_severity_control_pesticide_contribution_percentage = models.FloatField(null = True)
+    disease_severity_control_genetic_contribution_percentage = models.FloatField(null=True)
+    disease_severity_control_cultural_contribution_percentage = models.FloatField(null=True)
+    disease_severity_control_pesticide_contribution_percentage = models.FloatField(null=True)
     fungicide_resistance_risk = models.CharField(max_length=3)
 
     class Meta:
         unique_together = ('disease', 'crop', 'sub_region')
+
+    def __str__(self):
+        return f"{self.disease} on {self.crop} in {self.sub_region}"
 
 
 # Custom user manager to use email instead of username
@@ -81,12 +104,13 @@ class UserManager(BaseUserManager) :
 
         user.set_password(password)
         user.save(using=self.db)
+        return user
 
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
-        self.create_user(email, password, **extra_fields)
+        return self.create_user(email, password, **extra_fields)
 
 # Custom user class for authentication and creation
 
@@ -101,3 +125,6 @@ class CPAS_User(AbstractUser):
     REQUIRED_FIELDS = [] # can be used to set other required fields
 
     objects = UserManager()
+
+    def __str__(self):
+        return self.email
