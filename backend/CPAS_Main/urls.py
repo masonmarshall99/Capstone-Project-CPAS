@@ -1,6 +1,5 @@
 from django.urls import path
-from .views import create_user, login_user, logout_user, whoami
-from .views import create_user, logout_user, whoami, get_csrf_token
+from .views import create_user, logout_user, whoami, get_csrf_token, edit_user, login_user
 
 urlpatterns = [
     #path("test/", test),
@@ -9,4 +8,5 @@ urlpatterns = [
     path("logout/", logout_user),
     path("whoami/", whoami),
     path("get-csrf-token/", get_csrf_token),
+    path("edit-user/", edit_user),
 ]
