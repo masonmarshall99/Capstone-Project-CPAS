@@ -171,33 +171,25 @@ LOG_DIR.mkdir(exist_ok=True)
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
-
+    'disable_existing_loggers': False,  # Keep Django's built-in loggers
     'formatters': {
         'simple': {
             'format': '{asctime} [{levelname}] {message}',
             'style': '{',
         },
     },
-
     'handlers': {
         'file': {
-            'level': 'INFO',  # Log INFO and above to file
+            'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': LOG_DIR / 'cpas.log',
-            'formatter': 'simple',
-        },
-        'console': {
-            'level': 'WARNING',  # Only show WARNING and above in terminal
-            'class': 'logging.StreamHandler',
+            'filename': LOG_DIR / 'cpas.log',  # Log file location
             'formatter': 'simple',
         },
     },
-
     'loggers': {
-        'cpas': {
-            'handlers': ['file', 'console'],  # Log both 
-            'level': 'INFO',  # Ignore debug messages
+        'cpas': {  # Our custom logger
+            'handlers': ['file'],
+            'level': 'INFO',
             'propagate': False,
         },
     },
