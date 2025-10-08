@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Styling/CSS/AuthPages.css";
+
 import { useData } from "./../Data";
+import Cookies from "js-cookie";
 
 const CreateAccountPage = () => {
   const [email, setEmail] = useState("");
@@ -15,6 +17,7 @@ const CreateAccountPage = () => {
 
   const navigate = useNavigate();
 
+
   const handleSignUp = async (e) => {
     if (account == null) {
       e.preventDefault();
@@ -24,14 +27,17 @@ const CreateAccountPage = () => {
         return;
       }
 
-      try {
-        const response = await fetch("http://localhost:8000/api/register/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, name, lastName, password }),
-        });
+    try {
+      const response = await fetch("http://localhost:8000/api/register/", {
+        method: "POST",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": Cookies.get("csrftoken"),
+        },
+        body: JSON.stringify({ email, name, lastName, password }),
+      });
 
         const data = await response.json();
 

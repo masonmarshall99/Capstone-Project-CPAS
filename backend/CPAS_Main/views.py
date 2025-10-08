@@ -2,27 +2,28 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 import json
 
-from django.contrib.auth import get_user_model, authenticate, login
+from django.contrib.auth import get_user_model, authenticate, login, logout
 from .serializers import serializeUser
 
 # Ariadne testing view imports
 from ariadne.wsgi import GraphQL
 from CPAS.graphql_config import schema
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie, csrf_protect
 graphql_app = GraphQL(schema, debug=True)
 
 # Define user class
 User = get_user_model()
 
-# Create your views here.
+# Required REST API Endpoints for CPAS
 
-# Testing frontend/backend connection
-def test(request):
-    return HttpResponse("Welcome to CPAS")
+# Feature B01c Cookie Handling
+@ensure_csrf_cookie
+def get_csrf_token(request):
+    return JsonResponse({'message': 'CSRF cookie set'}, status=200)
+# Add any other cookie related views here
 
 # Feature B01a User Creation Functionality
-# CSRF Exempt decorator used for testing. To be removed when frontend connected
-@csrf_exempt
+@csrf_protect
 def create_user(request):
     if request.method == 'POST':
         # Load json data from frontend POST request
@@ -33,7 +34,7 @@ def create_user(request):
         new_last_name = data.get('lastName')
         new_email = data.get('email')
         
-        if User.objects.filter(email = new_email):
+        if User.objects.filter(email = new_email).exists():
             return JsonResponse({'message': 'Email address unavailable'}, status = 400)
 
         # If user doesn't exist, create new user and return success message
@@ -43,12 +44,55 @@ def create_user(request):
             last_name = new_last_name,
             email = new_email
         )
+        user = authenticate(request, email=new_email, password=new_password)
 
         # Log the new user in
-        login(request, new_user)
+        login(request, user)
 
-        return JsonResponse({'message': 'User created successfully', 'user': serializeUser(new_user).data})
+        return JsonResponse({'message': 'User created successfully', 'user': serializeUser(user).data}, status=201)
 
+# Feature B01b User Login Functionality
+@csrf_protect
+def login_user(request):
+        if request.method != 'POST':
+            return JsonResponse({'message': 'Method not allowed'}, status=405)
+
+        try:
+            data = json.loads(request.body)
+        except Exception:
+            return JsonResponse({'message': 'Invalid JSON body'}, status=400)
+
+        email = data.get('email')
+        password = data.get('password')
+
+        if not email or not password:
+            return JsonResponse({'message': 'Email and password are required'}, status=400)
+
+        user = authenticate(request, email=email, password=password)
+        if user is None:
+            return JsonResponse({'message': 'Invalid email or password'}, status=401)
+
+        login(request, user)
+        return JsonResponse({'message': 'Login successful', 'user': serializeUser(user).data}, status=200)
+
+# Feature B01f User logout
+# Testing required
+@csrf_protect    
+def logout_user(request):
+    if request.user.is_authenticated:
+        logout(request)
+        return JsonResponse({'message': 'User logged out successfully'}, status=200)
+    else:
+        return JsonResponse({'message': 'No user is currently logged in'}, status=400)
+
+# Feature B01g whoami
+# Testing required
+@csrf_protect
+def whoami(request):
+        if request.user.is_authenticated:
+            return JsonResponse({'user': serializeUser(request.user).data}, status=200)
+        else:
+            return JsonResponse({'message': 'No user logged in'}, status=400)
 
 @csrf_exempt
 def graphql_testing_view(request):

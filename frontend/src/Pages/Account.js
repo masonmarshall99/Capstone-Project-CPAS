@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useData } from "./../Data";
+import Cookies from "js-cookie";
 
 import Top from "./../Styling/Top";
 import Sidebar from "./../Styling/Sidebar";
@@ -10,25 +11,18 @@ import "../Styling/CSS/Pages.css";
 
 function Account() {
   const navigate = useNavigate();
-  //const { account, setAccount } = useData();
-  //*
-  const account = {
-    first_name: "Ivan",
-    last_name: "Bezuidenhout",
-    email: "Ivan.Bezuidenhout2@gmail.com",
-  };
-  const setAccount = console.error;
-  //*/
+  const { account, setAccount } = useData();
 
   const signOut = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/signout/", {
-        method: "POST",
+      const response = await fetch("http://localhost:8000/api/logout/", {
+        method: "GET",
+        mode: "cors",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          "X-CSRFToken": Cookies.get("csrftoken"),
         },
-        credentials: "include",
-        body: JSON.stringify({}),
       });
 
       const data = await response.json();
@@ -36,6 +30,8 @@ function Account() {
       if (!response.ok) {
         if (!data.message) {
           throw new Error(`HTTP error! status: ${response.status}`);
+        } else {
+          console.log("Logout failed: ", data.message);
         }
       } else {
         setAccount(null);
@@ -121,7 +117,6 @@ function Account() {
           <span className="text title is-5">
             <strong>Account details:</strong>
           </span>
-
           <nav className="level mb-1">
             <div className="level-left">
               <div className="level-item">

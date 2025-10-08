@@ -1,12 +1,18 @@
 # Model to Schema types
 
+# TODO: ability to add whole csv row
+
 type Zone {
     zone_name: String!
 }
 
+type Region {
+    region_name: String!
+}
+
 type Location {
     sub_region: String!
-    region: String!
+    region: Region!
     zone: Zone!
 }
 
@@ -14,21 +20,21 @@ type Season {
     year: String!
 }
 
-type Crops {
+type Crop {
     crop_name: String!
 }
 
 type CropArea {
-    crop: Crops!
-    sub_region: Location!
-    year: Season!
+    crop: Crop!
+    location: Location!
+    season: Season!
     area_hectares: Float!
     value_tonnes: Float!
 }
 
 type ProducedIn {
-    crop: Crops!
-    year: Season!
+    crop: Crop!
+    season: Season!
     average_commodity_price: Float!
 }
 
@@ -39,8 +45,8 @@ type Disease {
 
 type DiseasePresence {
     disease: Disease!
-    crop: Crops!
-    sub_region: Location!
+    crop: Crop!
+    location: Location!
     disease_presence_status: String!
     disease_incidence_year_percentage: Float!
     disease_incidence_area_percentage: Float!

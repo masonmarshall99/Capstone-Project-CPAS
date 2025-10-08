@@ -1,4 +1,5 @@
-import React, { createContext, useState, useContext, useCallback } from "react";
+import React, { createContext, useState, useContext, useCallback, useEffect } from "react";
+import Cookies from "js-cookie";
 
 const SharedDataContext = createContext();
 
@@ -35,16 +36,31 @@ export const SharedData = ({ children }) => {
     setAccount(newAccount);
   };
 
+  /* Get CSRF Token from backend */
+  const getCSRFToken = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/api/get-csrf-token/", {
+        method: "GET",
+        mode: "cors",
+        credentials: "include",
+      });
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  }
+  getCSRFToken();
+
   /* Initial Load */
   const initialLoad = async () => {
     try {
       const response = await fetch("http://localhost:8000/api/whoami/", {
-        method: "POST",
+        method: "GET",
+        mode: "cors",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          "X-CSRFToken": Cookies.get("csrftoken"),
         },
-        credentials: "include",
-        body: JSON.stringify({}),
       });
 
       const data = await response.json();
@@ -52,17 +68,21 @@ export const SharedData = ({ children }) => {
       if (!response.ok) {
         if (!data.message) {
           throw new Error(`HTTP error! status: ${response.status}`);
+        } else {
+          console.log(data.message);
         }
       } else {
-        _Account(data);
-
-        alert(`Auto signin`);
+        _Account(data.user);
+        console.log("Current user:", data.user);
       }
     } catch (error) {
       console.error("Fetch error:", error);
     }
   };
-  initialLoad();
+  
+  useEffect(() => {
+    initialLoad();
+  }, []);
 
   /* Every tab listens to events */
   window.addEventListener("storage", (event) => {
