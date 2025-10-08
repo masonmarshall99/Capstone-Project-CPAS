@@ -92,7 +92,7 @@ const LoginPage = () => {
 
           <button
             type="button"
-            className="button-primary"
+            className="button-secondary"
             onClick={handleLoginClick}
           >
             Login
@@ -100,7 +100,7 @@ const LoginPage = () => {
 
           <button
             type="button"
-            className="button-secondary mt-2"
+            className="button-secondary mt-3"
             onClick={handleCreateAccountClick}
           >
             Create Account
