@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useCallback } from "react";
+import React, { createContext, useState, useContext, useCallback, useEffect } from "react";
 import Cookies from "js-cookie";
 
 const SharedDataContext = createContext();
@@ -54,14 +54,13 @@ export const SharedData = ({ children }) => {
   const initialLoad = async () => {
     try {
       const response = await fetch("http://localhost:8000/api/whoami/", {
-        method: "POST",
+        method: "GET",
         mode: "cors",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
           "X-CSRFToken": Cookies.get("csrftoken"),
         },
-        body: JSON.stringify({}),
       });
 
       const data = await response.json();
@@ -80,7 +79,10 @@ export const SharedData = ({ children }) => {
       console.error("Fetch error:", error);
     }
   };
-  initialLoad();
+  
+  useEffect(() => {
+    initialLoad();
+  }, []);
 
   /* Every tab listens to events */
   window.addEventListener("storage", (event) => {

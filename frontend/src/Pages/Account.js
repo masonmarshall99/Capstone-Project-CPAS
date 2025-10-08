@@ -10,14 +10,13 @@ function Account() {
   const signOut = async () => {
     try {
       const response = await fetch("http://localhost:8000/api/logout/", {
-        method: "POST",
+        method: "GET",
         mode: "cors",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
           "X-CSRFToken": Cookies.get("csrftoken"),
         },
-        body: JSON.stringify({}),
       });
 
       const data = await response.json();
