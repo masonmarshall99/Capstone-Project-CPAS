@@ -31,3 +31,27 @@
   overflow-y: scroll;
 }
 
+/*---------------------------------------------------------------*/
+/* Account */
+.account-page {
+  flex-direction: column;
+  padding-top: 30px;
+  padding-left: 25px;
+  align-items: flex-start;
+}
+
+.account-detail {
+  color: var(--text-color);
+  display: block;
+}
+
+.edit-button {
+  height: auto;
+  padding-top: 0.5em;
+  padding-bottom: 0.25em;
+  line-height: 1;
+}
+
+.signout {
+  color: red;
+}
