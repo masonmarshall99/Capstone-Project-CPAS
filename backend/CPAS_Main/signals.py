@@ -46,11 +46,7 @@ def fill_database(sender, **kwargs):
         #Fill Crops Table
         try:
             if pd.notna(row['Crops']):
-<<<<<<< HEAD
                 Crop.objects.get_or_create(crop_name=row['Crops'])
-=======
-                Crops.objects.get_or_create(crop_name=row['Crops'])
->>>>>>> parent of 5502ff5 (Logging implementaion and improved model readabilty)
         except Exception as error:
             print(f'Crops error at row {index}: {error}')
 
