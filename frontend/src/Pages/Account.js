@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useData } from "./../Data";
+// import { useData } from "./../Data";
 import Cookies from "js-cookie";
 
 import Top from "./../Styling/Top";
@@ -9,43 +9,12 @@ import Sidebar from "./../Styling/Sidebar";
 import "bulma/css/bulma.min.css";
 import "../Styling/CSS/Pages.css";
 
+import { useAuth } from "../CheckAuth";
+
 function Account() {
   const navigate = useNavigate();
-  const { account, setAccount } = useData();
 
-  const signOut = async () => {
-    try {
-      const response = await fetch("http://localhost:8000/api/logout/", {
-        method: "GET",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": Cookies.get("csrftoken"),
-        },
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        if (!data.message) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        } else {
-          console.log("Logout failed: ", data.message);
-        }
-      } else {
-        setAccount(null);
-      }
-    } catch (error) {
-      console.error("Fetch error:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (account === null) {
-      navigate("/login");
-    }
-  }, [account, navigate]);
+  const { loading, user, isAuthenticated } = useAuth();
 
   /* Edit details */
   const [isEdit, setIsEdit] = useState(false);
@@ -53,7 +22,7 @@ function Account() {
   const [lastName, setLastName] = useState(null);
 
   const handleSave = async () => {
-    if (account !== null) {
+    if (user !== null) {
       const obj = {
         ...(firstName ? { firstname: firstName } : {}),
         ...(lastName ? { lastname: lastName } : {}),
@@ -69,26 +38,18 @@ function Account() {
         });
 
         const data = await response.json();
-
-        if (!response.ok) {
-          if (!data.message) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-        } else {
-          setAccount(data);
-        }
       } catch (error) {
         console.error("Fetch error:", error);
       }
-    }
+
   };
 
   function edit(detail) {
     setIsEdit(true);
     if (detail == "firstName") {
-      setFirstName(account.first_name);
+      setFirstName(user.first_name);
     } else if (detail == "lastName") {
-      setLastName(account.last_name);
+      setLastName(user.last_name);
     }
   }
 
@@ -107,6 +68,7 @@ function Account() {
 
     console.log(firstName, lastName);
   }
+}
 
   return (
     <>
@@ -129,10 +91,10 @@ function Account() {
                     suppressContentEditableWarning={true}
                     onBlur={(e) => setFirstName(e.currentTarget.textContent)}
                   >
-                    {firstName ?? account.first_name}
+                    {firstName ?? user.first_name}
                   </span>
                 ) : (
-                  <span>{account.first_name}</span>
+                  <span>{user.first_name}</span>
                 )}
               </div>
             </div>
@@ -142,7 +104,6 @@ function Account() {
             >
               <div className="level-item">
                 <button
-                  onClick={() => edit("firstName")}
                   className="button is-small edit-button"
                 >
                   Edit
@@ -158,7 +119,6 @@ function Account() {
             >
               <div className="level-item">
                 <button
-                  onClick={() => save("firstName", "save")}
                   className="button is-small edit-button"
                 >
                   Save
@@ -166,7 +126,6 @@ function Account() {
               </div>
               <div className="level-item">
                 <button
-                  onClick={() => save("firstName", "cancel")}
                   className="button is-small edit-button"
                 >
                   Cancel
@@ -187,10 +146,10 @@ function Account() {
                     suppressContentEditableWarning={true}
                     onBlur={(e) => setLastName(e.currentTarget.textContent)}
                   >
-                    {lastName ?? account.last_name}
+                    {lastName ?? user.last_name}
                   </span>
                 ) : (
-                  <span>{account.last_name}</span>
+                  <span>{user.last_name}</span>
                 )}
               </div>
             </div>
@@ -200,7 +159,6 @@ function Account() {
             >
               <div className="level-item">
                 <button
-                  onClick={() => edit("lastName")}
                   className="button is-small edit-button"
                 >
                   Edit
@@ -216,7 +174,6 @@ function Account() {
             >
               <div className="level-item">
                 <button
-                  onClick={() => save("lastName", "save")}
                   className="button is-small edit-button"
                 >
                   Save
@@ -224,7 +181,6 @@ function Account() {
               </div>
               <div className="level-item">
                 <button
-                  onClick={() => save("lastName", "cancel")}
                   className="button is-small edit-button"
                 >
                   Cancel
@@ -234,11 +190,11 @@ function Account() {
           </nav>
 
           <span className="text account-detail">
-            <strong>Email:</strong> {account.email}
+            <strong>Email:</strong> {user.email}
           </span>
           <button className="button">Update Password</button>
 
-          <button className="button signout" onClick={signOut}>
+          <button className="button signout">
             Signout
           </button>
         </div>

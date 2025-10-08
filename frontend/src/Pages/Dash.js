@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useData } from "./../Data";
+// import { useData } from "./../Data";
+import { useState } from "react";
 
 import Top from "./../Styling/Top";
 import Sidebar from "./../Styling/Sidebar";
@@ -11,20 +12,14 @@ import "./../Styling/CSS/Pages.css";
 function Dash() {
   /* Testing items */
   const items = [];
-  const { dash, setDash } = useData();
 
-  for (let i = 0; i < dash; i++) {
+  /* for (let i = 0; i < dash; i++) {
     items.push(
       <div key={i} style={{ padding: "10px", borderBottom: "1px solid #ccc" }}>
         Dash Item {i + 1}
       </div>
     );
-  }
-
-  /* Find things to add to dash */
-  function addDash() {
-    setDash(dash + 1);
-  }
+  } */
 
   return (
     <>
@@ -35,7 +30,7 @@ function Dash() {
         <div style={{ flex: 1, fontWeight: 600, padding: "1.15rem" }}>
           Dashboard
         </div>
-        <button className="add-to-dash is-fullwidth" onClick={addDash}>
+        <button className="add-to-dash is-fullwidth">
           +
         </button>
         <div className="scroll-overlay"> {items}</div>

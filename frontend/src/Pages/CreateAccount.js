@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Styling/CSS/AuthPages.css";
 
-import { useData } from "./../Data";
+// import { useData } from "./../Data";
 import Cookies from "js-cookie";
 
 const CreateAccountPage = () => {
@@ -13,7 +13,7 @@ const CreateAccountPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const { account, setAccount } = useData();
+  const { account, setAccount } = useState(null);
 
   const navigate = useNavigate();
 
@@ -50,8 +50,6 @@ const CreateAccountPage = () => {
         } else {
           console.log("Signup success:", data);
 
-          setAccount(data);
-
           alert(`Account created for ${email}`);
           setMessage("");
           navigate("/dash");
@@ -81,13 +79,6 @@ const CreateAccountPage = () => {
   useEffect(() => {
     handleChange();
   }, [email, password, confirmPassword]);
-
-  /* Redirect if signed in */
-  useEffect(() => {
-    if (account !== null) {
-      navigate("/dash");
-    }
-  }, [account, navigate]);
 
   return (
     <div className="auth-wrapper">

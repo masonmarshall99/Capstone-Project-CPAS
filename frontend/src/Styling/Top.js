@@ -6,14 +6,10 @@ import { useData } from "./../Data";
 
 function Top() {
   const navigate = useNavigate();
-  const { account, setAccount } = useData();
+  //const { account, setAccount } = useData();
 
   function toAccount() {
-    if (account !== null) {
-      navigate("/account");
-    } else {
-      navigate("/login");
-    }
+    navigate("/account");
   }
 
   return (

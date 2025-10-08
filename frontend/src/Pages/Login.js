@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Styling/CSS/AuthPages.css";
-import { useData } from "./../Data";
+//import { useData } from "./../Data";
 import Cookies from "js-cookie";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { account, setAccount } = useData();
+  const { account, setAccount } = useState(null);
 
   const handleCreateAccountClick = () => {
     navigate("/create-account");
@@ -56,13 +56,6 @@ const LoginPage = () => {
       }
     }
   };
-
-  /* Redirect if signed in */
-  useEffect(() => {
-    if (account !== null) {
-      navigate("/dash");
-    }
-  }, [account, navigate]);
 
   return (
     <div className="auth-wrapper">
