@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Styling/CSS/AuthPages.css";
-import { useData } from "./../Data";
 import Cookies from "js-cookie";
+import { useAuth } from "../CheckAuth";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { account, setAccount } = useData();
+  const { loading, user, fetchUser } = useAuth();
 
   const handleCreateAccountClick = () => {
     navigate("/create-account");
   };
 
   const handleLoginClick = async (e) => {
-    if (account == null) {
+    if (user == null) {
       e.preventDefault();
 
       if (!email || !password) {
@@ -40,15 +40,14 @@ const LoginPage = () => {
         if (!response.ok) {
           if (!data.message) {
             throw new Error(`HTTP error! status: ${response.status}`);
-          } else if(data.message){
+          } else if (data.message) {
             alert(`Login failed: ${data.message}`);
           }
         } else {
           console.log("Signin success:", data);
 
-          setAccount(data);
-
           alert(`Signing for ${email}`);
+          fetchUser();
           navigate("/dash");
         }
       } catch (error) {
@@ -56,13 +55,6 @@ const LoginPage = () => {
       }
     }
   };
-
-  /* Redirect if signed in */
-  useEffect(() => {
-    if (account !== null) {
-      navigate("/dash");
-    }
-  }, [account, navigate]);
 
   return (
     <div className="auth-wrapper">
