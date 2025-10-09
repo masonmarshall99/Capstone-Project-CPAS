@@ -5,7 +5,7 @@ const ProtectRoutes = ({ children, authOnly = false, guestOnly = false }) => {
     const { loading, user } = useAuth();
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <Navigate to="/loading" />;
     }
 
     if (authOnly && !user) {

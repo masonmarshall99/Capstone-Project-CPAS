@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-// import { useData } from "./../Data";
 import Cookies from "js-cookie";
 
 import Top from "./../Styling/Top";
@@ -14,7 +13,7 @@ import { useAuth } from "../CheckAuth";
 function Account() {
   const navigate = useNavigate();
 
-  const { loading, user, isAuthenticated } = useAuth();
+  const { loading, user, fetchUser } = useAuth();
 
   /* Edit details */
   const [isEdit, setIsEdit] = useState(false);
@@ -31,15 +30,47 @@ function Account() {
       console.log(JSON.stringify(obj));
       try {
         const response = await fetch("http://localhost:8000/api/edit-user/", {
-          method: "POST",
+          method: "PUT",
+          credentials: "include",
+          mode: "cors",
           headers: {
             "Content-Type": "application/json",
+            "X-CSRFToken": Cookies.get("csrftoken"),
           },
-          body: JSON.stringify(obj),
+          body: JSON.stringify({ firstName, lastName }),
         });
+
+        if (response.ok) {
+          window.location.reload();
+        } else {
+          const data = await response.json();
+          console.log(data.message || `HTTP error! status: ${response.status}`);
+        }
       } catch (error) {
         console.error("Fetch error:", error);
       }
+    }
+  };
+
+  const logout = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/api/logout/", {
+        method: "POST",
+        credentials: "include",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": Cookies.get("csrftoken"),
+        },
+      });
+      if (response.ok) {
+        fetchUser();
+      } else {
+        const data = await response.json();
+        console.log(data.message || `HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Fetch error:", error);
     }
   };
 
@@ -204,7 +235,7 @@ function Account() {
           </span>
           <button className="button">Update Password</button>
 
-          <button className="button signout" onClick={handleSave}>
+          <button className="button signout" onClick={logout}>
             Signout
           </button>
         </div>

@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-// import { useData } from "./../Data";
 import { useState } from "react";
 
 import Top from "./../Styling/Top";

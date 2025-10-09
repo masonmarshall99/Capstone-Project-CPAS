@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Styling/CSS/AuthPages.css";
 import { useAuth } from "../CheckAuth";
-
-// import { useData } from "./../Data";
 import Cookies from "js-cookie";
 
 const CreateAccountPage = () => {
@@ -15,7 +13,7 @@ const CreateAccountPage = () => {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const { account, setAccount } = useState(null);
-  const { loading, user, isAuthenticated } = useAuth();
+  const { loading, user, fetchUser } = useAuth();
 
   const navigate = useNavigate();
 
@@ -52,6 +50,7 @@ const CreateAccountPage = () => {
           console.log("Signup success:", data);
 
           alert(`Account created for ${email}`);
+          fetchUser();
           setMessage("");
           navigate("/dash");
         }

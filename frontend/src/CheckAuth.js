@@ -55,8 +55,40 @@ export const AuthProvider = ({ children }) => {
         checkAuth();
     }, []);
 
+    const fetchUser = async () => {
+        try {
+            const response = await fetch("http://localhost:8000/api/whoami/", {
+                method: "GET",
+                mode: "cors",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": Cookies.get("csrftoken"),
+                },
+            });
+            const data = await response.json();
+            if (response.ok) {
+                if(data.user) {
+                    setUser(data.user);
+                    console.log("Current user:", data.user);
+                } else {
+                    setUser(null);
+                    console.log("No user logged in");
+                }
+            } else {
+                setUser(null);
+                console.log(data.message || `HTTP error! status: ${response.status}`);
+            }
+        } catch (error) {
+                setUser(null);
+                console.error("Fetch error:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
-        <AuthContext.Provider value={{ user, loading }} >{children}</AuthContext.Provider>
+        <AuthContext.Provider value={{ user, loading, fetchUser }} >{children}</AuthContext.Provider>
     );
 }
 

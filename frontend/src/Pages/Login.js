@@ -8,7 +8,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { loading, user, isAuthenticated } = useAuth();
+  const { loading, user, fetchUser } = useAuth();
 
   const handleCreateAccountClick = () => {
     navigate("/create-account");
@@ -47,6 +47,7 @@ const LoginPage = () => {
           console.log("Signin success:", data);
 
           alert(`Signing for ${email}`);
+          fetchUser();
           navigate("/dash");
         }
       } catch (error) {

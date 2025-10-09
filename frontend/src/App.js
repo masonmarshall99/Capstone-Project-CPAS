@@ -24,6 +24,10 @@ import Contact from "./Pages/Contact";
 
 function App() {
   const { loading, user } = useAuth();
+
+  if (loading) {
+    return <div>Loading user session...</div>;
+  }
   
   return (
       <Router>

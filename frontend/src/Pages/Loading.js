@@ -1,14 +1,13 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Styling/CSS/LoadingPage.css";
-//import { useData } from "./../Data";
 import curtinLogo from "../Styling/Icons/Curtin_Logo.jpg";
 import { useState } from "react";
 import { useAuth } from "../CheckAuth";
 
 const LoadingPage = () => {
   const navigate = useNavigate();
-  const { loading, user, isAuthenticated } = useAuth();
+  const { loading, user } = useAuth();
 
   const handleSignUpClick = () => {
     navigate("/create-account");
