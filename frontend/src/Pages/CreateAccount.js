@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Styling/CSS/AuthPages.css";
+import { useAuth } from "../CheckAuth";
 
 // import { useData } from "./../Data";
 import Cookies from "js-cookie";
@@ -14,9 +15,9 @@ const CreateAccountPage = () => {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const { account, setAccount } = useState(null);
+  const { loading, user, isAuthenticated } = useAuth();
 
   const navigate = useNavigate();
-
 
   const handleSignUp = async (e) => {
     if (account == null) {
@@ -27,17 +28,17 @@ const CreateAccountPage = () => {
         return;
       }
 
-    try {
-      const response = await fetch("http://localhost:8000/api/register/", {
-        method: "POST",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": Cookies.get("csrftoken"),
-        },
-        body: JSON.stringify({ email, name, lastName, password }),
-      });
+      try {
+        const response = await fetch("http://localhost:8000/api/register/", {
+          method: "POST",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": Cookies.get("csrftoken"),
+          },
+          body: JSON.stringify({ email, name, lastName, password }),
+        });
 
         const data = await response.json();
 
@@ -79,6 +80,12 @@ const CreateAccountPage = () => {
   useEffect(() => {
     handleChange();
   }, [email, password, confirmPassword]);
+
+  useEffect(() => {
+    if (user !== null) {
+      navigate("/dash");
+    }
+  }, [user, navigate]);
 
   return (
     <div className="auth-wrapper">

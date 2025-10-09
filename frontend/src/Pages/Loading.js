@@ -4,11 +4,11 @@ import "../Styling/CSS/LoadingPage.css";
 //import { useData } from "./../Data";
 import curtinLogo from "../Styling/Icons/Curtin_Logo.jpg";
 import { useState } from "react";
-
+import { useAuth } from "../CheckAuth";
 
 const LoadingPage = () => {
   const navigate = useNavigate();
-  const { account, setAccount } = useState(null);
+  const { loading, user, isAuthenticated } = useAuth();
 
   const handleSignUpClick = () => {
     navigate("/create-account");
@@ -21,10 +21,10 @@ const LoadingPage = () => {
 
   /* Redirect if signed in */
   useEffect(() => {
-    if (account !== null) {
+    if (user !== null) {
       navigate("/dash");
     }
-  }, [account, navigate]);
+  }, [user, navigate]);
 
   return (
     <div className="loading-wrapper">

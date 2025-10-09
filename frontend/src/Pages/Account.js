@@ -28,6 +28,7 @@ function Account() {
         ...(lastName ? { lastname: lastName } : {}),
       };
 
+      console.log(JSON.stringify(obj));
       try {
         const response = await fetch("http://localhost:8000/api/edit-user/", {
           method: "POST",
@@ -36,12 +37,10 @@ function Account() {
           },
           body: JSON.stringify(obj),
         });
-
-        const data = await response.json();
       } catch (error) {
         console.error("Fetch error:", error);
       }
-
+    }
   };
 
   function edit(detail) {
@@ -68,7 +67,12 @@ function Account() {
 
     console.log(firstName, lastName);
   }
-}
+
+  useEffect(() => {
+    if (user == null) {
+      navigate("/dash");
+    }
+  }, [user, navigate]);
 
   return (
     <>
@@ -104,6 +108,7 @@ function Account() {
             >
               <div className="level-item">
                 <button
+                  onClick={() => edit("firstName")}
                   className="button is-small edit-button"
                 >
                   Edit
@@ -119,6 +124,7 @@ function Account() {
             >
               <div className="level-item">
                 <button
+                  onClick={() => save("firstName", "save")}
                   className="button is-small edit-button"
                 >
                   Save
@@ -126,6 +132,7 @@ function Account() {
               </div>
               <div className="level-item">
                 <button
+                  onClick={() => save("firstName", "cancel")}
                   className="button is-small edit-button"
                 >
                   Cancel
@@ -159,6 +166,7 @@ function Account() {
             >
               <div className="level-item">
                 <button
+                  onClick={() => edit("lastName")}
                   className="button is-small edit-button"
                 >
                   Edit
@@ -174,6 +182,7 @@ function Account() {
             >
               <div className="level-item">
                 <button
+                  onClick={() => save("lastName", "save")}
                   className="button is-small edit-button"
                 >
                   Save
@@ -181,6 +190,7 @@ function Account() {
               </div>
               <div className="level-item">
                 <button
+                  onClick={() => save("lastName", "cancel")}
                   className="button is-small edit-button"
                 >
                   Cancel
@@ -194,7 +204,7 @@ function Account() {
           </span>
           <button className="button">Update Password</button>
 
-          <button className="button signout">
+          <button className="button signout" onClick={handleSave}>
             Signout
           </button>
         </div>

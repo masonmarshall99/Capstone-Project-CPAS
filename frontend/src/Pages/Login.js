@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Styling/CSS/AuthPages.css";
-//import { useData } from "./../Data";
 import Cookies from "js-cookie";
+import { useAuth } from "../CheckAuth";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { account, setAccount } = useState(null);
+  const { loading, user, isAuthenticated } = useAuth();
 
   const handleCreateAccountClick = () => {
     navigate("/create-account");
   };
 
   const handleLoginClick = async (e) => {
-    if (account == null) {
+    if (user == null) {
       e.preventDefault();
 
       if (!email || !password) {
@@ -40,13 +40,11 @@ const LoginPage = () => {
         if (!response.ok) {
           if (!data.message) {
             throw new Error(`HTTP error! status: ${response.status}`);
-          } else if(data.message){
+          } else if (data.message) {
             alert(`Login failed: ${data.message}`);
           }
         } else {
           console.log("Signin success:", data);
-
-          setAccount(data);
 
           alert(`Signing for ${email}`);
           navigate("/dash");
