@@ -5,6 +5,10 @@ import { useNavigate } from "react-router-dom";
 import Top from "./../Styling/Top";
 import Sidebar from "./../Styling/Sidebar";
 
+import { gql } from "@apollo/client";
+import { useQuery } from "@apollo/client/react"
+import { GET_REGIONS } from "./../Query"
+
 import "bulma/css/bulma.min.css";
 import "./../Styling/CSS/Pages.css";
 
@@ -99,7 +103,7 @@ function Disease() {
 
 function RegionCropSeason({setRegion, setSubregion, setCrop, setSeason}) {
 
-  const regionList = ["Northern", "Southern", "Western"] // TODO: Query for regions
+  
   const cropList = ["Barley", "Chickpeas", "Wheat"] // TODO: Query for crops
   const seasonList = ["21/22", "22/23", "23/24", "24/25"] // TODO: Query for seasons
 
@@ -122,25 +126,62 @@ function RegionCropSeason({setRegion, setSubregion, setCrop, setSeason}) {
     setSeason(event.target.value)
   }
 
+  function SelectRegion({handleRegionChange}) {
+    const {loading, error, data} = useQuery(GET_REGIONS)
+    if (loading) {
+      return (
+        <div>
+          <label>
+            <p>Region</p>
+            <div class="select is-primary">
+            <select defaultValue="">
+              <option value="" hidden disabled>Loading...</option>
+            </select>
+          </div>
+          </label>
+        </div>
+      )
+    }
+    if (error) {
+      return (
+        <div>
+          <label>
+            <p>Region</p>
+            <div class="select is-primary">
+            <select defaultValue="">
+              <option value="" hidden disabled>Error!</option>
+            </select>
+          </div>
+          </label>
+        </div>
+      )
+    }
+    return (
+      <div>
+        <label>
+          <p>Region</p>
+          <div class="select is-primary">
+            <select defaultValue="" onChange={handleRegionChange}>
+              <option value="" hidden disabled>Select Region</option>
+              {data.regions.map(region => (
+                <option value={region.region_name}>{region.region_name}</option>
+              ))} 
+            </select>
+          </div>
+        </label>
+      </div>
+    )
+  }
+
   return(
     <div class="is-flex is-flex-direction-column">
       <p class="is-size-4">Region, Crop & Season</p>
       <div class="box is-flex is-flex-direction-row is-justify-content-space-evenly">
         
         {/* Region Select */}
-        <div>
-          <label>
-            <p>Region</p>
-            <div class="select is-primary">
-              <select defaultValue="" onChange={handleRegionChange}>
-                <option value="" disabled hidden>Select Region</option>
-                {regionList.map((region) => (
-                  <option value={region}>{region}</option>
-                ))}
-              </select>
-            </div>
-          </label>
-        </div>
+        <SelectRegion
+          handleRegionChange={handleRegionChange}
+        />
 
         {/* Subregion Select */}
         <div>
@@ -426,25 +467,39 @@ function HarvestEstimates({setPrice, setDowngradePrice, yieldLoss, setYieldLoss}
   }
 
   return(
-    <div style={{flex: 1, padding: "1rem"}}>
-      <h1>Harvest Estimates</h1>
-      <div style={{flex: 1, padding: "1rem", border: "1px solid cyan", borderRadius: '10px'}}>
-        <div style={{display: "flex", gap: "1rem", justifyContent: "space-evenly"}}>
+    <div class="is-flex is-flex-direction-column">
+      <p class="is-size-4">Harvest Estimates</p>
+      <div class="box is-flex is-flex-direction-column is-justify-content-space-evenly">
+        <div class="columns">
           
           {/* Market Price */}
-          <span><label>
-            <p>Market Price ($/t)</p>
-            $<input type="number" min="0" style={{width: "80%"}} onChange={handlePriceChange}/>
-          </label></span>
+          <div class="column is-5 field">
+            <label>
+              <p>Market Price ($/t)</p>
+              <p class="control has-icons-left">
+                <input class="input is-primary" type="number" min="0" onChange={handlePriceChange}/>
+                <span class="icon is-left is-small">
+                  <i class="fas fa-dollar-sign"></i>
+                </span>
+              </p>
+            </label>
+          </div>
 
           {/* Downgraded Price */}
-          <span><label>
-            <p>Downgraded Price ($/t)</p>
-            $<input type="number" min="0" style={{width: "80%"}} onChange={handleDowngradePriceChange}/>
-          </label></span>
+         <div class="column is-5 field">
+            <label>
+              <p>Downgraded Price ($/t)</p>
+              <p class="control has-icons-left">
+                <input class="input is-primary" type="number" min="0" onChange={handleDowngradePriceChange}/>
+                <span class="icon is-left is-small">
+                  <i class="fas fa-dollar-sign"></i>
+                </span>
+              </p>
+            </label>
+          </div>
 
         </div>
-        <div style={{display: "flex", gap: "1rem", justifyContent: "space-evenly"}}>
+        <div>
 
           {/* Yield Loss */}
           <span><label>
@@ -466,9 +521,9 @@ function HarvestEstimates({setPrice, setDowngradePrice, yieldLoss, setYieldLoss}
 
 function CostBenefitSummary() {
   return(
-    <div style={{flex: 1, padding: "1rem"}}>
-      <h1>Cost-Benefit Summary</h1>
-      <div style={{flex: 1, padding: "1rem", border: "1px solid cyan", borderRadius: '10px'}}>
+    <div class="is-flex is-flex-direction-column">
+      <p class="is-size-4">Cost-Benefit Summary</p>
+      <div class="box is-flex is-flex-direction-column is-justify-content-space-evenly">
         Text
       </div>
     </div>
