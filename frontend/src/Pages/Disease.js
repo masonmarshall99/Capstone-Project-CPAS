@@ -7,7 +7,7 @@ import Sidebar from "./../Styling/Sidebar";
 
 import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/client/react"
-import { GET_REGIONS } from "./../Query"
+import { GET_REGIONS, GET_SUBREGIONS, GET_CROPS, GET_SEASONS } from "./../Query"
 
 import "bulma/css/bulma.min.css";
 import "./../Styling/CSS/Pages.css";
@@ -52,7 +52,11 @@ function Disease() {
         <div class="rows mx-auto mt-3">
           <div class="row columns">
             <div class="column">
-              <RegionCropSeason 
+              <RegionCropSeason
+              region={region}
+              subregion={subregion}
+              crop={crop}
+              season={season}
               setRegion={setRegion}
               setSubregion={setSubregion}
               setCrop={setCrop}
@@ -101,17 +105,10 @@ function Disease() {
   );
 }
 
-function RegionCropSeason({setRegion, setSubregion, setCrop, setSeason}) {
-
-  
-  const cropList = ["Barley", "Chickpeas", "Wheat"] // TODO: Query for crops
-  const seasonList = ["21/22", "22/23", "23/24", "24/25"] // TODO: Query for seasons
-
-  var subregionList = [] // Will be filled in when region is selected
+function RegionCropSeason({region, subregion, crop, season, setRegion, setSubregion, setCrop, setSeason}) {
   
   const handleRegionChange = (event) => {
     setRegion(event.target.value)
-    // TODO: Query for subregions in selected region
   }
 
   const handleSubregionChange = (event) => {
@@ -126,7 +123,7 @@ function RegionCropSeason({setRegion, setSubregion, setCrop, setSeason}) {
     setSeason(event.target.value)
   }
 
-  function SelectRegion({handleRegionChange}) {
+  function SelectRegion() {
     const {loading, error, data} = useQuery(GET_REGIONS)
     if (loading) {
       return (
@@ -161,11 +158,139 @@ function RegionCropSeason({setRegion, setSubregion, setCrop, setSeason}) {
         <label>
           <p>Region</p>
           <div class="select is-primary">
-            <select defaultValue="" onChange={handleRegionChange}>
+            <select defaultValue="" value={region} onChange={handleRegionChange}>
               <option value="" hidden disabled>Select Region</option>
               {data.regions.map(region => (
                 <option value={region.region_name}>{region.region_name}</option>
               ))} 
+            </select>
+          </div>
+        </label>
+      </div>
+    )
+  }
+
+  function SelectSubregion() {
+    const {loading, error, data} = useQuery(GET_SUBREGIONS)
+    if (loading) {
+      return (
+        <div>
+          <label>
+            <p>Subregion</p>
+            <div class="select is-primary">
+            <select defaultValue="">
+              <option value="" hidden disabled>Loading...</option>
+            </select>
+          </div>
+          </label>
+        </div>
+      )
+    }
+    if (error) {
+      return (
+        <div>
+          <label>
+            <p>Subregion</p>
+            <div class="select is-primary">
+            <select defaultValue="">
+              <option value="" hidden disabled>Error!</option>
+            </select>
+          </div>
+          </label>
+        </div>
+      )
+    }
+    const subregions = data.locations
+                        .filter(location => location.region.region_name == region)
+                        .map(location => location.sub_region)
+                        .sort()
+    
+    return (
+      <div>
+        <label>
+          <p>Subregion</p>
+          <div class="select is-primary">
+            <select defaultValue="" value={subregion} onChange={handleSubregionChange}>
+              <option value="" hidden disabled>Select Subregion</option>
+              {subregions.map(subregion => (
+                <option value={subregion}>{subregion}</option>
+              ))} 
+            </select>
+          </div>
+        </label>
+      </div>
+    )
+
+  }
+
+  function SelectCrop() {
+    const {loading, error, data} = useQuery(GET_CROPS)
+
+    if (loading) return (
+      <div class="is-flex is-flex-direction-column">
+        <p>Crop</p>
+        <p>Loading...</p>
+      </div>
+    )
+    if (error) return (
+      <div class="is-flex is-flex-direction-column">
+        <p>Crop</p>
+        <p>Error!</p>
+      </div>
+    )
+
+    return (
+      <div class="is-flex is-flex-direction-column">
+        <p>Crop</p>
+        {data.crops.map((entry) => (
+          <label class="radio px-1 py-1">
+            <input type="radio" name="crop" value={entry.crop_name} checked={crop == entry.crop_name} onChange={handleCropChange}/>
+            {entry.crop_name}
+          </label>
+        ))}
+      </div>
+    )
+
+  }
+
+  function SelectSeason() {
+    const {loading, error, data} = useQuery(GET_SEASONS)
+
+    if (loading) return (
+      <div>
+        <label>
+            <p>Season</p>
+            <div class="select is-primary">
+              <select defaultValue="">
+                <option value="" disabled hidden>Loading...</option>
+            </select>
+          </div>
+        </label>
+      </div>
+    )
+    if (error) return (
+      <div>
+        <label>
+            <p>Season</p>
+            <div class="select is-primary">
+              <select defaultValue="">
+                <option value="" disabled hidden>Error!</option>
+            </select>
+          </div>
+        </label>
+      </div>
+    )
+
+    return (
+      <div>
+        <label>
+            <p>Season</p>
+            <div class="select is-primary">
+              <select defaultValue="" value={season} onChange={handleSeasonChange}>
+                <option value="" disabled hidden>Select Season</option>
+                {data.seasons.map((season) => (
+                  <option value={season.year}>{season.year}</option>
+                ))}
             </select>
           </div>
         </label>
@@ -179,50 +304,16 @@ function RegionCropSeason({setRegion, setSubregion, setCrop, setSeason}) {
       <div class="box is-flex is-flex-direction-row is-justify-content-space-evenly">
         
         {/* Region Select */}
-        <SelectRegion
-          handleRegionChange={handleRegionChange}
-        />
+        <SelectRegion/>
 
         {/* Subregion Select */}
-        <div>
-          <label>
-              <p>Subregion</p>
-              <div class="select is-primary">
-                <select defaultValue="" onChange={handleSubregionChange}>
-                  <option value="" disabled hidden>Select Subregion</option>
-                  {subregionList.map((subregion) => (
-                    <option value={subregion}>{subregion}</option>
-                  ))}
-              </select>
-            </div>
-          </label>
-        </div>
+        <SelectSubregion/>
 
         {/* Crop Select */}
-        <div class="is-flex is-flex-direction-column">
-          <p>Crop</p>
-          {cropList.map((crop) => (
-            <label class="radio px-1 py-1">
-              <input type="radio" name="crop" value={crop} onSelect={handleCropChange}/>
-              {crop}
-            </label>
-          ))}
-        </div>
-
+        <SelectCrop/>
+        
         {/* Season Select */}
-        <div>
-          <label>
-              <p>Season</p>
-              <div class="select is-primary">
-                <select defaultValue="" onChange={handleSeasonChange}>
-                  <option value="" disabled hidden>Select Season</option>
-                  {seasonList.map((season) => (
-                    <option value={season}>{season}</option>
-                  ))}
-              </select>
-            </div>
-          </label>
-        </div>
+        <SelectSeason/>
 
       </div>
     </div>
@@ -521,7 +612,7 @@ function HarvestEstimates({setPrice, setDowngradePrice, yieldLoss, setYieldLoss}
 
 function CostBenefitSummary() {
   return(
-    <div class="is-flex is-flex-direction-column">
+    <div class="is-flex is-flex-direction-column mt-3">
       <p class="is-size-4">Cost-Benefit Summary</p>
       <div class="box is-flex is-flex-direction-column is-justify-content-space-evenly">
         Text
