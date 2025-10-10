@@ -35,7 +35,7 @@ function Disease() {
   const [seedCost, setSeedCost] = useState(null)
   const [firstApplicationCost, setFirstApplicationCost] = useState(null)
   const [secondApplicationCost, setSecondApplicationCost] = useState(null)
-  const [otherOperationCost, setOtherApplicationCost] = useState(null)
+  const [otherOperationCost, setOtherOperationCost] = useState(null)
 
   // Inputs for Harvest Estimates
   const [price, setPrice] = useState(null)
@@ -87,7 +87,7 @@ function Disease() {
               setSeedCost={setSeedCost}
               setFirstApplicationCost={setFirstApplicationCost}
               setSecondApplicationCost={setSecondApplicationCost}
-              setOtherApplicationCost={setOtherApplicationCost}/>
+              setOtherOperationCost={setOtherOperationCost}/>
             </div>
           </div>
           <div class="row">
@@ -98,7 +98,20 @@ function Disease() {
             setYieldLoss={setYieldLoss}/>
           </div>
           <div class="row">
-            <CostBenefitSummary />
+            <CostBenefitSummary 
+            area={area}
+            yieldRate={yieldRate}
+            incidence={incidence}
+            areaOfEffect={areaOfEffect}
+            severity={severity}
+            seedCost={seedCost}
+            firstApplicationCost={firstApplicationCost}
+            secondApplicationCost={secondApplicationCost}
+            otherOperationCost={otherOperationCost}
+            price={price}
+            downgradePrice={downgradePrice}
+            yieldLoss={yieldLoss}
+            />
           </div>
         </div>
       </div>
@@ -110,6 +123,7 @@ function RegionCropSeason({region, subregion, crop, season, setRegion, setSubreg
   
   const handleRegionChange = (event) => {
     setRegion(event.target.value)
+    setSubregion(null)
   }
 
   const handleSubregionChange = (event) => {
@@ -384,7 +398,6 @@ function CropProduction({area, setArea, yieldRate, setYieldRate}) {
 }
 
 function DiseaseImpactEstimates({disease, setDisease, incidence, setIncidence, areaOfEffect, setAreaOfEffect, severity, setSeverity}) {
-  const diseaseList = ["A", "B", "C"] // TODO: Query for disease
 
   const handleDiseaseChange = (event) => {
     setDisease(event.target.value)
@@ -492,7 +505,7 @@ function DiseaseImpactEstimates({disease, setDisease, incidence, setIncidence, a
   );
 }
 
-function TreatmentCostEstimates({setSeedCost, setFirstApplicationCost, setSecondApplicationCost, setOtherApplicationCost}) {
+function TreatmentCostEstimates({setSeedCost, setFirstApplicationCost, setSecondApplicationCost, setOtherOperationCost}) {
 
   const handleSeedChange = (event) => {
     setSeedCost(event.target.value)
@@ -506,8 +519,8 @@ function TreatmentCostEstimates({setSeedCost, setFirstApplicationCost, setSecond
     setSecondApplicationCost(event.target.value)
   }
 
-  const handleOtherApplicationChange = (event) => {
-    setOtherApplicationCost(event.target.value)
+  const handleOtherOperationChange = (event) => {
+    setOtherOperationCost(event.target.value)
   }
 
   return(
@@ -563,7 +576,7 @@ function TreatmentCostEstimates({setSeedCost, setFirstApplicationCost, setSecond
             <label>
               <p>Other Operation Cost ($/ha)</p>
               <p class="control has-icons-left">
-                <input class="input is-primary" type="number" min="0" onChange={handleOtherApplicationChange}/>
+                <input class="input is-primary" type="number" min="0" onChange={handleOtherOperationChange}/>
                 <span class="icon is-left is-small">
                   <i class="fas fa-dollar-sign"></i>
                 </span>
@@ -644,12 +657,32 @@ function HarvestEstimates({setPrice, setDowngradePrice, yieldLoss, setYieldLoss}
   );
 }
 
-function CostBenefitSummary() {
+function CostBenefitSummary({area, yieldRate, incidence, areaOfEffect, severity, seedCost, firstApplicationCost, secondApplicationCost, otherOperationCost, price, downgradePrice, yieldLoss}) {
+  
+  const grossRev = Math.round(area * yieldRate * price /1_000_000 * 100)/100
+  const grossRev_pha = Math.round(yieldRate * price * 100)/100 
+
+  const valueLossToDisease = Math.round((1 - (yieldLoss/100)) * (incidence/100) * (areaOfEffect/100) * (severity/100) * area * yieldRate * price /1_000_000 * 100)/100
+  const valueLossToDisease_pha = Math.round((1 - (yieldLoss/100)) * (incidence/100) * (areaOfEffect/100) * (severity/100) * yieldRate * price * 100)/100
+
+  const valueLossToQuality = Math.round((yieldLoss/100) * (incidence/100) * (areaOfEffect/100) * (severity/100) * area * yieldRate * (price - downgradePrice) /1_000_000 * 100)/100
+  const valueLossToQuality_pha = Math.round((yieldLoss/100) * (incidence/100) * (areaOfEffect/100) * (severity/100) * yieldRate * (price - downgradePrice) * 100)/100
+
+  const productionCost = Math.round(( 1 * seedCost +  1 * firstApplicationCost +  1 * secondApplicationCost +  1 * otherOperationCost) * area / 1_000_000 * 100)/100
+  const productionCost_pha = Math.round(( 1 * seedCost +  1 * firstApplicationCost +  1 * secondApplicationCost +  1 * otherOperationCost) * 100)/100
+
+  const netBenefit = Math.round(((valueLossToDisease + valueLossToQuality) - productionCost) * 100)/100
+  const netBenefit_pha = Math.round(((valueLossToDisease_pha + valueLossToQuality_pha) - productionCost_pha) * 100)/100
+
   return(
     <div class="is-flex is-flex-direction-column mt-3">
       <p class="is-size-4">Cost-Benefit Summary</p>
       <div class="box is-flex is-flex-direction-column is-justify-content-space-evenly">
-        Text
+        <p>Total Gross Revenue: ${grossRev}M (${grossRev_pha}/ha)</p>
+        <p>Value Loss To Disease: ${valueLossToDisease}M (${valueLossToDisease_pha}/ha)</p>
+        <p>Value Loss to Downgrade: ${valueLossToQuality}M (${valueLossToQuality_pha}/ha)</p>
+        <p>Total Production Cost: ${productionCost}M (${productionCost_pha}/ha)</p>
+        <p>Net Benefit: ${netBenefit}M (${netBenefit_pha}/ha)</p>
       </div>
     </div>
   );
