@@ -2,17 +2,17 @@ import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "bulma/css/bulma.min.css";
 import "./CSS/Dash.css";
-import { useData } from "./../Data";
+import { useAuth } from "../CheckAuth";
 
 function Top() {
   const navigate = useNavigate();
-  const { account, setAccount } = useData();
+  const { loading, user } = useAuth();
 
   function toAccount() {
-    if (account !== null) {
-      navigate("/account");
-    } else {
+    if (user == null) {
       navigate("/login");
+    } else {
+      navigate("/account");
     }
   }
 

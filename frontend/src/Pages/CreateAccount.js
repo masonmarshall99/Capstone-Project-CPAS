@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Styling/CSS/AuthPages.css";
-
-import { useData } from "./../Data";
+import { useAuth } from "../CheckAuth";
 import Cookies from "js-cookie";
 
 const CreateAccountPage = () => {
@@ -13,10 +12,10 @@ const CreateAccountPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const { account, setAccount } = useData();
+  const { account, setAccount } = useState(null);
+  const { loading, user, fetchUser } = useAuth();
 
   const navigate = useNavigate();
-
 
   const handleSignUp = async (e) => {
     if (account == null) {
@@ -27,17 +26,17 @@ const CreateAccountPage = () => {
         return;
       }
 
-    try {
-      const response = await fetch("http://localhost:8000/api/register/", {
-        method: "POST",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": Cookies.get("csrftoken"),
-        },
-        body: JSON.stringify({ email, name, lastName, password }),
-      });
+      try {
+        const response = await fetch("http://localhost:8000/api/register/", {
+          method: "POST",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": Cookies.get("csrftoken"),
+          },
+          body: JSON.stringify({ email, name, lastName, password }),
+        });
 
         const data = await response.json();
 
@@ -50,9 +49,8 @@ const CreateAccountPage = () => {
         } else {
           console.log("Signup success:", data);
 
-          setAccount(data);
-
           alert(`Account created for ${email}`);
+          fetchUser();
           setMessage("");
           navigate("/dash");
         }
@@ -82,12 +80,11 @@ const CreateAccountPage = () => {
     handleChange();
   }, [email, password, confirmPassword]);
 
-  /* Redirect if signed in */
   useEffect(() => {
-    if (account !== null) {
+    if (user !== null) {
       navigate("/dash");
     }
-  }, [account, navigate]);
+  }, [user, navigate]);
 
   return (
     <div className="auth-wrapper">
