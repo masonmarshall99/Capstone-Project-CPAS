@@ -7,7 +7,7 @@ import Sidebar from "./../Styling/Sidebar";
 
 import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/client/react"
-import { GET_REGIONS, GET_SUBREGIONS, GET_CROPS, GET_SEASONS } from "./../Query"
+import { GET_REGIONS, GET_SUBREGIONS, GET_CROPS, GET_SEASONS, GET_DISEASES } from "./../Query"
 
 import "bulma/css/bulma.min.css";
 import "./../Styling/CSS/Pages.css";
@@ -72,7 +72,8 @@ function Disease() {
           </div>
           <div class="row columns">
             <div class="column">
-              <DiseaseImpactEstimates 
+              <DiseaseImpactEstimates
+              disease={disease} 
               setDisease={setDisease}
               incidence={incidence}
               setIncidence={setIncidence}
@@ -382,7 +383,7 @@ function CropProduction({area, setArea, yieldRate, setYieldRate}) {
   );
 }
 
-function DiseaseImpactEstimates({setDisease, incidence, setIncidence, areaOfEffect, setAreaOfEffect, severity, setSeverity}) {
+function DiseaseImpactEstimates({disease, setDisease, incidence, setIncidence, areaOfEffect, setAreaOfEffect, severity, setSeverity}) {
   const diseaseList = ["A", "B", "C"] // TODO: Query for disease
 
   const handleDiseaseChange = (event) => {
@@ -401,6 +402,51 @@ function DiseaseImpactEstimates({setDisease, incidence, setIncidence, areaOfEffe
     setSeverity(event.target.value)
   }
 
+  function SelectDisease() {
+    const {loading, error, data} = useQuery(GET_DISEASES)
+
+    if (loading) return (
+      <div class="column">
+        <label>
+          <p>Select disease present</p>
+          <div class="select is-primary">
+            <select defaultValue="">
+              <option value="" disabled hidden>Loading...</option>
+            </select>
+          </div>
+        </label>
+      </div>
+    )
+    if (error) return (
+      <div class="column">
+        <label>
+          <p>Select disease present</p>
+          <div class="select is-primary">
+            <select defaultValue="">
+              <option value="" disabled hidden>Error!</option>
+            </select>
+          </div>
+        </label>
+      </div>
+    )
+
+    return (
+      <div class="column">
+        <label>
+          <p>Select disease present</p>
+          <div class="select is-primary">
+            <select defaultValue="" value={disease} onChange={handleDiseaseChange}>
+              <option value="" disabled hidden>Select Disease</option>
+              {data.diseases.map((item) => (
+                <option value={item.disease_name}>{item.disease_name}</option>
+              ))}
+            </select>
+          </div>
+        </label>
+      </div>
+    )
+  }
+
   return(
     <div class="is-flex is-flex-direction-column">
       <p class="is-size-4">Disease Impact Estimates</p>
@@ -408,19 +454,7 @@ function DiseaseImpactEstimates({setDisease, incidence, setIncidence, areaOfEffe
         <div class="columns">
           
           {/* Disease Select */}
-          <div class="column">
-            <label>
-              <p>Select disease present</p>
-              <div class="select is-primary">
-                <select defaultValue="" onChange={handleDiseaseChange}>
-                  <option value="" disabled hidden>Select Disease</option>
-                  {diseaseList.map((disease) => (
-                    <option value={disease}>{disease}</option>
-                  ))}
-                </select>
-              </div>
-            </label>
-          </div>
+          <SelectDisease/>
 
           {/* Disease Incidince Input */}
           <div class="column">
