@@ -14,6 +14,7 @@ import Dash from "./Pages/Dash";
 import Disease from "./Pages/Disease";
 import Historical from "./Pages/Historical";
 import Contact from "./Pages/Contact";
+import APIAuthTest from "./Pages/APIAuthTest";
 
 
 function App() {
@@ -30,6 +31,8 @@ function App() {
           <Route path="/historical" element={<Historical />} />
           <Route path="/disease" element={<Disease />} />
           <Route path="/Contact" element={<Contact />} />
+
+          <Route path="/apiauthtest" element={<APIAuthTest />} />
         </Routes>
       </Router>
     </SharedData>
