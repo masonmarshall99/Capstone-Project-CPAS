@@ -665,24 +665,27 @@ function CostBenefitSummary({area, yieldRate, incidence, areaOfEffect, severity,
   const valueLossToDisease = Math.round((1 - (yieldLoss/100)) * (incidence/100) * (areaOfEffect/100) * (severity/100) * area * yieldRate * price /1_000_000 * 100)/100
   const valueLossToDisease_pha = Math.round((1 - (yieldLoss/100)) * (incidence/100) * (areaOfEffect/100) * (severity/100) * yieldRate * price * 100)/100
 
-  const valueLossToQuality = Math.round((yieldLoss/100) * (incidence/100) * (areaOfEffect/100) * (severity/100) * area * yieldRate * (price - downgradePrice) /1_000_000 * 100)/100
-  const valueLossToQuality_pha = Math.round((yieldLoss/100) * (incidence/100) * (areaOfEffect/100) * (severity/100) * yieldRate * (price - downgradePrice) * 100)/100
+  const valueLossToQuality = Math.round((yieldLoss/100) * area * yieldRate * downgradePrice /1_000_000 * 100)/100
+  const valueLossToQuality_pha = Math.round((yieldLoss/100) *  yieldRate * downgradePrice * 100)/100
 
   const productionCost = Math.round(( 1 * seedCost +  1 * firstApplicationCost +  1 * secondApplicationCost +  1 * otherOperationCost) * area / 1_000_000 * 100)/100
   const productionCost_pha = Math.round(( 1 * seedCost +  1 * firstApplicationCost +  1 * secondApplicationCost +  1 * otherOperationCost) * 100)/100
 
-  const netBenefit = Math.round(((valueLossToDisease + valueLossToQuality) - productionCost) * 100)/100
-  const netBenefit_pha = Math.round(((valueLossToDisease_pha + valueLossToQuality_pha) - productionCost_pha) * 100)/100
+  const netBenefit = Math.round((grossRev - (valueLossToDisease + valueLossToQuality + productionCost)) * 100)/100
+  const netBenefit_pha = Math.round((grossRev_pha - (valueLossToDisease_pha + valueLossToQuality_pha + productionCost_pha)) * 100)/100
+
+  const ROI = Math.round(netBenefit/productionCost * 10)/10
 
   return(
     <div class="is-flex is-flex-direction-column mt-3">
       <p class="is-size-4">Cost-Benefit Summary</p>
-      <div class="box is-flex is-flex-direction-column is-justify-content-space-evenly">
-        <p>Total Gross Revenue: ${grossRev}M (${grossRev_pha}/ha)</p>
-        <p>Value Loss To Disease: ${valueLossToDisease}M (${valueLossToDisease_pha}/ha)</p>
-        <p>Value Loss to Downgrade: ${valueLossToQuality}M (${valueLossToQuality_pha}/ha)</p>
-        <p>Total Production Cost: ${productionCost}M (${productionCost_pha}/ha)</p>
-        <p>Net Benefit: ${netBenefit}M (${netBenefit_pha}/ha)</p>
+      <div class="box is-flex is-flex-direction-column is-justify-content-space-evenly is-gap-2">
+        <p>Total Gross Revenue: <b>${grossRev}M (${grossRev_pha}/ha)</b></p>
+        <p>Value Loss To Disease: <b>${valueLossToDisease}M (${valueLossToDisease_pha}/ha)</b></p>
+        <p>Value Loss to Downgrade: <b>${valueLossToQuality}M (${valueLossToQuality_pha}/ha)</b></p>
+        <p>Total Production Cost: <b>${productionCost}M (${productionCost_pha}/ha)</b></p>
+        <p>Net Revenue: <b>${netBenefit}M (${netBenefit_pha}/ha)</b></p>
+        <p>Return on Investment (ROI): <b>{ROI}</b></p>
       </div>
     </div>
   );
