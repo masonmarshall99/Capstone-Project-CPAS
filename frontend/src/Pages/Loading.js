@@ -21,7 +21,7 @@ const LoadingPage = () => {
   /* Redirect if signed in */
   useEffect(() => {
     if (user !== null) {
-      navigate("/dash");
+      navigate("/");
     }
   }, [user, navigate]);
 

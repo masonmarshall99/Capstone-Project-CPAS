@@ -1,37 +1,4 @@
 /*---------------------------------------------------------------*/
-/* Dash */
-.add-to-dash {
-  position: absolute;
-  top: 54px;
-  right: 8px;
-  width: 18px;
-  height: 32px;
-  min-width: 32px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  border-radius: 20%;
-  background-color: var(--primary-color);
-  color: var(--back-colour);
-  font-size: 30px;
-  font-weight: 600;
-}
-
-.add-to-dash:hover {
-  filter: brightness(var(--button-Fade));
-}
-
-.scroll-overlay {
-  position: absolute;
-  right: 12px;
-  bottom: 12px;
-  width: calc(100% - 244px);
-  height: calc(100% - 107px);
-  overflow-y: scroll;
-}
-
-/*---------------------------------------------------------------*/
 /* Account */
 .account-page {
   flex-direction: column;
