@@ -5,6 +5,8 @@ import App from "./App";
 import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 import { ApolloProvider } from "@apollo/client/react";
 
+import { AuthProvider } from "./CheckAuth";
+
 // Apollo Client initialisation 
 // Will have to be changed eventually to include authorisation (might be done on backend instead, or needed in both)
 const client = new ApolloClient({
@@ -19,7 +21,9 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </ApolloProvider>
   </React.StrictMode>
 );

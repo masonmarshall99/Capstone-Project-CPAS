@@ -5,6 +5,10 @@ import { useNavigate } from "react-router-dom";
 import Top from "./../Styling/Top";
 import Sidebar from "./../Styling/Sidebar";
 
+import { gql } from "@apollo/client";
+import { useQuery } from "@apollo/client/react"
+import { GET_REGIONS, GET_SUBREGIONS, GET_CROPS, GET_SEASONS, GET_DISEASES } from "./../Query"
+
 import "bulma/css/bulma.min.css";
 import "./../Styling/CSS/Pages.css";
 
@@ -31,7 +35,7 @@ function Disease() {
   const [seedCost, setSeedCost] = useState(null)
   const [firstApplicationCost, setFirstApplicationCost] = useState(null)
   const [secondApplicationCost, setSecondApplicationCost] = useState(null)
-  const [otherOperationCost, setOtherApplicationCost] = useState(null)
+  const [otherOperationCost, setOtherOperationCost] = useState(null)
 
   // Inputs for Harvest Estimates
   const [price, setPrice] = useState(null)
@@ -48,7 +52,11 @@ function Disease() {
         <div class="rows mx-auto mt-3">
           <div class="row columns">
             <div class="column">
-              <RegionCropSeason 
+              <RegionCropSeason
+              region={region}
+              subregion={subregion}
+              crop={crop}
+              season={season}
               setRegion={setRegion}
               setSubregion={setSubregion}
               setCrop={setCrop}
@@ -64,7 +72,8 @@ function Disease() {
           </div>
           <div class="row columns">
             <div class="column">
-              <DiseaseImpactEstimates 
+              <DiseaseImpactEstimates
+              disease={disease} 
               setDisease={setDisease}
               incidence={incidence}
               setIncidence={setIncidence}
@@ -78,7 +87,7 @@ function Disease() {
               setSeedCost={setSeedCost}
               setFirstApplicationCost={setFirstApplicationCost}
               setSecondApplicationCost={setSecondApplicationCost}
-              setOtherApplicationCost={setOtherApplicationCost}/>
+              setOtherOperationCost={setOtherOperationCost}/>
             </div>
           </div>
           <div class="row">
@@ -89,7 +98,20 @@ function Disease() {
             setYieldLoss={setYieldLoss}/>
           </div>
           <div class="row">
-            <CostBenefitSummary />
+            <CostBenefitSummary 
+            area={area}
+            yieldRate={yieldRate}
+            incidence={incidence}
+            areaOfEffect={areaOfEffect}
+            severity={severity}
+            seedCost={seedCost}
+            firstApplicationCost={firstApplicationCost}
+            secondApplicationCost={secondApplicationCost}
+            otherOperationCost={otherOperationCost}
+            price={price}
+            downgradePrice={downgradePrice}
+            yieldLoss={yieldLoss}
+            />
           </div>
         </div>
       </div>
@@ -97,17 +119,11 @@ function Disease() {
   );
 }
 
-function RegionCropSeason({setRegion, setSubregion, setCrop, setSeason}) {
-
-  const regionList = ["Northern", "Southern", "Western"] // TODO: Query for regions
-  const cropList = ["Barley", "Chickpeas", "Wheat"] // TODO: Query for crops
-  const seasonList = ["21/22", "22/23", "23/24", "24/25"] // TODO: Query for seasons
-
-  var subregionList = [] // Will be filled in when region is selected
+function RegionCropSeason({region, subregion, crop, season, setRegion, setSubregion, setCrop, setSeason}) {
   
   const handleRegionChange = (event) => {
     setRegion(event.target.value)
-    // TODO: Query for subregions in selected region
+    setSubregion(null)
   }
 
   const handleSubregionChange = (event) => {
@@ -122,66 +138,197 @@ function RegionCropSeason({setRegion, setSubregion, setCrop, setSeason}) {
     setSeason(event.target.value)
   }
 
+  function SelectRegion() {
+    const {loading, error, data} = useQuery(GET_REGIONS)
+    if (loading) {
+      return (
+        <div>
+          <label>
+            <p>Region</p>
+            <div class="select is-primary">
+            <select defaultValue="">
+              <option value="" hidden disabled>Loading...</option>
+            </select>
+          </div>
+          </label>
+        </div>
+      )
+    }
+    if (error) {
+      return (
+        <div>
+          <label>
+            <p>Region</p>
+            <div class="select is-primary">
+            <select defaultValue="">
+              <option value="" hidden disabled>Error!</option>
+            </select>
+          </div>
+          </label>
+        </div>
+      )
+    }
+    return (
+      <div>
+        <label>
+          <p>Region</p>
+          <div class="select is-primary">
+            <select defaultValue="" value={region} onChange={handleRegionChange}>
+              <option value="" hidden disabled>Select Region</option>
+              {data.regions.map(region => (
+                <option value={region.region_name}>{region.region_name}</option>
+              ))} 
+            </select>
+          </div>
+        </label>
+      </div>
+    )
+  }
+
+  function SelectSubregion() {
+    const {loading, error, data} = useQuery(GET_SUBREGIONS)
+    if (loading) {
+      return (
+        <div>
+          <label>
+            <p>Subregion</p>
+            <div class="select is-primary">
+            <select defaultValue="">
+              <option value="" hidden disabled>Loading...</option>
+            </select>
+          </div>
+          </label>
+        </div>
+      )
+    }
+    if (error) {
+      return (
+        <div>
+          <label>
+            <p>Subregion</p>
+            <div class="select is-primary">
+            <select defaultValue="">
+              <option value="" hidden disabled>Error!</option>
+            </select>
+          </div>
+          </label>
+        </div>
+      )
+    }
+    const subregions = data.locations
+                        .filter(location => location.region.region_name == region)
+                        .map(location => location.sub_region)
+                        .sort()
+    
+    return (
+      <div>
+        <label>
+          <p>Subregion</p>
+          <div class="select is-primary">
+            <select defaultValue="" value={subregion} onChange={handleSubregionChange}>
+              <option value="" hidden disabled>Select Subregion</option>
+              {subregions.map(subregion => (
+                <option value={subregion}>{subregion}</option>
+              ))} 
+            </select>
+          </div>
+        </label>
+      </div>
+    )
+
+  }
+
+  function SelectCrop() {
+    const {loading, error, data} = useQuery(GET_CROPS)
+
+    if (loading) return (
+      <div class="is-flex is-flex-direction-column">
+        <p>Crop</p>
+        <p>Loading...</p>
+      </div>
+    )
+    if (error) return (
+      <div class="is-flex is-flex-direction-column">
+        <p>Crop</p>
+        <p>Error!</p>
+      </div>
+    )
+
+    return (
+      <div class="is-flex is-flex-direction-column">
+        <p>Crop</p>
+        {data.crops.map((entry) => (
+          <label class="radio px-1 py-1">
+            <input type="radio" name="crop" value={entry.crop_name} checked={crop == entry.crop_name} onChange={handleCropChange}/>
+            {entry.crop_name}
+          </label>
+        ))}
+      </div>
+    )
+
+  }
+
+  function SelectSeason() {
+    const {loading, error, data} = useQuery(GET_SEASONS)
+
+    if (loading) return (
+      <div>
+        <label>
+            <p>Season</p>
+            <div class="select is-primary">
+              <select defaultValue="">
+                <option value="" disabled hidden>Loading...</option>
+            </select>
+          </div>
+        </label>
+      </div>
+    )
+    if (error) return (
+      <div>
+        <label>
+            <p>Season</p>
+            <div class="select is-primary">
+              <select defaultValue="">
+                <option value="" disabled hidden>Error!</option>
+            </select>
+          </div>
+        </label>
+      </div>
+    )
+
+    return (
+      <div>
+        <label>
+            <p>Season</p>
+            <div class="select is-primary">
+              <select defaultValue="" value={season} onChange={handleSeasonChange}>
+                <option value="" disabled hidden>Select Season</option>
+                {data.seasons.map((season) => (
+                  <option value={season.year}>{season.year}</option>
+                ))}
+            </select>
+          </div>
+        </label>
+      </div>
+    )
+  }
+
   return(
     <div class="is-flex is-flex-direction-column">
       <p class="is-size-4">Region, Crop & Season</p>
       <div class="box is-flex is-flex-direction-row is-justify-content-space-evenly">
         
         {/* Region Select */}
-        <div>
-          <label>
-            <p>Region</p>
-            <div class="select is-primary">
-              <select defaultValue="" onChange={handleRegionChange}>
-                <option value="" disabled hidden>Select Region</option>
-                {regionList.map((region) => (
-                  <option value={region}>{region}</option>
-                ))}
-              </select>
-            </div>
-          </label>
-        </div>
+        <SelectRegion/>
 
         {/* Subregion Select */}
-        <div>
-          <label>
-              <p>Subregion</p>
-              <div class="select is-primary">
-                <select defaultValue="" onChange={handleSubregionChange}>
-                  <option value="" disabled hidden>Select Subregion</option>
-                  {subregionList.map((subregion) => (
-                    <option value={subregion}>{subregion}</option>
-                  ))}
-              </select>
-            </div>
-          </label>
-        </div>
+        <SelectSubregion/>
 
         {/* Crop Select */}
-        <div class="is-flex is-flex-direction-column">
-          <p>Crop</p>
-          {cropList.map((crop) => (
-            <label class="radio px-1 py-1">
-              <input type="radio" name="crop" value={crop} onSelect={handleCropChange}/>
-              {crop}
-            </label>
-          ))}
-        </div>
-
+        <SelectCrop/>
+        
         {/* Season Select */}
-        <div>
-          <label>
-              <p>Season</p>
-              <div class="select is-primary">
-                <select defaultValue="" onChange={handleSeasonChange}>
-                  <option value="" disabled hidden>Select Season</option>
-                  {seasonList.map((season) => (
-                    <option value={season}>{season}</option>
-                  ))}
-              </select>
-            </div>
-          </label>
-        </div>
+        <SelectSeason/>
 
       </div>
     </div>
@@ -250,8 +397,7 @@ function CropProduction({area, setArea, yieldRate, setYieldRate}) {
   );
 }
 
-function DiseaseImpactEstimates({setDisease, incidence, setIncidence, areaOfEffect, setAreaOfEffect, severity, setSeverity}) {
-  const diseaseList = ["A", "B", "C"] // TODO: Query for disease
+function DiseaseImpactEstimates({disease, setDisease, incidence, setIncidence, areaOfEffect, setAreaOfEffect, severity, setSeverity}) {
 
   const handleDiseaseChange = (event) => {
     setDisease(event.target.value)
@@ -269,6 +415,51 @@ function DiseaseImpactEstimates({setDisease, incidence, setIncidence, areaOfEffe
     setSeverity(event.target.value)
   }
 
+  function SelectDisease() {
+    const {loading, error, data} = useQuery(GET_DISEASES)
+
+    if (loading) return (
+      <div class="column">
+        <label>
+          <p>Select disease present</p>
+          <div class="select is-primary">
+            <select defaultValue="">
+              <option value="" disabled hidden>Loading...</option>
+            </select>
+          </div>
+        </label>
+      </div>
+    )
+    if (error) return (
+      <div class="column">
+        <label>
+          <p>Select disease present</p>
+          <div class="select is-primary">
+            <select defaultValue="">
+              <option value="" disabled hidden>Error!</option>
+            </select>
+          </div>
+        </label>
+      </div>
+    )
+
+    return (
+      <div class="column">
+        <label>
+          <p>Select disease present</p>
+          <div class="select is-primary">
+            <select defaultValue="" value={disease} onChange={handleDiseaseChange}>
+              <option value="" disabled hidden>Select Disease</option>
+              {data.diseases.map((item) => (
+                <option value={item.disease_name}>{item.disease_name}</option>
+              ))}
+            </select>
+          </div>
+        </label>
+      </div>
+    )
+  }
+
   return(
     <div class="is-flex is-flex-direction-column">
       <p class="is-size-4">Disease Impact Estimates</p>
@@ -276,19 +467,7 @@ function DiseaseImpactEstimates({setDisease, incidence, setIncidence, areaOfEffe
         <div class="columns">
           
           {/* Disease Select */}
-          <div class="column">
-            <label>
-              <p>Select disease present</p>
-              <div class="select is-primary">
-                <select defaultValue="" onChange={handleDiseaseChange}>
-                  <option value="" disabled hidden>Select Disease</option>
-                  {diseaseList.map((disease) => (
-                    <option value={disease}>{disease}</option>
-                  ))}
-                </select>
-              </div>
-            </label>
-          </div>
+          <SelectDisease/>
 
           {/* Disease Incidince Input */}
           <div class="column">
@@ -326,7 +505,7 @@ function DiseaseImpactEstimates({setDisease, incidence, setIncidence, areaOfEffe
   );
 }
 
-function TreatmentCostEstimates({setSeedCost, setFirstApplicationCost, setSecondApplicationCost, setOtherApplicationCost}) {
+function TreatmentCostEstimates({setSeedCost, setFirstApplicationCost, setSecondApplicationCost, setOtherOperationCost}) {
 
   const handleSeedChange = (event) => {
     setSeedCost(event.target.value)
@@ -340,8 +519,8 @@ function TreatmentCostEstimates({setSeedCost, setFirstApplicationCost, setSecond
     setSecondApplicationCost(event.target.value)
   }
 
-  const handleOtherApplicationChange = (event) => {
-    setOtherApplicationCost(event.target.value)
+  const handleOtherOperationChange = (event) => {
+    setOtherOperationCost(event.target.value)
   }
 
   return(
@@ -397,7 +576,7 @@ function TreatmentCostEstimates({setSeedCost, setFirstApplicationCost, setSecond
             <label>
               <p>Other Operation Cost ($/ha)</p>
               <p class="control has-icons-left">
-                <input class="input is-primary" type="number" min="0" onChange={handleOtherApplicationChange}/>
+                <input class="input is-primary" type="number" min="0" onChange={handleOtherOperationChange}/>
                 <span class="icon is-left is-small">
                   <i class="fas fa-dollar-sign"></i>
                 </span>
@@ -426,25 +605,39 @@ function HarvestEstimates({setPrice, setDowngradePrice, yieldLoss, setYieldLoss}
   }
 
   return(
-    <div style={{flex: 1, padding: "1rem"}}>
-      <h1>Harvest Estimates</h1>
-      <div style={{flex: 1, padding: "1rem", border: "1px solid cyan", borderRadius: '10px'}}>
-        <div style={{display: "flex", gap: "1rem", justifyContent: "space-evenly"}}>
+    <div class="is-flex is-flex-direction-column">
+      <p class="is-size-4">Harvest Estimates</p>
+      <div class="box is-flex is-flex-direction-column is-justify-content-space-evenly">
+        <div class="columns">
           
           {/* Market Price */}
-          <span><label>
-            <p>Market Price ($/t)</p>
-            $<input type="number" min="0" style={{width: "80%"}} onChange={handlePriceChange}/>
-          </label></span>
+          <div class="column is-5 field">
+            <label>
+              <p>Market Price ($/t)</p>
+              <p class="control has-icons-left">
+                <input class="input is-primary" type="number" min="0" onChange={handlePriceChange}/>
+                <span class="icon is-left is-small">
+                  <i class="fas fa-dollar-sign"></i>
+                </span>
+              </p>
+            </label>
+          </div>
 
           {/* Downgraded Price */}
-          <span><label>
-            <p>Downgraded Price ($/t)</p>
-            $<input type="number" min="0" style={{width: "80%"}} onChange={handleDowngradePriceChange}/>
-          </label></span>
+         <div class="column is-5 field">
+            <label>
+              <p>Downgraded Price ($/t)</p>
+              <p class="control has-icons-left">
+                <input class="input is-primary" type="number" min="0" onChange={handleDowngradePriceChange}/>
+                <span class="icon is-left is-small">
+                  <i class="fas fa-dollar-sign"></i>
+                </span>
+              </p>
+            </label>
+          </div>
 
         </div>
-        <div style={{display: "flex", gap: "1rem", justifyContent: "space-evenly"}}>
+        <div>
 
           {/* Yield Loss */}
           <span><label>
@@ -464,12 +657,32 @@ function HarvestEstimates({setPrice, setDowngradePrice, yieldLoss, setYieldLoss}
   );
 }
 
-function CostBenefitSummary() {
+function CostBenefitSummary({area, yieldRate, incidence, areaOfEffect, severity, seedCost, firstApplicationCost, secondApplicationCost, otherOperationCost, price, downgradePrice, yieldLoss}) {
+  
+  const grossRev = Math.round(area * yieldRate * price /1_000_000 * 100)/100
+  const grossRev_pha = Math.round(yieldRate * price * 100)/100 
+
+  const valueLossToDisease = Math.round((1 - (yieldLoss/100)) * (incidence/100) * (areaOfEffect/100) * (severity/100) * area * yieldRate * price /1_000_000 * 100)/100
+  const valueLossToDisease_pha = Math.round((1 - (yieldLoss/100)) * (incidence/100) * (areaOfEffect/100) * (severity/100) * yieldRate * price * 100)/100
+
+  const valueLossToQuality = Math.round((yieldLoss/100) * (incidence/100) * (areaOfEffect/100) * (severity/100) * area * yieldRate * (price - downgradePrice) /1_000_000 * 100)/100
+  const valueLossToQuality_pha = Math.round((yieldLoss/100) * (incidence/100) * (areaOfEffect/100) * (severity/100) * yieldRate * (price - downgradePrice) * 100)/100
+
+  const productionCost = Math.round(( 1 * seedCost +  1 * firstApplicationCost +  1 * secondApplicationCost +  1 * otherOperationCost) * area / 1_000_000 * 100)/100
+  const productionCost_pha = Math.round(( 1 * seedCost +  1 * firstApplicationCost +  1 * secondApplicationCost +  1 * otherOperationCost) * 100)/100
+
+  const netBenefit = Math.round(((valueLossToDisease + valueLossToQuality) - productionCost) * 100)/100
+  const netBenefit_pha = Math.round(((valueLossToDisease_pha + valueLossToQuality_pha) - productionCost_pha) * 100)/100
+
   return(
-    <div style={{flex: 1, padding: "1rem"}}>
-      <h1>Cost-Benefit Summary</h1>
-      <div style={{flex: 1, padding: "1rem", border: "1px solid cyan", borderRadius: '10px'}}>
-        Text
+    <div class="is-flex is-flex-direction-column mt-3">
+      <p class="is-size-4">Cost-Benefit Summary</p>
+      <div class="box is-flex is-flex-direction-column is-justify-content-space-evenly">
+        <p>Total Gross Revenue: ${grossRev}M (${grossRev_pha}/ha)</p>
+        <p>Value Loss To Disease: ${valueLossToDisease}M (${valueLossToDisease_pha}/ha)</p>
+        <p>Value Loss to Downgrade: ${valueLossToQuality}M (${valueLossToQuality_pha}/ha)</p>
+        <p>Total Production Cost: ${productionCost}M (${productionCost_pha}/ha)</p>
+        <p>Net Benefit: ${netBenefit}M (${netBenefit_pha}/ha)</p>
       </div>
     </div>
   );
