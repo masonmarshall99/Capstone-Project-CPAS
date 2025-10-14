@@ -9,15 +9,15 @@ import "./../Styling/CSS/Pages.css";
 
 import { useData } from "../Data";
 
-import {useAuth} 
+import { useAuth } from "../CheckAuth";
 
 
 function APIAuthTest() {
 
     const AuthTest = () => {
 
-        const { account, setAccount} = useData();
-        console.log("ACCOUNT STRING \n"+account);
+        const { loading, user, fetchUser } = useAuth()
+        console.log("USER STRING \n"+user.is_staff);
 
         } 
 
