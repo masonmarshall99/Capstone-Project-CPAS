@@ -1,9 +1,11 @@
 import React from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ScatterChart, Scatter } from 'recharts';
 
 import AustraliaMap from "../Maps/Australia";
+import { SelectDisease, SelectRegion, SelectSubregion, SelectCrop, SelectSeason } from "../Selector";
+
 
 import Top from "./../Styling/Top";
 import Sidebar from "./../Styling/Sidebar";
@@ -11,15 +13,50 @@ import Sidebar from "./../Styling/Sidebar";
 import "bulma/css/bulma.min.css";
 import "./../Styling/CSS/Pages.css";
 
-const sampleData = [
-  { name: '2019', yield: 4000, price: 2400 },
-  { name: '2020', yield: 3000, price: 1398 },
-  { name: '2021', yield: 2000, price: 9800 },
-  { name: '2022', yield: 2780, price: 3908 },
-  { name: '2023', yield: 1890, price: 4800 },
-];
 
 function Historical() {
+  const sampleData = [
+    { name: '2019', yield: 4000, price: 2400 },
+    { name: '2020', yield: 3000, price: 1398 },
+    { name: '2021', yield: 2000, price: 9800 },
+    { name: '2022', yield: 2780, price: 3908 },
+    { name: '2023', yield: 1890, price: 4800 },
+  ];
+  const [region, setRegion] = useState(null)
+  const [subregion, setSubregion] = useState(null)
+  const [crop, setCrop] = useState(null)
+  const [season, setSeason] = useState(null)
+  const [disease, setDisease] = useState(null)
+
+  const handleRegionChange = (event) => {
+    setRegion(event.target.value)
+    setSubregion(null)
+  }
+
+  const handleSubregionChange = (event) => {
+    setSubregion(event.target.value)
+  }
+
+  const handleCropChange = (event) => {
+    setCrop(event.target.value)
+  }
+
+  const handleSeasonChange = (event) => {
+    setSeason(event.target.value)
+  }
+
+  const handleDiseaseChange = (event) => {
+    setDisease(event.target.value)
+  }
+
+  const handleReset = (event) => {
+    setRegion("")
+    setSubregion("")
+    setCrop(null)
+    setSeason("")
+    setDisease("")
+  }
+
   return (
     <>
       <Top />
@@ -39,6 +76,34 @@ function Historical() {
             <h2 className="title is-5">Average Yield for Current Season: <span className="has-text-link">IMPLEMENT</span>.</h2>
             <br />
             <p className="subtitle is-6">Average commodity price: <span className="has-text-success">IMPLEMENT</span>.</p>
+          </div>
+
+          {/* Selection Inputs */}
+          <div className="box is-flex is-gap-6">
+            <SelectRegion
+            region={region}
+            handleRegionChange={handleRegionChange}
+            />
+            <SelectSubregion
+            region={region}
+            subregion={subregion}
+            handleSubregionChange={handleSubregionChange}
+            />
+            <SelectCrop
+            crop={crop}
+            handleCropChange={handleCropChange}
+            />
+            <SelectSeason
+            season={season}
+            handleSeasonChange={handleSeasonChange}
+            />
+            <SelectDisease
+            disease={disease}
+            handleDiseaseChange={handleDiseaseChange}
+            />
+            <input class="is-primary button mt-4" type="reset" content="Reset" 
+            style={{height: "3rem"}} onClick={handleReset}
+            />
           </div>
 
           {/* Tabbed Section Dispaly */}
