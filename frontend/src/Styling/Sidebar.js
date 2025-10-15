@@ -9,6 +9,7 @@ import { ReactComponent as diseaseIcon } from "./Icons/Disease.svg";
 import { ReactComponent as contactIcon } from "./Icons/Contact.svg";
 import { ReactComponent as helpIcon } from "./Icons/Help.svg";
 import { ReactComponent as faqIcon } from "./Icons/faq.svg";
+import { ReactComponent as fileIcon} from "./Icons/File.svg";
 
 function Sidebar({ curWindow }) {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ function Sidebar({ curWindow }) {
     { icon: dashIcon, text: "Dashboard", route: "/dash" },
     { icon: historicalIcon, text: "Historical Analysis", route: "/historical" },
     { icon: diseaseIcon, text: "Disease Risk", route: "/disease" },
+    { icon: fileIcon, text: "File Upload", route: "/fileupload" },
     { icon: faqIcon, text: "FAQ", route: "/faq" },
     { icon: helpIcon, text: "Help & Navigation", route: "/help" },
     { icon: contactIcon, text: "Contact Us", pos: "Bottom", route: "/contact" },

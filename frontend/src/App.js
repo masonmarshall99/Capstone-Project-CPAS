@@ -22,7 +22,7 @@ import Historical from "./Pages/Historical";
 import FAQ from "./Pages/Faq";
 import Help from "./Pages/Help";
 import Contact from "./Pages/Contact";
-import APIAuthTest from "./Pages/APIAuthTest";
+import FileUpload from "./Pages/FileUpload";
 
 
 function App() {
@@ -46,7 +46,7 @@ function App() {
           <Route path="/help" element={<Help />} />``
           <Route path="/Contact" element={<Contact />} />
 
-          <Route path="/apiauthtest" element={<APIAuthTest />} />
+          <Route path="/fileupload" element={<FileUpload />} />
         </Routes>
       </Router>
   );
