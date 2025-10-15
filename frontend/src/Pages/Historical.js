@@ -4,12 +4,19 @@ import { useNavigate } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ScatterChart, Scatter } from 'recharts';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
+import coords from '../grdc_coords.json';
+
 import Top from "./../Styling/Top";
 import Sidebar from "./../Styling/Sidebar";
 
 import "bulma/css/bulma.min.css";
 import "./../Styling/CSS/Pages.css";
 import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+
+import iconUrl from "leaflet/dist/images/marker-icon.png";
+import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
+import shadowUrl from "leaflet/dist/images/marker-shadow.png";
 
 function AustraliaMap() {
   // Cleanup to avoid re-init on re-mount
@@ -21,6 +28,14 @@ function AustraliaMap() {
       }
     };
   }, []);
+
+  delete L.Icon.Default.prototype._getIconUrl;
+
+  L.Icon.Default.mergeOptions({
+    iconRetinaUrl,
+    iconUrl,
+    shadowUrl,
+  });
 
   return (
     <MapContainer
@@ -39,6 +54,11 @@ function AustraliaMap() {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
       />
+      {coords.map((c) => (
+        <Marker key={c.id} position={[c.lat, c.lon]}>
+          <Popup>{c.name}</Popup>
+        </Marker>
+      ))}
     </MapContainer>
   );
 }
