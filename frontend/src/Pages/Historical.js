@@ -2,66 +2,14 @@ import React from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ScatterChart, Scatter } from 'recharts';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
-import coords from '../grdc_coords.json';
+import AustraliaMap from "../Maps/Australia";
 
 import Top from "./../Styling/Top";
 import Sidebar from "./../Styling/Sidebar";
 
 import "bulma/css/bulma.min.css";
 import "./../Styling/CSS/Pages.css";
-import "leaflet/dist/leaflet.css";
-import L from "leaflet";
-
-import iconUrl from "leaflet/dist/images/marker-icon.png";
-import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
-import shadowUrl from "leaflet/dist/images/marker-shadow.png";
-
-function AustraliaMap() {
-  // Cleanup to avoid re-init on re-mount
-  useEffect(() => {
-    return () => {
-      const container = document.querySelector(".leaflet-container");
-      if (container && container._leaflet_id) {
-        container._leaflet_id = null;
-      }
-    };
-  }, []);
-
-  delete L.Icon.Default.prototype._getIconUrl;
-
-  L.Icon.Default.mergeOptions({
-    iconRetinaUrl,
-    iconUrl,
-    shadowUrl,
-  });
-
-  return (
-    <MapContainer
-      center={[-27, 133.7751]}
-      zoom={4}
-      style={{ height: "100%", width: "100%", borderRadius: "10px" }}
-      dragging={true}
-      scrollWheelZoom={true}
-      doubleClickZoom={true}
-      zoomControl={true}
-      maxBounds={[[ -44.0, 112.0 ], [ -10.0, 154.0 ]]}
-      maxBoundsViscosity={1}
-      minZoom={3}
-    >
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
-      />
-      {coords.map((c) => (
-        <Marker key={c.id} position={[c.lat, c.lon]}>
-          <Popup>{c.name}</Popup>
-        </Marker>
-      ))}
-    </MapContainer>
-  );
-}
 
 const sampleData = [
   { name: '2019', yield: 4000, price: 2400 },
@@ -105,12 +53,13 @@ function Historical() {
           <div className="columns is-variable is-5 is-multiline">
             <div className="column is-full-mobile is-half-table is-half-desktop">
               <div className="box" style={{ aspectRatio: "16 / 9", width: "100%" }}>
-                {/* Sample Leaflet Map of Australia */}
+                <h3 className="title is-5" style={{ marginBottom: "1rem" }}>Select Zone for More Information</h3>
                 <AustraliaMap />
               </div>
             </div>
             <div className="column is-full-mobile is-half-table is-half-desktop">
               <div className="box" style={{ aspectRatio: "16 / 9", width: "100%", height: "100%" }}>
+                <h3 className="title is-5" style={{ marginBottom: "0.5rem" }}>Growing Season Margins</h3>
                 {/* Example Recharts Bar Chart. Replace with actual data. */}
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
@@ -118,13 +67,13 @@ function Historical() {
                     height = {300}
                     data = {sampleData}
                     margin = {{
-                      top: 5, right: 30, left: 20, bottom: 5,
+                      top: 5, right: 10, left: 10, bottom: 5,
                     }} >
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="name" />
                       <YAxis />
                       <Tooltip />
-                      <Legend />
+                      <Legend verticalAlign="top" />
                       <Bar dataKey="yield" fill="#8884d8" />
                       <Bar dataKey="price" fill="#82ca9d" />
                     </BarChart>

@@ -1,0 +1,125 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "WA Northern" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [118.0, -25.0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "WA Central" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [118.5, -29.0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "WA Eastern" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.0, -30.0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "WA Sandplain and Mallee" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [116.0, -31.0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "SA Mid-North - Lower Yorke, Eyre" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [137.0, -34.0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "SA - Victoria Mallee" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [140.0, -35.0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "SA - Victoria Border - Wimmera" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [141.5, -36.0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Victoria High Rainfall" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [145.5, -37.5]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "NSW - Victoria Slopes" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [147.0, -35.0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "NSW Central (South)" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [148.0, -33.5]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "NSW Central (North)" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [148.5, -31.0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "NSW North West - QLD South West" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [147.0, -28.0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "NSW North East - QLD South East" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [150.0, -28.0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "QLD Central" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [148.0, -24.0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Tasmania" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [147.0, -42.0]
+      }
+    }
+  ]
+}

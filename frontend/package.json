@@ -19,8 +19,8 @@
     "web-vitals": "^2.1.4",
     "js-cookie": "^3.0.5",
     "recharts": "^2.5.0",
-    "react-leaflet": "^4.2.1",
-    "leaflet": "^1.9.4"
+    "leaflet": "^1.9.4",
+    "react-leaflet": "^4.2.1"
   },
   "scripts": {
     "start": "react-scripts start",
