@@ -1,5 +1,15 @@
+/*TODO:
+    Write mutation
+    Array to Bulk Mutation calls
+    User Authentication
+    CSS of Drag and Drop 
+    Test
+*/
+
+import { useCallback, useState } from "react";
 import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/client/react";
+import { useDropzone } from 'react-dropzone';
 
 import Top from "./../Styling/Top";
 import Sidebar from "./../Styling/Sidebar";
@@ -7,18 +17,14 @@ import Sidebar from "./../Styling/Sidebar";
 import "bulma/css/bulma.min.css";
 import "./../Styling/CSS/Pages.css";
 
-import { useData } from "../Data";
-
 import { useAuth } from "../CheckAuth";
 
 
 function APIAuthTest() {
 
     const AuthTest = () => {
-
         const { loading, user, fetchUser } = useAuth()
-        console.log("USER STRING \n"+user.is_staff);
-
+        console.log("USER STRING \n"+user);
         } 
 
     AuthTest();
@@ -28,17 +34,9 @@ function APIAuthTest() {
             <Top />
             <title>API Test</title>
             <div className="panel-bottom">
-                <Sidebar curWindow="APITest" />
+                <Sidebar curWindow="CSVUpload" />
                 <div>
-                    <div style={{display: "flex", margin: "5rem"}}>
-                        <DisplayZones />
-
-                        
-
-                        <span style={{paddingLeft: "5rem"}}>
-                            <DisplayLocations />
-                        </span>
-                    </div>
+                    <FileDropzone/>
                 </div>
             </div>
         </>
@@ -48,6 +46,61 @@ function APIAuthTest() {
 
 
 // Component example
+
+function FileDropzone() {
+    const [fileContent, setFileContent] = useState(null);
+
+    const onDrop = useCallback(acceptedFiles => {
+        const file = acceptedFiles[0];
+        const fileReader = new FileReader;
+        
+        fileReader.onabort = () => console.log('File read aborted');
+        fileReader.onerror = () => console.log('An error has occurred while reading the file');
+        fileReader.onload = (e) => {
+            const content = e.target.result;
+            const csv = parseCSV(content)
+            csv.map(item => {
+                    return <li>{item[0]}</li>;
+                })
+            console.log(csv)
+            setFileContent(csv);
+        }
+        fileReader.readAsText(file)
+    }, [])
+    const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+
+    const parseCSV = (text) => {
+        const lines = text.split('\n');
+        const headers = lines[0].split(',').map(header => header.trim());
+        
+        return lines.slice(1).map(line => {
+        const values = line.split(',').map(value => value.trim());
+        console.log(values)
+        // const row = {};
+        // headers.forEach((header, index) => {
+        //     row[header] = values[index] || '';
+        // });
+        return values;
+        //}).filter(row => Object.values(row).some(value => value !== ''));
+        });
+    };
+
+    return (
+        <div>
+            <div {...getRootProps()}>
+                <input {...getInputProps()} />{
+                    isDragActive ?
+                    <p>Drop the files here ...</p> :
+                    <p>Drag 'n' drop some files here, or click to select files</p>
+                }
+            </div>
+            <aside>
+                <h4>Files</h4>
+                {/*<ul>{fileContent}</ul>*/}
+            </aside>
+        </div>
+    )
+}
 
 function DisplayZones() {
     // Example query
