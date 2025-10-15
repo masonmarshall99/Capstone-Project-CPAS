@@ -1,10 +1,13 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { gql } from "@apollo/client";
+import { useQuery } from "@apollo/client/react"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ScatterChart, Scatter } from 'recharts';
 
 import AustraliaMap from "../Maps/Australia";
 import { SelectDisease, SelectRegion, SelectSubregion, SelectCrop, SelectSeason } from "../Selector";
+import { GET_CROP_AREAS, GET_SEASONS } from "../Query";
 
 
 import Top from "./../Styling/Top";
@@ -22,11 +25,12 @@ function Historical() {
     { name: '2022', yield: 2780, price: 3908 },
     { name: '2023', yield: 1890, price: 4800 },
   ];
-  const [region, setRegion] = useState(null)
-  const [subregion, setSubregion] = useState(null)
-  const [crop, setCrop] = useState(null)
-  const [season, setSeason] = useState(null)
-  const [disease, setDisease] = useState(null)
+
+  const [region, setRegion] = useState("")
+  const [subregion, setSubregion] = useState("")
+  const [crop, setCrop] = useState("")
+  const [season, setSeason] = useState("")
+  const [disease, setDisease] = useState("")
 
   const handleRegionChange = (event) => {
     setRegion(event.target.value)
@@ -52,7 +56,7 @@ function Historical() {
   const handleReset = (event) => {
     setRegion("")
     setSubregion("")
-    setCrop(null)
+    setCrop("")
     setSeason("")
     setDisease("")
   }
@@ -124,25 +128,15 @@ function Historical() {
             </div>
             <div className="column is-full-mobile is-half-table is-half-desktop">
               <div className="box" style={{ aspectRatio: "16 / 9", width: "100%", height: "100%" }}>
-                <h3 className="title is-5" style={{ marginBottom: "0.5rem" }}>Growing Season Margins</h3>
+                <h3 className="title is-5" style={{ marginBottom: "0.5rem" }}>Growing Season Yields</h3>
                 {/* Example Recharts Bar Chart. Replace with actual data. */}
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    width = {500}
-                    height = {300}
-                    data = {sampleData}
-                    margin = {{
-                      top: 5, right: 10, left: 10, bottom: 5,
-                    }} >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend verticalAlign="top" />
-                      <Bar dataKey="yield" fill="#8884d8" />
-                      <Bar dataKey="price" fill="#82ca9d" />
-                    </BarChart>
-                </ResponsiveContainer>
+                <YieldChart
+                  region={region}
+                  subregion={subregion}
+                  crop={crop}
+                  season={season}
+                  disease={disease}
+                />
               </div>
             </div>
 
@@ -202,6 +196,76 @@ function Historical() {
       </div>
     </>
   );
+}
+
+function YieldChart({region, subregion, crop, season, disease}) {
+  const {loading, error, data} = useQuery(GET_CROP_AREAS)
+  if (loading) return (
+    <div>Loading...</div>
+  )
+  if (error) return (
+    <div>Error!</div>
+  )
+
+  /* Reorganize full data to be single-level */
+  let crop_areas = data.cropAreas.map((crop_area) => (
+    {
+      crop: `${crop_area.crop.crop_name}`,
+      zone: `${crop_area.location.zone.zone_name}`,
+      region: `${crop_area.location.region.region_name}`,
+      subregion: `${crop_area.location.subregion}`,
+      season: `${crop_area.season.year}`,
+      area: `${crop_area.area_hectares}`,
+      value: `${crop_area.value_tonnes}`
+    }
+  ))
+  
+  // Filter
+  if (!(subregion == "")) {
+    crop_areas = crop_areas.filter((crop_area) => crop_area.subregion == subregion)
+  }
+  else if (!(region == "")) {
+    crop_areas = crop_areas.filter((crop_area) => crop_area.region == region)
+  }
+  if (!(crop == "")) {
+    crop_areas = crop_areas.filter((crop_area) => crop_area.crop == crop)
+  }
+  if (!(season == "")) {
+    crop_areas = crop_areas.filter((crop_area) => crop_area.season == season)
+  }
+
+  // Reduce
+  let seasonalData = crop_areas.reduce((acc, currentItem) => {
+    let {crop, zone, region, subregion, season, area, value} = currentItem
+
+    if (!acc[season]) {
+      acc[season] = {season, value: 0}
+    }
+    acc[season].value += 1 * value
+
+    return acc
+  }, {})
+  
+  let graphData = Object.values(seasonalData)
+  
+  return (
+    <ResponsiveContainer width="100%" height="100%">
+      <BarChart
+        width = {500}
+        height = {300}
+        data = {graphData}
+        margin = {{
+          top: 5, right: 10, left: 10, bottom: 5,
+        }} >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="season" />
+          <YAxis />
+          <Tooltip />
+          <Legend verticalAlign="top" />
+          <Bar name="Total Yield" dataKey="value" fill="#8884d8" />
+        </BarChart>
+    </ResponsiveContainer>
+  )
 }
 
 export default Historical;

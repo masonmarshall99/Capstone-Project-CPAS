@@ -42,3 +42,21 @@ export const GET_DISEASES = gql`
         }
     }
 `
+
+export const GET_CROP_AREAS = gql`
+    query {
+        cropAreas {
+            crop {
+                crop_name
+            }
+            location {
+                zone {zone_name}
+                region {region_name}
+                sub_region
+            }
+            season {year}
+            area_hectares
+            value_tonnes
+        }
+    }
+`
