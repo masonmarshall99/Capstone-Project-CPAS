@@ -33,7 +33,7 @@ function App() {
   return (
       <Router>
         <Routes>
-          <Route path="/" element={<Historical />} />
+          <Route path="/" element={<Loading />} />
           <Route path="/account" element={<ProtectRoutes authOnly> <Account /> </ProtectRoutes>} />
           <Route path="/login" element={<ProtectRoutes guestOnly> <Login /> </ProtectRoutes>} />
           <Route path="/create-account" element={<ProtectRoutes guestOnly> <CreateAccount /> </ProtectRoutes>} />
