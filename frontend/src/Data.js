@@ -39,7 +39,7 @@ export const SharedData = ({ children }) => {
   /* Get CSRF Token from backend */
   const getCSRFToken = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/get-csrf-token/", {
+      const response = await fetch("/api/get-csrf-token/", {
         method: "GET",
         mode: "cors",
         credentials: "include",
@@ -53,7 +53,7 @@ export const SharedData = ({ children }) => {
   /* Initial Load */
   const initialLoad = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/whoami/", {
+      const response = await fetch("/api/whoami/", {
         method: "GET",
         mode: "cors",
         credentials: "include",

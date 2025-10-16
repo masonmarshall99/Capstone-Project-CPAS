@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const response = fetch("http://localhost:8000/api/get-csrf-token/", {
+        const response = fetch("/api/get-csrf-token/", {
             method: "GET",
             mode: "cors",
             credentials: "include",
@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const response = await fetch("http://localhost:8000/api/whoami/", {
+                const response = await fetch("/api/whoami/", {
                     method: "GET",
                     mode: "cors",
                     credentials: "include",
@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }) => {
 
     const fetchUser = async () => {
         try {
-            const response = await fetch("http://localhost:8000/api/whoami/", {
+            const response = await fetch("/api/whoami/", {
                 method: "GET",
                 mode: "cors",
                 credentials: "include",

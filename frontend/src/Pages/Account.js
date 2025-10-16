@@ -29,7 +29,7 @@ function Account() {
 
       console.log(JSON.stringify(obj));
       try {
-        const response = await fetch("http://localhost:8000/api/edit-user/", {
+        const response = await fetch("/api/edit-user/", {
           method: "PUT",
           credentials: "include",
           mode: "cors",
@@ -54,7 +54,7 @@ function Account() {
 
   const logout = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/logout/", {
+      const response = await fetch("/api/logout/", {
         method: "POST",
         credentials: "include",
         mode: "cors",
