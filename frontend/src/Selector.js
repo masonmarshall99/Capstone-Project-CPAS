@@ -182,9 +182,9 @@ export function SelectDisease({disease, handleDiseaseChange}) {
   const {loading, error, data} = useQuery(GET_DISEASES)
 
   if (loading) return (
-    <div class="column">
+    <div>
       <label>
-        <p>Select disease present</p>
+        <p>Disease</p>
         <div class="select is-primary">
           <select defaultValue="">
             <option value="" disabled hidden>Loading...</option>
@@ -194,9 +194,9 @@ export function SelectDisease({disease, handleDiseaseChange}) {
     </div>
   )
   if (error) return (
-    <div class="column">
+    <div>
       <label>
-        <p>Select disease present</p>
+        <p>Disease</p>
         <div class="select is-primary">
           <select defaultValue="">
             <option value="" disabled hidden>Error!</option>
@@ -207,9 +207,9 @@ export function SelectDisease({disease, handleDiseaseChange}) {
   )
 
   return (
-    <div class="column">
+    <div>
       <label>
-        <p>Select disease present</p>
+        <p>Disease</p>
         <div class="select is-primary">
           <select defaultValue="" value={disease} onChange={handleDiseaseChange}>
             <option value="" disabled hidden>Select Disease</option>
