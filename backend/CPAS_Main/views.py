@@ -1,9 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 import json
+import csv
+import io
 
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from .serializers import serializeUser
+from .pdf_utils import create_crop_report_pdf
+from .models import Crop, CropArea, Disease, DiseasePresence, Location, Season
 
 # Ariadne testing view imports
 from ariadne.wsgi import GraphQL
@@ -153,3 +157,131 @@ def graphql_testing_view(request):
     for header_name, header_value in response_headers_list:
         response[header_name] = header_value
     return response
+
+
+# PDF Download System Views
+
+@csrf_protect
+def download_crop_report_pdf(request, crop_id):
+    """Download PDF report for a specific crop"""
+    if not request.user.is_authenticated:
+        return JsonResponse({'message': 'Authentication required'}, status=401)
+    
+    try:
+        # Get crop data
+        crop = get_object_or_404(Crop, crop_name=crop_id)
+        
+        # Get related data
+        crop_areas = CropArea.objects.filter(crop=crop).select_related('location', 'season')
+        
+        if not crop_areas.exists():
+            return JsonResponse({'message': 'No crop area data found'}, status=404)
+        
+        # Get the first crop area for basic info
+        crop_area = crop_areas.first()
+        location = crop_area.location
+        season = crop_area.season
+        
+        # Prepare data for PDF
+        crop_data = {
+            'crop_name': crop.crop_name,
+            'area_hectares': crop_area.area_hectares,
+            'value_tonnes': crop_area.value_tonnes
+        }
+        
+        location_data = {
+            'sub_region': location.sub_region,
+            'region': location.region.region_name,
+            'zone': location.zone.zone_name
+        }
+        
+        season_data = {
+            'year': season.year
+        }
+        
+        # Generate PDF
+        pdf_content = create_crop_report_pdf(crop_data, location_data, season_data)
+        
+        # Create HTTP response
+        response = HttpResponse(pdf_content, content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="crop_report_{crop.crop_name}_{season.year}.pdf"'
+        
+        return response
+        
+    except Exception as e:
+        return JsonResponse({'message': f'Error generating PDF: {str(e)}'}, status=500)
+
+
+# Crop Health Data Download System Views
+
+@csrf_exempt
+def download_crop_health_data(request):
+    """Download crop health data as CSV file"""
+    
+    try:
+        # Get all disease presence data with related objects
+        disease_presence_data = DiseasePresence.objects.select_related(
+            'disease', 'crop', 'location', 'location__region', 'location__zone'
+        ).all()
+        
+        if not disease_presence_data.exists():
+            return JsonResponse({'message': 'No crop health data found'}, status=404)
+        
+        # Create CSV content
+        output = io.StringIO()
+        writer = csv.writer(output)
+        
+        # Write CSV headers
+        headers = [
+            'Disease Name',
+            'Disease Group',
+            'Crop Name',
+            'Sub Region',
+            'Region',
+            'Zone',
+            'Disease Presence Status',
+            'Disease Incidence Year (%)',
+            'Disease Incidence Area (%)',
+            'Disease Severity Without Control (%)',
+            'Disease Severity With Control (%)',
+            'Genetic Control Contribution (%)',
+            'Cultural Control Contribution (%)',
+            'Pesticide Control Contribution (%)',
+            'Fungicide Resistance Risk'
+        ]
+        writer.writerow(headers)
+        
+        # Write data rows
+        for dp in disease_presence_data:
+            row = [
+                dp.disease.disease_name,
+                dp.disease.disease_group or '',
+                dp.crop.crop_name,
+                dp.location.sub_region,
+                dp.location.region.region_name,
+                dp.location.zone.zone_name,
+                dp.disease_presence_status,
+                dp.disease_incidence_year_percentage,
+                dp.disease_incidence_area_percentage,
+                dp.disease_severity_without_control_percentage or '',
+                dp.disease_severity_with_control_percentage or '',
+                dp.disease_severity_control_genetic_contribution_percentage or '',
+                dp.disease_severity_control_cultural_contribution_percentage or '',
+                dp.disease_severity_control_pesticide_contribution_percentage or '',
+                dp.fungicide_resistance_risk
+            ]
+            writer.writerow(row)
+        
+        # Get CSV content
+        csv_content = output.getvalue()
+        output.close()
+        
+        # Create HTTP response
+        response = HttpResponse(csv_content, content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="crop_health_data.csv"'
+        
+        return response
+        
+    except Exception as e:
+        return JsonResponse({'message': f'Error generating CSV: {str(e)}'}, status=500)
+

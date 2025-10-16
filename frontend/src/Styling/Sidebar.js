@@ -7,6 +7,7 @@ import { ReactComponent as dashIcon } from "./Icons/Dash.svg";
 import { ReactComponent as historicalIcon } from "./Icons/Historical.svg";
 import { ReactComponent as diseaseIcon } from "./Icons/Disease.svg";
 import { ReactComponent as contactIcon } from "./Icons/Contact.svg";
+import { ReactComponent as downloadIcon } from "./Icons/download.svg";
 
 function Sidebar({ curWindow }) {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ function Sidebar({ curWindow }) {
     { icon: dashIcon, text: "Dashboard", route: "/dash" },
     { icon: historicalIcon, text: "Historical Analysis", route: "/historical" },
     { icon: diseaseIcon, text: "Disease Risk", route: "/disease" },
+    { icon: downloadIcon, text: "Download Data", route: "/download" },
     { icon: contactIcon, text: "Contact Us", pos: "Bottom", route: "/contact" },
   ];
 
