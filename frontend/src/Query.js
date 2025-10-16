@@ -41,6 +41,22 @@ export const GET_DISEASES = gql`
             disease_name
         }
     }
+export const GET_CROP_AREAS = gql`
+    query {
+        cropAreas {
+            crop {
+                crop_name
+            }
+            location {
+                zone {zone_name}
+                region {region_name}
+                sub_region
+            }
+            season {year}
+            area_hectares
+            value_tonnes
+        }
+    }
 `
 
 export const ADD_CSV_ROW = gql`
@@ -107,4 +123,3 @@ export const ADD_CSV_ROW = gql`
             fungicide_resistance_risk,
 	}
 }
-`
