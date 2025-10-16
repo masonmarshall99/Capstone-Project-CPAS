@@ -41,6 +41,8 @@ export const GET_DISEASES = gql`
             disease_name
         }
     }
+`
+
 export const GET_CROP_AREAS = gql`
     query {
         cropAreas {
@@ -121,5 +123,6 @@ export const ADD_CSV_ROW = gql`
             disease_severity_control_cultural_contribution_percentage,
             disease_severity_control_pesticide_contribution_percentage,
             fungicide_resistance_risk,
-	}
-}
+	    }
+    }
+`

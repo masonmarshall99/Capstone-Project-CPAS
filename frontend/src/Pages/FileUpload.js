@@ -9,7 +9,7 @@
 import { useCallback, useState, useEffect} from "react";
 import { gql } from "@apollo/client";
 import { useMutation, useQuery } from "@apollo/client/react";
-import { useDropzone } from 'react-dropzone';
+import { useDropzone } from "react-dropzone";
 
 import Top from "../Styling/Top";
 import Sidebar from "../Styling/Sidebar";
