@@ -48,7 +48,7 @@ const LoginPage = () => {
 
           alert(`Signing for ${email}`);
           fetchUser();
-          navigate("/historical");
+          navigate("/help");
         }
       } catch (error) {
         console.error("Fetch error:", error);
@@ -96,7 +96,7 @@ const LoginPage = () => {
         </form>
 
         <div className="text-link mt-4">
-          <a href="/historical">Continue as guest</a>
+          <a href="/help">Continue as guest</a>
         </div>
       </div>
     </div>

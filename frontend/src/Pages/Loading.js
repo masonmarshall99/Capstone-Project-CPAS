@@ -19,13 +19,13 @@ const LoadingPage = () => {
   };
 
   const handleGuest = (e) => {
-    navigate("/historical");
+    navigate("/help");
   };
 
   /* Redirect if signed in */
   useEffect(() => {
     if (user !== null) {
-      navigate("/historical");
+      navigate("/help");
     }
   }, [user, navigate]);
 

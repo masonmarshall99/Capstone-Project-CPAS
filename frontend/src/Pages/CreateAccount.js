@@ -52,7 +52,7 @@ const CreateAccountPage = () => {
           alert(`Account created for ${email}`);
           fetchUser();
           setMessage("");
-          navigate("/historical");
+          navigate("/help");
         }
       } catch (error) {
         console.error("Fetch error:", error);
@@ -144,7 +144,7 @@ const CreateAccountPage = () => {
         </form>
 
         <div className="text-link mt-4">
-          <a href="/historical">Continue as guest</a>
+          <a href="/help">Continue as guest</a>
         </div>
 
         <p className="auth-switch-text">
