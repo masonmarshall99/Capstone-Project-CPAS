@@ -7,6 +7,7 @@ import { ReactComponent as historicalIcon } from "./Icons/Historical.svg";
 import { ReactComponent as diseaseIcon } from "./Icons/Disease.svg";
 import { ReactComponent as contactIcon } from "./Icons/Contact.svg";
 import { ReactComponent as helpIcon } from "./Icons/Help.svg";
+import { ReactComponent as feedbackIcon } from "./Icons/Feedback.svg";
 import { ReactComponent as faqIcon } from "./Icons/faq.svg";
 
 function Sidebar({ curWindow }) {

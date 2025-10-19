@@ -41,7 +41,7 @@ function App() {
           <Route path="/historical" element={<Historical />} />
           <Route path="/disease" element={<Disease />} />
           <Route path="/faq" element={<FAQ />} />
-          <Route path="/help" element={<Help />} />''
+          <Route path="/help" element={<Help />} />
           <Route path="/Feedback" element={<Feedback />} />
           <Route path="/Contact" element={<Contact />} />
         </Routes>
