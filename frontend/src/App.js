@@ -21,6 +21,7 @@ import Disease from "./Pages/Disease";
 import Historical from "./Pages/Historical";
 import FAQ from "./Pages/Faq";
 import Help from "./Pages/Help";
+import Feedback from "./Pages/Feedback";
 import Contact from "./Pages/Contact";
 import FileUpload from "./Pages/FileUpload";
 
@@ -44,6 +45,7 @@ function App() {
           <Route path="/disease" element={<Disease />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/help" element={<Help />} />``
+           <Route path="/Feedback" element={<Feedback />} />
           <Route path="/Contact" element={<Contact />} />
 
           <Route path="/fileupload" element={<FileUpload />} />
