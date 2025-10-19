@@ -14,13 +14,13 @@ import Loading from "./Pages/Loading";
 import Login from "./Pages/Login";
 import CreateAccount from "./Pages/CreateAccount";
 import Account from "./Pages/Account";
-import Feedback from "./Pages/Feedback";
 
 // Dash pages //
 import Disease from "./Pages/Disease";
 import Historical from "./Pages/Historical";
 import FAQ from "./Pages/Faq";
 import Help from "./Pages/Help";
+import Feedback from "./Pages/Feedback";
 import Contact from "./Pages/Contact";
 
 
@@ -41,7 +41,7 @@ function App() {
           <Route path="/historical" element={<Historical />} />
           <Route path="/disease" element={<Disease />} />
           <Route path="/faq" element={<FAQ />} />
-          <Route path="/help" element={<Help />} />
+          <Route path="/help" element={<Help />} />''
           <Route path="/Feedback" element={<Feedback />} />
           <Route path="/Contact" element={<Contact />} />
         </Routes>
