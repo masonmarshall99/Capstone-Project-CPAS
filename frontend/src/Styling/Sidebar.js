@@ -17,6 +17,7 @@ function Sidebar({ curWindow }) {
     { icon: diseaseIcon, text: "Disease Risk", route: "/disease" },
     { icon: faqIcon, text: "FAQ", route: "/faq" },
     { icon: helpIcon, text: "Help & Navigation", route: "/help" },
+    { icon: feedbackIcon, text: "Feedback", route: "/Feedback" },
     { icon: contactIcon, text: "Contact Us", pos: "Bottom", route: "/contact" },
   ];
 
