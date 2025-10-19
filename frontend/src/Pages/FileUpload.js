@@ -1,11 +1,3 @@
-/*TODO:
-    Write mutation
-    Array to Bulk Mutation calls
-    User Authentication
-    CSS of Drag and Drop 
-    Test
-*/
-
 import { useCallback, useState, useEffect} from "react";
 import { gql } from "@apollo/client";
 import { useMutation, useQuery } from "@apollo/client/react";
