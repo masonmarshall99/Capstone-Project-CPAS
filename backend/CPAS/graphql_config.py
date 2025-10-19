@@ -1,9 +1,11 @@
 from ariadne import QueryType, make_executable_schema, load_schema_from_path, MutationType
+from ariadne_jwt import resolve_verify, resolve_refresh, resolve_token_auth, jwt_schema, GenericScalar
 import CPAS_Main.resolvers
 
 type_defs = [
     load_schema_from_path("CPAS/schema.graphql"),
     load_schema_from_path("CPAS_Main/schema.graphql"),
+    jwt_schema
 ]
 
 query = QueryType()
@@ -29,4 +31,10 @@ mutation.set_field("createDisease", CPAS_Main.resolvers.create_disease)
 mutation.set_field("createDiseasePresence", CPAS_Main.resolvers.create_disease_presence)
 mutation.set_field("addCSVRow", CPAS_Main.resolvers.addCSVRow)
 
-schema = make_executable_schema(type_defs, query, mutation)
+mutation.set_field('verifyToken', resolve_verify)
+mutation.set_field('refreshToken', resolve_refresh)
+mutation.set_field('tokenAuth', resolve_token_auth)
+
+#schema = make_executable_schema(type_defs, query, mutation)
+
+schema = make_executable_schema(type_defs, [query, mutation], GenericScalar)
