@@ -48,7 +48,7 @@ const LoginPage = () => {
 
           alert(`Signing for ${email}`);
           fetchUser();
-          navigate("/dash");
+          navigate("/help");
         }
       } catch (error) {
         console.error("Fetch error:", error);
@@ -78,10 +78,6 @@ const LoginPage = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <div className="text-link">
-            <a href="#">Forgot your password?</a>
-          </div>
-
           <button
             type="button"
             className="button-secondary"
@@ -98,6 +94,10 @@ const LoginPage = () => {
             Create Account
           </button>
         </form>
+
+        <div className="text-link mt-4">
+          <a href="/help">Continue as guest</a>
+        </div>
       </div>
     </div>
   );
