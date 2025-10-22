@@ -48,8 +48,6 @@ const CreateAccountPage = () => {
           }
         } else {
           console.log("Signup success:", data);
-
-          alert(`Account created for ${email}`);
           fetchUser();
           setMessage("");
           navigate("/dash");
