@@ -51,7 +51,7 @@ class CropArea(models.Model):
         unique_together = ('crop', 'location', 'season')
 
     def __str__(self):
-        return f"{self.crop} in {self.sub_region} ({self.year})"
+        return f"{self.crop} in {self.location} ({self.season})"
 
 class ProducedIn(models.Model):
     crop = models.ForeignKey(Crop, on_delete=models.PROTECT)
@@ -62,7 +62,7 @@ class ProducedIn(models.Model):
         unique_together = ('crop', 'season')
 
     def __str__(self):
-        return f"{self.crop} in {self.year}: ${self.average_commodity_price}"
+        return f"{self.crop} in {self.season}: ${self.average_commodity_price}"
 
 class Disease(models.Model):
     disease_name = models.CharField(max_length=255, primary_key=True)
@@ -89,7 +89,7 @@ class DiseasePresence(models.Model):
         unique_together = ('disease', 'crop', 'location')
 
     def __str__(self):
-        return f"{self.disease} on {self.crop} in {self.sub_region}"
+        return f"{self.disease} on {self.crop} in {self.location}"
 
 
 # Custom user manager to use email instead of username
