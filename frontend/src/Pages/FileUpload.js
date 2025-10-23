@@ -12,6 +12,7 @@ import { ADD_CSV_ROW } from "../Query";
 import "bulma/css/bulma.min.css";
 import "./../Styling/CSS/Pages.css";
 import "./../Styling/CSS/FileUpload.css";
+import csvFile from './../Styling/Files/format.csv';
 
 function FileUpload() {
     return(
@@ -184,6 +185,16 @@ function FileDropzone() {
                             <p className="label">Drag and drop a csv file, or click to select file</p>
                         }
                     </div>
+                </div>
+                <div className="box">
+                    CSV File must contain correct headers format<br/> 
+                    <a 
+                    className="button is-light" 
+                    href={csvFile} 
+                    download="format.csv"
+                    > 
+                        Download CSV Format 
+                    </a>
                 </div>
             </div>
         </div>
