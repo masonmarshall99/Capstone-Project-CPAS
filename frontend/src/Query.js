@@ -60,3 +60,13 @@ export const GET_CROP_AREAS = gql`
         }
     }
 `
+
+export const GET_DISEASE_CONTROLS = gql`
+    query {
+            diseasePresences{
+            disease {disease_name}
+            disease_severity_with_control_percentage
+            disease_severity_without_control_percentage
+            }
+        }
+`

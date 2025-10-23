@@ -3,11 +3,11 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/client/react"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ScatterChart, Scatter } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ScatterChart, Scatter, LabelList, Label } from 'recharts';
 
 import AustraliaMap from "../Maps/Australia";
 import { SelectDisease, SelectRegion, SelectSubregion, SelectCrop, SelectSeason } from "../Selector";
-import { GET_CROP_AREAS, GET_SEASONS, GET_TABLE_DATA } from "../Query";
+import { GET_CROP_AREAS, GET_SEASONS, GET_DISEASE_CONTROLS } from "../Query";
 
 
 import Top from "./../Styling/Top";
@@ -149,21 +149,8 @@ function Historical() {
             <div className="column is-full-mobile is-half-table is-half-desktop">
               <div className="box" style={{ aspectRatio: "16 / 9", width: "100%", height: "100%" }}>
                 {/* Example Recharts Scatter Chart. Replace with actual data. */}
-                <ResponsiveContainer width="100%" height="100%">
-                  <ScatterChart
-                    width={500}
-                    height={300}
-                    margin={{
-                      top: 20, right: 20, bottom: 10, left: 10,
-                    }}
-                  >
-                    <CartesianGrid />
-                    <XAxis type="number" dataKey="yield" name="Yield" unit="t/ha" />
-                    <YAxis type="number" dataKey="price" name="Price" unit="$" />
-                    <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-                    <Scatter name="A school" fill="#8884d8" />
-                  </ScatterChart>
-                </ResponsiveContainer>
+                <h3 className="title is-5" style={{ marginBottom: "0.5rem" }}>Average Disease Severity (Controlled vs Uncontrolled)</h3>
+                <DiseaseScatterPlot />
               </div>
             </div>
           </div>
@@ -323,6 +310,83 @@ function YieldTable({region, subregion, crop, season, disease}) {
       </table>
   )
   
+}
+
+function DiseaseScatterPlot() {
+  const {loading, error, data} = useQuery(GET_DISEASE_CONTROLS);
+  if (loading) return (
+    <div>Loading...</div>
+  );
+
+  if (error) return (
+    <div>Error!</div>
+  );
+
+  /* Reorganize full data to be single-level */
+  let disease_data = data.diseasePresences.map((disease_presence) => (
+    {
+      disease: `${disease_presence.disease.disease_name}`,
+      with_control: `${disease_presence.disease_severity_with_control_percentage}`,
+      without_control: `${disease_presence.disease_severity_without_control_percentage}`
+    }
+  ));
+
+  const groupedData = Object.values(
+  data.diseasePresences.reduce((acc, d) => {
+    const name = d.disease.disease_name;
+    if (!acc[name]) {
+      acc[name] = {
+        disease: name,
+        with_control: Number(d.disease_severity_with_control_percentage),
+        without_control: Number(d.disease_severity_without_control_percentage),
+      };
+    } else {
+      // Optional averaging if duplicates exist
+      acc[name].with_control = (acc[name].with_control + Number(d.disease_severity_with_control_percentage)) / 2;
+      acc[name].without_control = (acc[name].without_control + Number(d.disease_severity_without_control_percentage)) / 2;
+    }
+    return acc;
+  }, {})
+);
+
+  return (
+    <ResponsiveContainer width="100%" height="100%">
+      <ScatterChart
+        width={500}
+        height={300}
+        margin={{
+          top: 20, right: 20, bottom: 10, left: 10,
+        }}>
+        <CartesianGrid />
+        <XAxis label= "Severity (Without Control)" type="number" dataKey="without_control" name="Severity (Without Control)" unit="%"/>
+        <YAxis type="number" dataKey="with_control" name="Severity (With Control)" unit="%">
+          <Label 
+            value="Severity (With Control)"
+            angle={-90} position="insideLeft"
+          />
+
+          </YAxis>
+        <Tooltip 
+          cursor={{ strokeDasharray: '3 3' }}
+          content={({ active, payload }) => {
+            if (active && payload && payload.length) {
+              const p = payload[0].payload;
+              return (
+                <div className="custom-tooltip" style={{ backgroundColor: '--back-color', border: '1px solid #ccc', padding: '10px', opacity: 1 }}>
+                  <p><strong>{p.disease}</strong></p>
+                  <p>Severity (With Control): {p.with_control}%</p>
+                  <p>Severity (Without Control): {p.without_control}%</p>
+                </div>
+              )
+            }
+          }} 
+        />
+        <Scatter name="Disease Severity" data={groupedData} fill="#8884d8"/>
+
+      </ScatterChart>
+    </ResponsiveContainer>
+  )
+
 }
 
 export default Historical;
