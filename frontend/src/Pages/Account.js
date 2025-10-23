@@ -101,7 +101,7 @@ function Account() {
 
   useEffect(() => {
     if (user == null) {
-      navigate("/dash");
+      navigate("/");
     }
   }, [user, navigate]);
 

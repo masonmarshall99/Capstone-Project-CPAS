@@ -29,7 +29,6 @@ function Help() {
             <h2 className="is-size-4 has-text-weight-semibold mb-3">Navigation</h2>
             <div className="box">
               <ul className="content">
-                <li><strong>Dashboard:</strong> Overview of key metrics and summaries.</li>
                 <li><strong>Historical Analysis:</strong> Explore past data trends and reports.</li>
                 <li><strong>Disease Risk:</strong> Assess disease impact and related estimates.</li>
                 <li><strong>FAQ:</strong> Frequently asked questions about using the platform.</li>
