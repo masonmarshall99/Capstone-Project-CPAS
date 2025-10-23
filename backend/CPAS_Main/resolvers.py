@@ -293,3 +293,95 @@ def create_disease_presence(
         "disease_severity_control_pesticide_contribution_percentage":disease_presence.disease_severity_control_pesticide_contribution_percentage,
         "fungicide_resistance_risk":disease_presence.fungicide_resistance_risk
     }
+
+def addCSVRow(
+    *_,
+    zone_name: str,
+    region_name: str,
+    sub_region: str,
+    year: str,
+    crop_name: str,
+    area_hectares: float,
+    value_tonnes: float,
+    disease_group: str,
+    disease_name: str,
+    disease_presence_status: str,
+    disease_incidence_year_percentage: float,
+    disease_incidence_area_percentage: float,
+    disease_severity_without_control_percentage: float,
+    disease_severity_with_control_percentage: float,
+    disease_severity_control_genetic_contribution_percentage: float,
+    disease_severity_control_cultural_contribution_percentage: float,
+    disease_severity_control_pesticide_contribution_percentage: float,
+    average_commodity_price: float,
+    fungicide_resistance_risk: str,
+):
+    zone, created = Zone.objects.get_or_create(
+        zone_name=zone_name
+    )
+    region, created = Region.objects.get_or_create(
+        region_name=region_name
+    )
+    location, created = Location.objects.get_or_create(
+        sub_region=sub_region,
+        region=region,
+        zone=zone
+    )
+    season, created = Season.objects.get_or_create(
+        year=year
+    )
+    crop, created = Crop.objects.get_or_create(
+        crop_name=crop_name
+    )
+    crop_area, created = CropArea.objects.get_or_create(
+        crop=crop,
+        location=location,
+        season=season,
+        area_hectares=area_hectares,
+        value_tonnes=value_tonnes
+    )
+    produced_in, created = ProducedIn.objects.get_or_create(
+        crop=crop,
+        season=season,
+        average_commodity_price=average_commodity_price
+    )
+    disease, created = Disease.objects.get_or_create(
+        disease_name=disease_name,
+        disease_group=disease_group
+    )
+    disease_presence, created = DiseasePresence.objects.get_or_create(
+        disease=disease,
+        crop=crop,
+        location=location,
+        disease_presence_status=disease_presence_status,
+        disease_incidence_year_percentage=disease_incidence_year_percentage,
+        disease_incidence_area_percentage=disease_incidence_area_percentage,
+        disease_severity_without_control_percentage=disease_severity_without_control_percentage,
+        disease_severity_with_control_percentage=disease_severity_with_control_percentage,
+        disease_severity_control_genetic_contribution_percentage=disease_severity_control_genetic_contribution_percentage,
+        disease_severity_control_cultural_contribution_percentage=disease_severity_control_cultural_contribution_percentage,
+        disease_severity_control_pesticide_contribution_percentage=disease_severity_control_pesticide_contribution_percentage,
+        fungicide_resistance_risk=fungicide_resistance_risk
+    )
+
+    return{
+        "zone_name": zone.zone_name,
+        "region_name": region.region_name,
+        "sub_region": location.sub_region,
+        "year": season.year,
+        "crop_name": crop.crop_name,
+        "area_hectares": crop_area.area_hectares,
+        "value_tonnes": crop_area.value_tonnes,
+        "disease_group": disease.disease_group,
+        "disease_name": disease.disease_name,
+        "disease_presence_status":disease_presence.disease_presence_status,
+        "disease_incidence_year_percentage":disease_presence.disease_incidence_year_percentage,
+        "disease_incidence_area_percentage":disease_presence.disease_incidence_area_percentage,
+        "disease_severity_without_control_percentage":disease_presence.disease_severity_without_control_percentage,
+        "disease_severity_with_control_percentage":disease_presence.disease_severity_with_control_percentage,
+        "disease_severity_control_genetic_contribution_percentage":disease_presence.disease_severity_control_genetic_contribution_percentage,
+        "disease_severity_control_cultural_contribution_percentage":disease_presence.disease_severity_control_cultural_contribution_percentage,
+        "disease_severity_control_pesticide_contribution_percentage":disease_presence.disease_severity_control_pesticide_contribution_percentage,
+        "average_commodity_price": average_commodity_price,
+        "fungicide_resistance_risk":disease_presence.fungicide_resistance_risk
+    }

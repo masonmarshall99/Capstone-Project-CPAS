@@ -22,8 +22,8 @@ import FAQ from "./Pages/Faq";
 import Help from "./Pages/Help";
 import Feedback from "./Pages/Feedback";
 import Contact from "./Pages/Contact";
+import FileUpload from "./Pages/FileUpload";
 import Download from "./Pages/Download";
-
 
 function App() {
   const { loading, user } = useAuth();
@@ -42,10 +42,13 @@ function App() {
           <Route path="/historical" element={<Historical />} />
           <Route path="/disease" element={<Disease />} />
           <Route path="/download" element={<Download />} />
+          <Route path="/fileupload" element={<FileUpload />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/help" element={<Help />} />
           <Route path="/Feedback" element={<Feedback />} />
           <Route path="/Contact" element={<Contact />} />
+
+          <Route path="/fileupload" element={<FileUpload />} />
         </Routes>
       </Router>
   );

@@ -27,5 +27,6 @@ mutation.set_field("createCropArea", CPAS_Main.resolvers.create_crop_area)
 mutation.set_field("createProducedIn", CPAS_Main.resolvers.create_produced_in)
 mutation.set_field("createDisease", CPAS_Main.resolvers.create_disease)
 mutation.set_field("createDiseasePresence", CPAS_Main.resolvers.create_disease_presence)
+mutation.set_field("addCSVRow", CPAS_Main.resolvers.addCSVRow)
 
 schema = make_executable_schema(type_defs, query, mutation)

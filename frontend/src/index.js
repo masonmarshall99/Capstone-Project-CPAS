@@ -13,6 +13,7 @@ const client = new ApolloClient({
   link: new HttpLink({ 
     // Change port to the port you are using in your docker file (probably 8000)
     uri: "http://localhost:8000/graphql/",
+    credentials: "include",
   }),
   cache: new InMemoryCache(),
 });
