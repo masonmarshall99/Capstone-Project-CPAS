@@ -1,6 +1,5 @@
 import React from "react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import Top from "./../Styling/Top";
 import Sidebar from "./../Styling/Sidebar";
@@ -114,6 +113,8 @@ function Disease() {
             downgradePrice={downgradePrice}
             yieldLoss={yieldLoss}
             />
+          </div>
+          <div class="row">
           </div>
         </div>
       </div>
@@ -490,5 +491,6 @@ function CostBenefitSummary({area, yieldRate, incidence, areaOfEffect, severity,
     </div>
   );
 }
+
 
 export default Disease;

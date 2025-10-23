@@ -16,12 +16,13 @@ import CreateAccount from "./Pages/CreateAccount";
 import Account from "./Pages/Account";
 
 // Dash pages //
-import Dash from "./Pages/Dash";
 import Disease from "./Pages/Disease";
 import Historical from "./Pages/Historical";
 import FAQ from "./Pages/Faq";
 import Help from "./Pages/Help";
+import Feedback from "./Pages/Feedback";
 import Contact from "./Pages/Contact";
+import Download from "./Pages/Download";
 
 
 function App() {
@@ -38,11 +39,12 @@ function App() {
           <Route path="/account" element={<ProtectRoutes authOnly> <Account /> </ProtectRoutes>} />
           <Route path="/login" element={<ProtectRoutes guestOnly> <Login /> </ProtectRoutes>} />
           <Route path="/create-account" element={<ProtectRoutes guestOnly> <CreateAccount /> </ProtectRoutes>} />
-          <Route path="/dash" element={<Dash />} />
           <Route path="/historical" element={<Historical />} />
           <Route path="/disease" element={<Disease />} />
+          <Route path="/download" element={<Download />} />
           <Route path="/faq" element={<FAQ />} />
-          <Route path="/help" element={<Help />} />``
+          <Route path="/help" element={<Help />} />
+          <Route path="/Feedback" element={<Feedback />} />
           <Route path="/Contact" element={<Contact />} />
         </Routes>
       </Router>

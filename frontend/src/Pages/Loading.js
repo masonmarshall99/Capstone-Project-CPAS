@@ -18,10 +18,14 @@ const LoadingPage = () => {
     navigate("/login");
   };
 
+  const handleGuest = (e) => {
+    navigate("/help");
+  };
+
   /* Redirect if signed in */
   useEffect(() => {
     if (user !== null) {
-      navigate("/dash");
+      navigate("/help");
     }
   }, [user, navigate]);
 
@@ -38,7 +42,11 @@ const LoadingPage = () => {
           crops
         </p>
 
-        <button className="button-primary" onClick={handleSignUpClick}>
+        <button className="button-primary" onClick={handleGuest}>
+          GUEST
+        </button>
+
+        <button className="button-primary mt-3" onClick={handleSignUpClick}>
           SIGN UP
         </button>
 
