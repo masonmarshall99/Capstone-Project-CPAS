@@ -126,7 +126,6 @@ export const ADD_CSV_ROW = gql`
 	    }
     }
 `
-
 export const GET_DISEASE_CONTROLS = gql`
     query {
             diseasePresences{
