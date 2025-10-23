@@ -42,10 +42,10 @@ function App() {
           <Route path="/dash" element={<Dash />} />
           <Route path="/historical" element={<Historical />} />
           <Route path="/disease" element={<Disease />} />
+          <Route path="/download" element={<Download />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/help" element={<Help />} />``
           <Route path="/Contact" element={<Contact />} />
-          <Route path="/download" element={<Download />} />
         </Routes>
       </Router>
   );

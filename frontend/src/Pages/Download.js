@@ -1,5 +1,11 @@
 import React, { useState } from "react";
 
+import Top from "./../Styling/Top";
+import Sidebar from "./../Styling/Sidebar";
+
+import "bulma/css/bulma.min.css";
+import "./../Styling/CSS/Pages.css";
+
 const DownloadPage = () => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [message, setMessage] = useState("");
@@ -69,55 +75,62 @@ const DownloadPage = () => {
   };
 
   return (
-    <div style={{ padding: "2rem", maxWidth: "800px", margin: "0 auto" }}>
-      <h1>Crop Health Data Download</h1>
-      
-      <div>
-        <p>Download the complete crop health dataset as a CSV file.</p>
+    <>
+    <title>Disease Risk</title>
+      <Top />
+      <div className="panel-bottom">
+      <Sidebar curWindow="Disease Risk" />
+      <div style={{ padding: "2rem", maxWidth: "800px", margin: "0 auto" }}>
+        <h1>Crop Health Data Download</h1>
         
-        <div style={{ margin: "2rem 0" }}>
-          <button
-            onClick={handleDownload}
-            disabled={isDownloading}
-            style={{
-              padding: "1rem 2rem",
-              fontSize: "1.1rem",
-              backgroundColor: isDownloading ? "#ccc" : "#007bff",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              cursor: isDownloading ? "not-allowed" : "pointer",
-            }}
-          >
-            {isDownloading ? "Downloading..." : "Download CSV"}
-          </button>
-        </div>
-
-        {message && (
-          <div
-            style={{
-              padding: "1rem",
-              backgroundColor: message.includes("✅") ? "#e6ffe6" : "#ffe6e6",
-              border: `1px solid ${message.includes("✅") ? "#99ff99" : "#ff9999"}`,
-              borderRadius: "5px",
-              marginTop: "1rem",
-            }}
-          >
-            {message}
+        <div>
+          <p>Download the complete crop health dataset as a CSV file.</p>
+          
+          <div style={{ margin: "2rem 0" }}>
+            <button
+              onClick={handleDownload}
+              disabled={isDownloading}
+              style={{
+                padding: "1rem 2rem",
+                fontSize: "1.1rem",
+                backgroundColor: isDownloading ? "#ccc" : "#007bff",
+                color: "white",
+                border: "none",
+                borderRadius: "5px",
+                cursor: isDownloading ? "not-allowed" : "pointer",
+              }}
+            >
+              {isDownloading ? "Downloading..." : "Download CSV"}
+            </button>
           </div>
-        )}
 
-        <div style={{ marginTop: "2rem", padding: "1rem", backgroundColor: "#f8f9fa", borderRadius: "5px" }}>
-          <h3>Dataset Information</h3>
-          <ul>
-            <li><strong>File Format:</strong> CSV (Comma Separated Values)</li>
-            <li><strong>Data Includes:</strong> Disease information, crop details, location data, and health metrics</li>
-            <li><strong>Records:</strong> 2,886 disease presence records</li>
-            <li><strong>Columns:</strong> Disease Name, Crop Name, Region, Zone, Severity, Control methods, and more</li>
-          </ul>
+          {message && (
+            <div
+              style={{
+                padding: "1rem",
+                backgroundColor: message.includes("✅") ? "#e6ffe6" : "#ffe6e6",
+                border: `1px solid ${message.includes("✅") ? "#99ff99" : "#ff9999"}`,
+                borderRadius: "5px",
+                marginTop: "1rem",
+              }}
+            >
+              {message}
+            </div>
+          )}
+
+          <div style={{ marginTop: "2rem", padding: "1rem", backgroundColor: "#f8f9fa", borderRadius: "5px" }}>
+            <h3>Dataset Information</h3>
+            <ul>
+              <li><strong>File Format:</strong> CSV (Comma Separated Values)</li>
+              <li><strong>Data Includes:</strong> Disease information, crop details, location data, and health metrics</li>
+              <li><strong>Records:</strong> 2,886 disease presence records</li>
+              <li><strong>Columns:</strong> Disease Name, Crop Name, Region, Zone, Severity, Control methods, and more</li>
+            </ul>
+          </div>
+        </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
