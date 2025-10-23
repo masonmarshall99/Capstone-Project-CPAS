@@ -22,6 +22,7 @@ import FAQ from "./Pages/Faq";
 import Help from "./Pages/Help";
 import Feedback from "./Pages/Feedback";
 import Contact from "./Pages/Contact";
+import Download from "./Pages/Download";
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
           <Route path="/create-account" element={<ProtectRoutes guestOnly> <CreateAccount /> </ProtectRoutes>} />
           <Route path="/historical" element={<Historical />} />
           <Route path="/disease" element={<Disease />} />
+          <Route path="/download" element={<Download />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/help" element={<Help />} />
           <Route path="/Feedback" element={<Feedback />} />
