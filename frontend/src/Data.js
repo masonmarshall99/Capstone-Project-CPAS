@@ -36,19 +36,6 @@ export const SharedData = ({ children }) => {
     setAccount(newAccount);
   };
 
-  /* Get CSRF Token from backend */
-  const getCSRFToken = async () => {
-    try {
-      const response = await fetch("http://localhost:8000/api/get-csrf-token/", {
-        method: "GET",
-        mode: "cors",
-        credentials: "include",
-      });
-    } catch (error) {
-      console.error("Fetch error:", error);
-    }
-  }
-  getCSRFToken();
 
   /* Initial Load */
   const initialLoad = async () => {

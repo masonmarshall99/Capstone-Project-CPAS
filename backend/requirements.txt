@@ -8,3 +8,4 @@ django-environ
 pandas
 ariadne_django
 django-cors-headers
+reportlab
