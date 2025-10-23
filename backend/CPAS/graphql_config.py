@@ -35,6 +35,4 @@ mutation.set_field('verifyToken', resolve_verify)
 mutation.set_field('refreshToken', resolve_refresh)
 mutation.set_field('tokenAuth', resolve_token_auth)
 
-#schema = make_executable_schema(type_defs, query, mutation)
-
 schema = make_executable_schema(type_defs, [query, mutation], GenericScalar)
