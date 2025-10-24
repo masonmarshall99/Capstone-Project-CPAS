@@ -17,10 +17,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from CPAS_Main.views import graphql_testing_view
+#from CPAS_Main.views import graphql_testing_view
+
+from ariadne_django.views import GraphQLView
+from .graphql_config import schema
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include("CPAS_Main.urls")),
-    path('graphql/', graphql_testing_view),
+    #path('graphql/', graphql_testing_view),
+    path('graphql/', GraphQLView.as_view(schema=schema), name='graphql'),
 ]

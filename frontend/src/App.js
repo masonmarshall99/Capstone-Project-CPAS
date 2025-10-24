@@ -1,26 +1,56 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
-import Dash from "./Pages/Dash";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "./Styling/CSS/Main.css";
+// import { SharedData } from "./Data";
+
+// Authentication Check //
+import { useAuth } from "./CheckAuth";
+
+// Route Protection //
+import ProtectRoutes from "./ProtectRoutes";
+
+// Account pages //
+import Loading from "./Pages/Loading";
+import Login from "./Pages/Login";
+import CreateAccount from "./Pages/CreateAccount";
 import Account from "./Pages/Account";
+
+// Dash pages //
 import Disease from "./Pages/Disease";
 import Historical from "./Pages/Historical";
+import FAQ from "./Pages/Faq";
+import Help from "./Pages/Help";
+import Feedback from "./Pages/Feedback";
+import Contact from "./Pages/Contact";
+import FileUpload from "./Pages/FileUpload";
+import Download from "./Pages/Download";
 
 function App() {
+  const { loading, user } = useAuth();
+
+  if (loading) {
+    return <div>Loading user session...</div>;
+  }
+  
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Navigate to="/dash" replace />} />
-        <Route path="/dash" element={<Dash />} />
-        <Route path="/historical" element={<Historical />} />
-        <Route path="/disease" element={<Disease />} />
-        <Route path="/account" element={<Account />} />
-      </Routes>
-    </Router>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Loading />} />
+          <Route path="/account" element={<ProtectRoutes authOnly> <Account /> </ProtectRoutes>} />
+          <Route path="/login" element={<ProtectRoutes guestOnly> <Login /> </ProtectRoutes>} />
+          <Route path="/create-account" element={<ProtectRoutes guestOnly> <CreateAccount /> </ProtectRoutes>} />
+          <Route path="/historical" element={<Historical />} />
+          <Route path="/disease" element={<Disease />} />
+          <Route path="/download" element={<Download />} />
+          <Route path="/fileupload" element={<FileUpload />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/help" element={<Help />} />
+          <Route path="/Feedback" element={<Feedback />} />
+          <Route path="/Contact" element={<Contact />} />
+
+          <Route path="/fileupload" element={<FileUpload />} />
+        </Routes>
+      </Router>
   );
 }
 

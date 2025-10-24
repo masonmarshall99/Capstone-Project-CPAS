@@ -1,0 +1,104 @@
+# Query and Mutation types
+
+type Query {
+    zones: [Zone!]!
+    regions: [Region!]!
+    locations: [Location!]!
+    seasons: [Season!]!
+    crops: [Crop!]!
+    cropAreas: [CropArea!]!
+    producedIns: [ProducedIn!]!
+    diseases: [Disease!]!
+    diseasePresences: [DiseasePresence!]!
+}
+
+type Mutation {
+    createZone(
+        zone_name: String!
+    ): Zone!
+
+    createRegion(
+        region_name: String!
+    ): Region!
+
+    createLocation(
+        sub_region: String! 
+        region_name: String! 
+        zone_name: String!
+    ): Location!
+        
+    createSeason(
+        year: String!
+    ): Season!
+
+    createCrop(
+        crop_name: String!
+    ): Crop!
+
+    createCropArea(
+        crop_name: String!
+        sub_region: String! 
+        region_name: String! 
+        zone_name: String
+        year: String!
+        area_hectares: Float!
+        value_tonnes: Float!
+    ): CropArea!
+        
+    createProducedIn(
+        crop_name: String!
+        year: String!
+        average_commodity_price: Float!
+    ): ProducedIn!
+
+    createDisease(
+        disease_name: String!
+        disease_group: String!
+    ): Disease!
+
+    createDiseasePresence(
+        disease_name: String!
+        disease_group: String!
+        crop_name: String!
+        sub_region: String! 
+        region_name: String! 
+        zone_name: String!
+        disease_presence_status: String!
+        disease_incidence_year_percentage: Float!
+        disease_incidence_area_percentage: Float!
+        disease_severity_without_control_percentage: Float
+        disease_severity_with_control_percentage: Float
+        disease_severity_control_genetic_contribution_percentage: Float
+        disease_severity_control_cultural_contribution_percentage: Float
+        disease_severity_control_pesticide_contribution_percentage: Float
+        fungicide_resistance_risk: String!
+    ): DiseasePresence!
+
+    addCSVRow(
+        zone_name: String!
+        region_name: String!
+        sub_region: String!
+        year: String!
+        crop_name: String!
+        area_hectares: Float!
+        value_tonnes: Float!
+        disease_group: String!
+        disease_name: String!
+        disease_presence_status: String!
+        disease_incidence_year_percentage: Float!
+        disease_incidence_area_percentage: Float!
+        disease_severity_without_control_percentage: Float
+        disease_severity_with_control_percentage: Float
+        disease_severity_control_genetic_contribution_percentage: Float
+        disease_severity_control_cultural_contribution_percentage: Float
+        disease_severity_control_pesticide_contribution_percentage: Float
+        average_commodity_price: Float!
+        fungicide_resistance_risk: String!
+    ): CSVInput
+}
+
+extend type Mutation {
+    verifyToken(token: String!): VerifyToken
+    refreshToken(token: String!): RefreshToken
+    tokenAuth(email: String!, password:String!): TokenAuth
+}

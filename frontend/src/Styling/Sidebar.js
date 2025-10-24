@@ -3,17 +3,27 @@ import { useNavigate } from "react-router-dom";
 import "bulma/css/bulma.min.css";
 import "./CSS/Light.css";
 
-import { ReactComponent as dashIcon } from "./Icons/Dash.svg";
 import { ReactComponent as historicalIcon } from "./Icons/Historical.svg";
 import { ReactComponent as diseaseIcon } from "./Icons/Disease.svg";
+import { ReactComponent as contactIcon } from "./Icons/Contact.svg";
+import { ReactComponent as helpIcon } from "./Icons/Help.svg";
+import { ReactComponent as feedbackIcon } from "./Icons/Feedback.svg";
+import { ReactComponent as faqIcon } from "./Icons/faq.svg";
+import { ReactComponent as fileIcon} from "./Icons/File.svg";
+import { ReactComponent as downloadIcon} from "./Icons/download.svg";
 
 function Sidebar({ curWindow }) {
   const navigate = useNavigate();
 
   const options = [
-    { icon: dashIcon, text: "Dashboard", route: "/dash" },
     { icon: historicalIcon, text: "Historical Analysis", route: "/historical" },
     { icon: diseaseIcon, text: "Disease Risk", route: "/disease" },
+    { icon: downloadIcon, text: "Download Data", route: "/download" },
+    { icon: fileIcon, text: "File Upload", route: "/fileupload" },
+    { icon: faqIcon, text: "FAQ", route: "/faq" },
+    { icon: helpIcon, text: "Help & Navigation", route: "/help" },
+    { icon: feedbackIcon, text: "Feedback", route: "/Feedback" },
+    { icon: contactIcon, text: "Contact Us", pos: "Bottom", route: "/contact" },
   ];
 
   return (
