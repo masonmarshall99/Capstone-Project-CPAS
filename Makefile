@@ -38,6 +38,15 @@ deploy:
 deploy-down:
 	docker compose -f docker-compose-deploy.yml down
 
+deploy-logs:
+	docker compose -f docker-compose-deploy.yml logs -f
+
+deploy-shell-backend:
+	docker compose -f docker-compose-deploy.yml exec backend sh
+
+deploy-shell-frontend:
+	docker compose -f docker-compose-deploy.yml exec frontend sh
+
 help:
 	@echo "Usage:"
 	@echo "  make build           # Build all images"
