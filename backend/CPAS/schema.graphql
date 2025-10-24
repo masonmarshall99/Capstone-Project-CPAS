@@ -96,3 +96,9 @@ type Mutation {
         fungicide_resistance_risk: String!
     ): CSVInput
 }
+
+extend type Mutation {
+    verifyToken(token: String!): VerifyToken
+    refreshToken(token: String!): RefreshToken
+    tokenAuth(email: String!, password:String!): TokenAuth
+}

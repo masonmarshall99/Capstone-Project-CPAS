@@ -1,4 +1,5 @@
 from .models import *
+from ariadne_jwt.decorators import login_required, token_auth, staff_member_required
 
 # Query
 
@@ -20,6 +21,7 @@ def list_seasons(*_):
 def list_crops(*_):
     return Crop.objects.all()
 
+@login_required
 def list_crop_areas(*_):
     return CropArea.objects.all()
 
@@ -29,11 +31,13 @@ def list_produced_in(*_):
 def list_diseases(*_):
     return Disease.objects.all()
 
+@login_required
 def list_disease_presence(*_):
     return DiseasePresence.objects.all()
 
 # Mutation
 
+@staff_member_required
 def create_zone(*_, zone_name: str):
     zone, created = Zone.objects.get_or_create(
         zone_name=zone_name
@@ -43,6 +47,7 @@ def create_zone(*_, zone_name: str):
         "zone_name": zone.zone_name
     }
 
+@staff_member_required
 def create_region(*_, region_name: str):
     region, created = Region.objects.get_or_create(
         region_name=region_name
@@ -52,6 +57,7 @@ def create_region(*_, region_name: str):
         "region_name": region.region_name
     }
 
+@staff_member_required
 def create_location(
     *_, 
     sub_region: str, 
@@ -83,6 +89,7 @@ def create_location(
         },
     }
 
+@staff_member_required
 def create_season(*_, year: str):
     season, created = Season.objects.get_or_create(
         year=year
@@ -92,6 +99,7 @@ def create_season(*_, year: str):
         "year": season.year
     }
 
+@staff_member_required
 def create_crop(*_, crop_name: str):
     crop, created = Crop.objects.get_or_create(
         crop_name=crop_name
@@ -101,6 +109,7 @@ def create_crop(*_, crop_name: str):
         "crop_name": crop.crop_name
     }
 
+@staff_member_required
 def create_crop_area(
     *_, 
     crop_name: str, 
@@ -162,6 +171,7 @@ def create_crop_area(
         "value_tonnes": crop_area.value_tonnes,
     }
     
+@staff_member_required
 def create_produced_in(
     *_,
     crop_name: str,
@@ -193,6 +203,7 @@ def create_produced_in(
         "average_commodity_price": average_commodity_price,
     }
 
+@staff_member_required
 def create_disease(
     *_,
     disease_name: str,
@@ -209,6 +220,7 @@ def create_disease(
         "disease_group": disease.disease_group
     }
 
+@staff_member_required
 def create_disease_presence(
     *_,
     disease_name: str,
@@ -294,6 +306,7 @@ def create_disease_presence(
         "fungicide_resistance_risk":disease_presence.fungicide_resistance_risk
     }
 
+@staff_member_required
 def addCSVRow(
     *_,
     zone_name: str,
