@@ -1,6 +1,5 @@
 import React from "react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import Top from "./../Styling/Top";
 import Sidebar from "./../Styling/Sidebar";
@@ -49,7 +48,13 @@ function Disease() {
       <title>Disease Risk</title>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
       <Top />
-      <div className="panel-bottom">
+      <div
+        style={{
+          display: "flex",
+          height: `100%`,
+          gap: "12px",
+        }}
+      >
         <Sidebar curWindow="Disease Risk" />
         <div class="rows mx-auto mt-3">
           <div class="row columns">
@@ -114,6 +119,8 @@ function Disease() {
             downgradePrice={downgradePrice}
             yieldLoss={yieldLoss}
             />
+          </div>
+          <div class="row">
           </div>
         </div>
       </div>
@@ -490,5 +497,6 @@ function CostBenefitSummary({area, yieldRate, incidence, areaOfEffect, severity,
     </div>
   );
 }
+
 
 export default Disease;

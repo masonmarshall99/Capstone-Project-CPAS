@@ -1,7 +1,5 @@
 # Model to Schema types
 
-# TODO: ability to add whole csv row
-
 type Zone {
     zone_name: String!
 }
@@ -56,4 +54,40 @@ type DiseasePresence {
     disease_severity_control_cultural_contribution_percentage: Float
     disease_severity_control_pesticide_contribution_percentage: Float
     fungicide_resistance_risk: String!
+}
+
+type CSVInput {
+    zone_name: String!
+    region_name: String!
+    sub_region: String!
+    year: String!
+    crop_name: String!
+    area_hectares: Float!
+    value_tonnes: Float!
+    disease_group: String!
+    disease_name: String!
+    disease_presence_status: String!
+    disease_incidence_year_percentage: Float!
+    disease_incidence_area_percentage: Float!
+    disease_severity_without_control_percentage: Float
+    disease_severity_with_control_percentage: Float
+    disease_severity_control_genetic_contribution_percentage: Float
+    disease_severity_control_cultural_contribution_percentage: Float
+    disease_severity_control_pesticide_contribution_percentage: Float
+    average_commodity_price: Float!
+    fungicide_resistance_risk: String!
+}
+
+type UserNode {
+    _id:String
+    email:String
+    first_name:String
+    last_name:String
+    is_superuser:Boolean
+    is_staff:Boolean
+    is_active:Boolean
+}
+
+extend type TokenAuth {
+    user: UserNode
 }

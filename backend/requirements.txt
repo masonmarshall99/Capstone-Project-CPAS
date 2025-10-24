@@ -9,3 +9,5 @@ pandas
 ariadne_django
 django-cors-headers
 gunicorn
+reportlab
+ariadne-jwt

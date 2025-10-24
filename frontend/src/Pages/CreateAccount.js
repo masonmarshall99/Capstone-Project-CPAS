@@ -50,7 +50,7 @@ const CreateAccountPage = () => {
           console.log("Signup success:", data);
           fetchUser();
           setMessage("");
-          navigate("/dash");
+          navigate("/help");
         }
       } catch (error) {
         console.error("Fetch error:", error);
@@ -141,7 +141,11 @@ const CreateAccountPage = () => {
           </button>
         </form>
 
-        <p className="auth-switch-text mt-4">
+        <div className="text-link mt-4">
+          <a href="/help">Continue as guest</a>
+        </div>
+
+        <p className="auth-switch-text">
           Already have an account?{" "}
           <span className="auth-link" onClick={() => navigate("/login")}>
             Login

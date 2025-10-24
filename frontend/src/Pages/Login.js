@@ -48,7 +48,7 @@ const LoginPage = () => {
           console.log("Signin success:", data);
           fetchUser();
           setMessage("");
-          navigate("/dash");
+          navigate("/help");
         }
       } catch (error) {
         console.error("Fetch error:", error);
@@ -100,6 +100,10 @@ const LoginPage = () => {
             Create Account
           </button>
         </form>
+
+        <div className="text-link mt-4">
+          <a href="/help">Continue as guest</a>
+        </div>
       </div>
     </div>
   );

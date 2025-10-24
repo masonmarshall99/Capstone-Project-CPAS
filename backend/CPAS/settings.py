@@ -57,6 +57,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'ariadne_jwt.middleware.JSONWebTokenMiddleware',
+]
+
+AUTHENTICATION_BACKENDS = [
+    'ariadne_jwt.backends.JSONWebTokenBackend',
+    'django.contrib.auth.backends.ModelBackend'
 ]
 
 ROOT_URLCONF = 'CPAS.urls'
@@ -154,8 +160,6 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
     'credentials',
 ]
-
-CSRF_FAILURE_VIEW = 'django.views.csrf.csrf_failure'
 
 CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=['http://localhost:3000'])
 # Create a logs/ directory if it doesn't exist
