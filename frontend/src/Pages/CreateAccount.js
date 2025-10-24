@@ -27,7 +27,7 @@ const CreateAccountPage = () => {
       }
 
       try {
-        const response = await fetch("http://localhost:8000/api/register/", {
+        const response = await fetch("/api/register/", {
           method: "POST",
           mode: "cors",
           credentials: "include",
@@ -48,8 +48,6 @@ const CreateAccountPage = () => {
           }
         } else {
           console.log("Signup success:", data);
-
-          alert(`Account created for ${email}`);
           fetchUser();
           setMessage("");
           navigate("/help");

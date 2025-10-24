@@ -29,15 +29,33 @@ shell-frontend:
 migrate:
 	docker compose exec backend python manage.py migrate
 
+deploy:
+	docker compose -f docker-compose-deploy.yml up -d --build;
+	docker compose -f docker-compose-deploy.yml exec backend python manage.py makemigrations;
+	docker compose -f docker-compose-deploy.yml exec backend python manage.py migrate;
+	docker compose -f docker-compose-deploy.yml exec backend python manage.py collectstatic --noinput;
+
+deploy-down:
+	docker compose -f docker-compose-deploy.yml down
+
+deploy-logs:
+	docker compose -f docker-compose-deploy.yml logs -f
+
+deploy-shell-backend:
+	docker compose -f docker-compose-deploy.yml exec backend sh
+
+deploy-shell-frontend:
+	docker compose -f docker-compose-deploy.yml exec frontend sh
+
 help:
 	@echo "Usage:"
 	@echo "  make build           # Build all images"
 	@echo "  make up              # Start containers"
 	@echo "  make down            # Stop and remove containers"
-	@echo "  make pause			  # Pauses container"
-	@echo "  make start			  # Restarts a paused container"
 	@echo "  make rebuild         # Rebuild and start from scratch"
 	@echo "  make logs            # View container logs"
 	@echo "  make shell-backend   # Open backend container shell"
 	@echo "  make shell-frontend  # Open frontend container shell"
 	@echo "  make migrate         # Run Django migrations"
+	@echo "  make deploy          # Deploy application with production settings"
+	@echo "  make deploy-down     # Stop and remove deployed containers"

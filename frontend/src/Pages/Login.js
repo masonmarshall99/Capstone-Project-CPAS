@@ -7,6 +7,7 @@ import { useAuth } from "../CheckAuth";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const { loading, user, fetchUser } = useAuth();
 
@@ -19,12 +20,12 @@ const LoginPage = () => {
       e.preventDefault();
 
       if (!email || !password) {
-        alert("Please enter both email and password.");
+        setMessage("Please enter both email and password.");
         return;
       }
 
       try {
-        const response = await fetch("http://localhost:8000/api/login/", {
+        const response = await fetch("/api/login/", {
           method: "POST",
           mode: "cors",
           credentials: "include",
@@ -41,13 +42,12 @@ const LoginPage = () => {
           if (!data.message) {
             throw new Error(`HTTP error! status: ${response.status}`);
           } else if (data.message) {
-            alert(`Login failed: ${data.message}`);
+            setMessage(data.message);
           }
         } else {
           console.log("Signin success:", data);
-
-          alert(`Signing for ${email}`);
           fetchUser();
+          setMessage("");
           navigate("/help");
         }
       } catch (error) {
@@ -77,6 +77,12 @@ const LoginPage = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+
+          {message && <p className="error-text">{message}</p>}
+
+          <div className="text-link">
+            <a href="#">Forgot your password?</a>
+          </div>
 
           <button
             type="button"
